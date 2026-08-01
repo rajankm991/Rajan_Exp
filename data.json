@@ -1,0 +1,531 @@
+{
+  "years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+  ],
+  "data": {
+    "2021": {
+      "income": 147316.0,
+      "expense": 16122.98,
+      "investment": 55000.0,
+      "monthly_income": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        69316.0,
+        0.0,
+        52000.0,
+        26000.0
+      ],
+      "monthly_expense": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -76407.02,
+        33500.0,
+        27210.0,
+        13100.0,
+        18720.0
+      ],
+      "categories": [
+        {
+          "name": "Home",
+          "value": 48440.0
+        },
+        {
+          "name": "Rajan",
+          "value": 30300.0
+        },
+        {
+          "name": "Pawan",
+          "value": 11000.0
+        },
+        {
+          "name": "Recharge",
+          "value": 2560.0
+        },
+        {
+          "name": "Other",
+          "value": 230.0
+        },
+        {
+          "name": "Cashflow",
+          "value": -76407.02
+        }
+      ],
+      "payment": [
+        {
+          "name": "Net Banking",
+          "value": -76407.02
+        }
+      ],
+      "count": 35
+    },
+    "2022": {
+      "income": 447176.0,
+      "expense": 203940.0,
+      "investment": 6800.0,
+      "monthly_income": [
+        26000.0,
+        26000.0,
+        26000.0,
+        26000.0,
+        151000.0,
+        26000.0,
+        26000.0,
+        26000.0,
+        26000.0,
+        26852.0,
+        30662.0,
+        30662.0
+      ],
+      "monthly_expense": [
+        1988.0,
+        3342.0,
+        5870.0,
+        14950.0,
+        10762.0,
+        10560.0,
+        20083.0,
+        43344.0,
+        22033.0,
+        27394.0,
+        13183.0,
+        30431.0
+      ],
+      "categories": [
+        {
+          "name": "Pawan",
+          "value": 66156.0
+        },
+        {
+          "name": "Rajan",
+          "value": 61226.0
+        },
+        {
+          "name": "Home",
+          "value": 39250.0
+        },
+        {
+          "name": "DRCC",
+          "value": 31998.0
+        },
+        {
+          "name": "Recharge",
+          "value": 3310.0
+        },
+        {
+          "name": "Delhi",
+          "value": 2000.0
+        }
+      ],
+      "payment": [
+        {
+          "name": "UPI",
+          "value": 5333.0
+        },
+        {
+          "name": "Net Banking",
+          "value": 5333.0
+        }
+      ],
+      "count": 67
+    },
+    "2023": {
+      "income": 520304.0,
+      "expense": 495895.0,
+      "investment": 14504.0,
+      "monthly_income": [
+        30662.0,
+        30662.0,
+        55512.0,
+        34000.0,
+        34000.0,
+        34000.0,
+        34000.0,
+        34000.0,
+        131468.0,
+        34000.0,
+        34000.0,
+        34000.0
+      ],
+      "monthly_expense": [
+        21480.0,
+        36651.0,
+        59664.0,
+        43164.0,
+        23735.0,
+        31881.0,
+        65126.0,
+        85842.0,
+        36823.0,
+        22351.0,
+        31631.0,
+        37547.0
+      ],
+      "categories": [
+        {
+          "name": "Nisha",
+          "value": 135015.0
+        },
+        {
+          "name": "Pawan",
+          "value": 95720.0
+        },
+        {
+          "name": "Rajan",
+          "value": 91696.0
+        },
+        {
+          "name": "Ed LOAN",
+          "value": 61929.0
+        },
+        {
+          "name": "Delhi",
+          "value": 59040.0
+        },
+        {
+          "name": "DRCC",
+          "value": 21332.0
+        },
+        {
+          "name": "Other",
+          "value": 31163.0
+        }
+      ],
+      "payment": [],
+      "count": 111
+    },
+    "2024": {
+      "income": 722110.0,
+      "expense": 698384.53,
+      "investment": 16512.0,
+      "monthly_income": [
+        46000.0,
+        46000.0,
+        54500.0,
+        97500.0,
+        46000.0,
+        85000.0,
+        46000.0,
+        48000.0,
+        107000.0,
+        50110.0,
+        48000.0,
+        48000.0
+      ],
+      "monthly_expense": [
+        79581.0,
+        55257.0,
+        44968.14,
+        46552.0,
+        32774.6,
+        90762.7,
+        44505.57,
+        92706.34,
+        49841.11,
+        33047.6,
+        62329.46,
+        66059.01
+      ],
+      "categories": [
+        {
+          "name": "Nisha",
+          "value": 230200.0
+        },
+        {
+          "name": "Delhi",
+          "value": 101203.31
+        },
+        {
+          "name": "Home",
+          "value": 94540.2
+        },
+        {
+          "name": "Pawan",
+          "value": 91828.6
+        },
+        {
+          "name": "Rajan",
+          "value": 85428.0
+        },
+        {
+          "name": "Ed LOAN",
+          "value": 80708.02
+        },
+        {
+          "name": "Other",
+          "value": 14476.4
+        }
+      ],
+      "payment": [],
+      "count": 147
+    },
+    "2025": {
+      "income": 670000.0,
+      "expense": 806992.07,
+      "investment": 20792.0,
+      "monthly_income": [
+        78000.0,
+        48000.0,
+        48000.0,
+        48000.0,
+        107000.0,
+        48000.0,
+        48000.0,
+        48000.0,
+        48000.0,
+        48000.0,
+        50500.0,
+        50500.0
+      ],
+      "monthly_expense": [
+        120977.33,
+        120342.04,
+        70973.12,
+        65892.98,
+        39213.0,
+        113923.0,
+        17538.6,
+        36641.8,
+        101924.0,
+        40800.0,
+        31740.0,
+        47026.2
+      ],
+      "categories": [
+        {
+          "name": "Nisha",
+          "value": 252061.0
+        },
+        {
+          "name": "Rajan",
+          "value": 174544.0
+        },
+        {
+          "name": "Delhi",
+          "value": 95711.0
+        },
+        {
+          "name": "Home",
+          "value": 84280.0
+        },
+        {
+          "name": "Pawan",
+          "value": 59450.0
+        },
+        {
+          "name": "DRCC",
+          "value": 50000.0
+        },
+        {
+          "name": "Other",
+          "value": 90946.07
+        }
+      ],
+      "payment": [
+        {
+          "name": "Credit Card",
+          "value": 44851.0
+        }
+      ],
+      "count": 140
+    },
+    "2026": {
+      "income": 375929.0,
+      "expense": 479689.44,
+      "investment": 67386.0,
+      "monthly_income": [
+        120874.0,
+        50500.0,
+        50500.0,
+        53055.0,
+        50500.0,
+        50500.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "monthly_expense": [
+        33853.6,
+        143053.24,
+        65611.8,
+        79968.2,
+        103426.6,
+        34784.0,
+        18992.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "categories": [
+        {
+          "name": "Nisha",
+          "value": 131700.0
+        },
+        {
+          "name": "Rajan",
+          "value": 79206.55
+        },
+        {
+          "name": "Pawan",
+          "value": 55171.0
+        },
+        {
+          "name": "Home",
+          "value": 51509.0
+        },
+        {
+          "name": "Delhi",
+          "value": 47375.89
+        },
+        {
+          "name": "Alka",
+          "value": 44600.0
+        },
+        {
+          "name": "Other",
+          "value": 70127.0
+        }
+      ],
+      "payment": [
+        {
+          "name": "UPI",
+          "value": 77492.0
+        },
+        {
+          "name": "Net Banking",
+          "value": 50500.0
+        },
+        {
+          "name": "Credit Card",
+          "value": 26002.0
+        },
+        {
+          "name": "Cash",
+          "value": 8200.0
+        }
+      ],
+      "count": 111
+    },
+    "2027": {
+      "income": 13392.0,
+      "expense": 0.0,
+      "investment": 0.0,
+      "monthly_income": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        13392.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "monthly_expense": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "categories": [],
+      "payment": [],
+      "count": 2
+    }
+  },
+  "lenders": [
+    {
+      "name": "Papa",
+      "balance": 112942
+    },
+    {
+      "name": "Anuj Bhaiya",
+      "balance": 105000
+    },
+    {
+      "name": "Bholu bhaiya",
+      "balance": 58772.2
+    },
+    {
+      "name": "Bitan Bhaiya",
+      "balance": 43341.6
+    },
+    {
+      "name": "Ankit Tiwari",
+      "balance": 20000
+    }
+  ],
+  "recent": [
+    {
+      "date": "2027-07-31",
+      "desc": "MIsbalance not getting the value(1214 till 9 jun)",
+      "type": "Income",
+      "category": "Other Income",
+      "amount": 9188,
+      "payment": ""
+    },
+    {
+      "date": "2027-07-31",
+      "desc": "11250-5000(21/5)-1971(07/09) Ebill + 500 folding- 575 wire",
+      "type": "Income",
+      "category": "Delhi",
+      "amount": 4204,
+      "payment": ""
+    },
+    {
+      "date": "2026-07-02",
+      "desc": "Alka. ",
+      "type": "Expense",
+      "category": "Alka",
+      "amount": 5000,
+      "payment": ""
+    },
+    {
+      "date": "2026-07-02",
+      "desc": "Nisha",
+      "type": "Expense",
+      "category": "Nisha",
+      "amount": 300,
+      "payment": ""
+    },
+    {
+      "date": "2026-07-01",
+      "desc": "Rhishikesh",
+      "type": "Expense",
+      "category": "Rajan",
+      "amount": 3860,
+      "payment": "UPI"
+    }
+  ]
+}

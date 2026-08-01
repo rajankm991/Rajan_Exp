@@ -196,6 +196,7 @@
       <div class="controls" id="sec-settings">
         <label class="loadbtn" for="fileInput">📂 Load Excel Workbook</label>
         <input type="file" id="fileInput" accept=".xlsx,.xlsm,.xls" hidden>
+        <button type="button" class="loadbtn" id="ghSettingsBtn" style="background:#fff;color:var(--ink-text);border-color:var(--card-line);">⚙️ GitHub Sync</button>
         <div class="field">
           <label>Year</label>
           <select id="yearSelect"></select>
@@ -207,6 +208,23 @@
       </div>
     </div>
     <div id="dataStatus" class="data-status demo">Showing sample data — click <b>Load Excel Workbook</b> above and select your <code>.xlsm</code> file to see your real, current numbers.</div>
+    <div id="downloadWrap" class="data-status" style="display:none;"></div>
+
+    <div id="ghPanel" class="panel" style="display:none; margin-bottom:18px;">
+      <h3><span class="ic">⚙️</span> GitHub Auto-Sync <span style="text-transform:none;font-weight:500;color:var(--muted);font-size:11px;">(one-time setup, saved only in this browser)</span></h3>
+      <div style="display:grid; grid-template-columns:1fr 1fr 2fr; gap:10px; margin-bottom:10px;">
+        <div class="field" style="min-width:0;"><label>Repo (owner/name)</label><input id="ghRepo" type="text" placeholder="rajan/finance-dashboard" style="border:none;outline:none;font-family:'IBM Plex Mono',monospace;font-size:13px;"></div>
+        <div class="field" style="min-width:0;"><label>Branch</label><input id="ghBranch" type="text" placeholder="main" style="border:none;outline:none;font-family:'IBM Plex Mono',monospace;font-size:13px;"></div>
+        <div class="field" style="min-width:0;"><label>Personal Access Token</label><input id="ghToken" type="password" placeholder="ghp_xxxxxxxxxxxx" style="border:none;outline:none;font-family:'IBM Plex Mono',monospace;font-size:13px;width:100%;"></div>
+      </div>
+      <button type="button" class="loadbtn" id="ghSave">💾 Save settings</button>
+      <span id="ghSaveMsg" style="font-size:11.5px;color:var(--green);margin-left:10px;"></span>
+      <p style="font-size:11px;color:var(--muted);margin:10px 0 0;line-height:1.6;">
+        Create a token at <b>github.com → Settings → Developer settings → Fine-grained tokens</b>, scoped to just this one repo with <b>Contents: Read & write</b> permission.
+        It's stored only in this browser's local storage and sent directly to GitHub's API — never through us. Once saved, loading an Excel file will show a
+        <b>🚀 Push to GitHub</b> button that commits <code>data.json</code> for you — no manual download/upload needed.
+      </p>
+    </div>
 
     <div class="kpi-row">
       <div class="kpi c-income"><div class="badge">💰</div><div class="lbl">Total Income</div><div class="num" id="kIncome">—</div><div class="delta" id="dIncome"></div></div>
@@ -572,39 +590,114 @@ function buildDataFromWorkbook(wb){
   return { years, data, lenders, recent };
 }
 
-const STORAGE_KEY = 'financeDashboard_savedData';
+const GH_KEY = 'financeDashboard_ghSettings';
 
-function saveToStorage(newData, filename){
+function loadGhSettings(){
+  try{ return JSON.parse(localStorage.getItem(GH_KEY) || 'null'); }catch(e){ return null; }
+}
+function saveGhSettings(s){ localStorage.setItem(GH_KEY, JSON.stringify(s)); }
+
+(function initGhPanel(){
+  const saved = loadGhSettings();
+  if(saved){
+    document.getElementById('ghRepo').value = saved.repo || '';
+    document.getElementById('ghBranch').value = saved.branch || 'main';
+    document.getElementById('ghToken').value = saved.token || '';
+  }
+  document.getElementById('ghSettingsBtn').addEventListener('click', ()=>{
+    const p = document.getElementById('ghPanel');
+    p.style.display = p.style.display==='none' ? 'block' : 'none';
+  });
+  document.getElementById('ghSave').addEventListener('click', ()=>{
+    const repo = document.getElementById('ghRepo').value.trim();
+    const branch = document.getElementById('ghBranch').value.trim() || 'main';
+    const token = document.getElementById('ghToken').value.trim();
+    saveGhSettings({repo, branch, token});
+    const msg = document.getElementById('ghSaveMsg');
+    msg.textContent = '✓ Saved in this browser';
+    setTimeout(()=> msg.textContent='', 2500);
+  });
+})();
+
+async function pushToGithub(newData){
+  const s = loadGhSettings();
+  if(!s || !s.repo || !s.token){
+    alert('Set up GitHub Sync first (⚙️ GitHub Sync button above) — repo and token are required.');
+    return;
+  }
+  const branch = s.branch || 'main';
+  const path = DATA_JSON_PATH;
+  const api = `https://api.github.com/repos/${s.repo}/contents/${path}`;
+  const btn = document.getElementById('ghPushBtn');
+  if(btn){ btn.disabled = true; btn.textContent = '⏳ Pushing…'; }
   try{
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({
-      payload: newData,
-      filename: filename,
-      loadedAt: new Date().toISOString()
-    }));
-  }catch(err){ console.warn('Could not save to localStorage:', err); }
+    // 1. get current file SHA (needed to update an existing file)
+    let sha = undefined;
+    const getResp = await fetch(`${api}?ref=${encodeURIComponent(branch)}`, {
+      headers: { 'Authorization': `Bearer ${s.token}`, 'Accept':'application/vnd.github+json' }
+    });
+    if(getResp.ok){ const j = await getResp.json(); sha = j.sha; }
+    else if(getResp.status !== 404){ throw new Error('Could not read current file (HTTP ' + getResp.status + ')'); }
+
+    // 2. commit updated content
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(newData, null, 2))));
+    const putResp = await fetch(api, {
+      method:'PUT',
+      headers: { 'Authorization': `Bearer ${s.token}`, 'Accept':'application/vnd.github+json', 'Content-Type':'application/json' },
+      body: JSON.stringify({
+        message: 'Update finance dashboard data — ' + new Date().toISOString(),
+        content, branch, sha
+      })
+    });
+    if(!putResp.ok){ const j = await putResp.json().catch(()=>({})); throw new Error(j.message || ('HTTP ' + putResp.status)); }
+    showBanner('live', '🚀 Pushed successfully to <b>' + s.repo + '</b> (' + branch + '). Every browser/device fetching this page will now see the updated data within a minute or two.');
+  }catch(err){
+    showBanner('error', '⚠️ GitHub push failed: ' + err.message);
+  }finally{
+    if(btn){ btn.disabled = false; btn.textContent = '🚀 Push to GitHub'; }
+  }
 }
 
-function loadFromStorage(){
-  try{
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if(!raw) return null;
-    return JSON.parse(raw);
-  }catch(err){ return null; }
-}
+const DATA_JSON_PATH = 'data.json';
 
-function clearStorage(){
-  localStorage.removeItem(STORAGE_KEY);
-  DATA = DEMO_DATA;
+function showBanner(cls, html){
   const statusEl = document.getElementById('dataStatus');
-  statusEl.className = 'data-status demo';
-  statusEl.innerHTML = 'Showing sample data — click <b>Load Excel Workbook</b> above and select your <code>.xlsm</code> file to see your real, current numbers.';
-  populateYearsAndRender(2026);
+  statusEl.className = 'data-status ' + cls;
+  statusEl.innerHTML = html;
 }
 
+function downloadJSON(obj, filename){
+  const blob = new Blob([JSON.stringify(obj, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function offerDownload(newData, sourceLabel){
+  const wrap = document.getElementById('downloadWrap');
+  wrap.style.display = 'block';
+  wrap.className = 'data-status live';
+  const ghConfigured = !!(loadGhSettings() && loadGhSettings().repo && loadGhSettings().token);
+  wrap.innerHTML = (ghConfigured
+    ? '<button type="button" class="loadbtn" id="ghPushBtn" style="margin-right:10px;">🚀 Push to GitHub</button>'
+    : '') +
+    '⬇️ <a href="#" id="downloadJsonLink" style="color:inherit;font-weight:700;text-decoration:underline;">Download data.json</a> — replace the <code>data.json</code> next to this HTML file in your git repo and push, so every browser/device shows this data.';
+  document.getElementById('downloadJsonLink').addEventListener('click', function(ev){
+    ev.preventDefault();
+    downloadJSON(newData, 'data.json');
+  });
+  if(ghConfigured){
+    document.getElementById('ghPushBtn').addEventListener('click', ()=> pushToGithub(newData));
+  }
+}
+
+// Parse a locally chosen Excel file — this previews instantly in THIS browser tab only.
+// To make it visible everywhere (any browser/device via git), download data.json and commit it.
 document.getElementById('fileInput').addEventListener('change', function(e){
   const file = e.target.files[0];
   if(!file) return;
-  const statusEl = document.getElementById('dataStatus');
   const reader = new FileReader();
   reader.onload = function(evt){
     try{
@@ -612,32 +705,31 @@ document.getElementById('fileInput').addEventListener('change', function(e){
       const newData = buildDataFromWorkbook(wb);
       if(!newData.years.length) throw new Error('No dated transactions found in the Transactions sheet.');
       DATA = newData;
-      saveToStorage(newData, file.name);
-      statusEl.className = 'data-status live';
-      statusEl.innerHTML = '✅ Live data loaded from <b>' + file.name + '</b> — ' + DATA.years.length + ' year(s) found. Saved in this browser, so it\'ll still be here next time you open this file. Load a new file any time to refresh it. <a href="#" id="clearSaved" style="color:inherit;text-decoration:underline;margin-left:8px;">Reset to sample data</a>';
-      document.getElementById('clearSaved').addEventListener('click', function(ev){ ev.preventDefault(); clearStorage(); });
+      showBanner('live', '👁️ Previewing <b>' + file.name + '</b> in this tab (' + DATA.years.length + ' year(s) found). This is local-only — download & commit <code>data.json</code> below to make it visible on every device.');
+      offerDownload(newData, file.name);
       populateYearsAndRender(2026);
     }catch(err){
-      statusEl.className = 'data-status error';
-      statusEl.textContent = '⚠️ Could not read that file: ' + err.message;
+      showBanner('error', '⚠️ Could not read that file: ' + err.message);
     }
   };
   reader.readAsArrayBuffer(file);
 });
 
-// On open: restore previously loaded data from this browser, if any
-const saved = loadFromStorage();
-if(saved && saved.payload && saved.payload.years && saved.payload.years.length){
-  DATA = saved.payload;
-  const statusEl = document.getElementById('dataStatus');
-  const when = new Date(saved.loadedAt).toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
-  statusEl.className = 'data-status live';
-  statusEl.innerHTML = '✅ Showing data loaded from <b>' + (saved.filename||'your file') + '</b> on ' + when + '. Load a new file any time to refresh it. <a href="#" id="clearSaved" style="color:inherit;text-decoration:underline;margin-left:8px;">Reset to sample data</a>';
-  document.getElementById('clearSaved').addEventListener('click', function(ev){ ev.preventDefault(); clearStorage(); });
-  populateYearsAndRender(2026);
-}else{
-  populateYearsAndRender(2026);
-}
+// On page open: fetch data.json (works when this page is served over http/https, e.g. GitHub
+// Pages — same repo, same folder). This is what makes the data show up on ANY browser/device.
+// If it isn't reachable (e.g. opened straight from disk as file://), fall back to sample data.
+fetch(DATA_JSON_PATH, {cache:'no-store'})
+  .then(r=> r.ok ? r.json() : Promise.reject(new Error('data.json not found (' + r.status + ')')))
+  .then(json=>{
+    if(!json || !json.years || !json.years.length) throw new Error('data.json is empty');
+    DATA = json;
+    showBanner('live', '✅ Live data loaded from <b>data.json</b> in this repo — same on every browser and device. Use <b>Load Excel Workbook</b> above whenever you want to refresh it.');
+    populateYearsAndRender(2026);
+  })
+  .catch(()=>{
+    showBanner('demo', 'Showing sample data — this page could not reach <code>data.json</code> (normal if opened directly from disk instead of a hosted URL, or if you haven\'t generated it yet). Click <b>Load Excel Workbook</b> to preview your real numbers, then download &amp; commit <code>data.json</code> so it shows up everywhere.');
+    populateYearsAndRender(2026);
+  });
 </script>
 </body>
 </html>
