@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rajan's Finance Ledger — Executive Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+  :root{
+    --ink:#10151F;
+    --ink-2:#171F2E;
+    --paper:#F5F2EA;
+    --card:#FFFFFF;
+    --card-line:#E7E1D2;
+    --brass:#B8862E;
+    --brass-dark:#8C6621;
+    --brass-tint:#F4E9D3;
+    --green:#1F7A5C;
+    --green-tint:#E1EFE8;
+    --red:#B23A48;
+    --red-tint:#F6E4E6;
+    --blue:#33538A;
+    --blue-tint:#E4E9F2;
+    --purple:#6B4E9E;
+    --purple-tint:#EBE4F4;
+    --teal:#1B7F86;
+    --teal-tint:#DFEEEF;
+    --ink-text:#1B2333;
+    --muted:#7C7460;
+    --muted-cool:#6E7686;
+  }
+  html{ scroll-behavior:smooth; }
+  [id^="sec-"]{ scroll-margin-top:18px; }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Inter',sans-serif;
+    background:var(--paper);
+    color:var(--ink-text);
+    -webkit-font-smoothing:antialiased;
+  }
+  .app{ display:flex; min-height:100vh; }
+
+  /* ---------------- MAIN ---------------- */
+  .main{ flex:1; padding:26px 34px 50px; max-width:1420px; margin:0 auto; }
+
+  .topbar{
+    display:flex; align-items:flex-end; justify-content:space-between;
+    margin-bottom:22px; flex-wrap:wrap; gap:16px;
+  }
+  .topbar h1{
+    font-family:'Fraunces',serif; font-weight:600; font-size:26px; margin:0 0 4px;
+    color:var(--ink-text); letter-spacing:-0.01em;
+  }
+  .topbar .tag{ font-size:12.5px; color:var(--muted); }
+  .controls{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  .field{
+    background:var(--card); border:1px solid var(--card-line); border-radius:10px;
+    padding:7px 14px; display:flex; flex-direction:column; gap:1px; min-width:108px;
+  }
+  .field label{ font-size:9.5px; letter-spacing:.08em; color:var(--muted); text-transform:uppercase; font-weight:600;}
+  .field select{
+    border:none; background:transparent; font-family:'IBM Plex Mono',monospace; font-size:14px;
+    font-weight:600; color:var(--ink-text); padding:0; outline:none;
+  }
+  .field .val{ font-family:'IBM Plex Mono',monospace; font-size:13px; font-weight:600; color:var(--ink-text); }
+
+  .loadbtn{
+    display:flex; align-items:center; gap:7px;
+    background:var(--ink); color:#F3EFE4; border:1px solid var(--ink);
+    border-radius:10px; padding:11px 16px; font-size:13px; font-weight:600;
+    cursor:pointer; white-space:nowrap; transition:background .15s;
+  }
+  .loadbtn:hover{ background:var(--ink-2); }
+  .data-status{
+    font-size:12px; padding:9px 14px; border-radius:8px; margin-bottom:18px;
+    border:1px solid transparent;
+  }
+  .data-status.demo{ background:var(--brass-tint); color:var(--brass-dark); border-color:#E8D5A8; }
+  .data-status.live{ background:var(--green-tint); color:var(--green); border-color:#BFE0CE; }
+  .data-status.error{ background:var(--red-tint); color:var(--red); border-color:#E8C1C6; }
+  .data-status code{ font-family:'IBM Plex Mono',monospace; }
+
+  /* ---------------- KPI CARDS ---------------- */
+  .kpi-row{
+    display:grid; grid-template-columns:repeat(6,1fr); gap:14px; margin-bottom:22px;
+  }
+  .kpi{
+    background:var(--card); border:1px solid var(--card-line); border-radius:12px;
+    padding:16px 16px 14px; position:relative; overflow:hidden;
+    box-shadow:0 1px 2px rgba(20,20,10,0.04);
+  }
+  .kpi::before{
+    content:""; position:absolute; left:0; top:0; bottom:0; width:4px;
+  }
+  .kpi.c-income::before{ background:var(--blue); }
+  .kpi.c-expense::before{ background:var(--red); }
+  .kpi.c-invest::before{ background:var(--purple); }
+  .kpi.c-savings::before{ background:var(--green); }
+  .kpi.c-rate::before{ background:var(--brass); }
+  .kpi.c-count::before{ background:var(--teal); }
+  .kpi .badge{
+    width:30px;height:30px;border-radius:8px; display:flex;align-items:center;justify-content:center;
+    font-size:15px; margin-bottom:10px;
+  }
+  .kpi.c-income .badge{ background:var(--blue-tint); }
+  .kpi.c-expense .badge{ background:var(--red-tint); }
+  .kpi.c-invest .badge{ background:var(--purple-tint); }
+  .kpi.c-savings .badge{ background:var(--green-tint); }
+  .kpi.c-rate .badge{ background:var(--brass-tint); }
+  .kpi.c-count .badge{ background:var(--teal-tint); }
+  .kpi .lbl{ font-size:10px; letter-spacing:.07em; text-transform:uppercase; color:var(--muted-cool); font-weight:700; margin-bottom:6px;}
+  .kpi .num{ font-family:'IBM Plex Mono',monospace; font-size:21px; font-weight:600; color:var(--ink-text); letter-spacing:-0.01em;}
+  .kpi .delta{ font-size:11.5px; margin-top:6px; font-weight:600; font-family:'IBM Plex Mono',monospace;}
+  .kpi .delta.up{ color:var(--green); }
+  .kpi .delta.down{ color:var(--red); }
+  .kpi .delta.flat{ color:var(--muted); }
+
+  /* ---------------- PANEL GRID ---------------- */
+  .grid3{ display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:16px; margin-bottom:16px; }
+  .panel{
+    background:var(--card); border:1px solid var(--card-line); border-radius:12px;
+    padding:16px 18px 14px; box-shadow:0 1px 2px rgba(20,20,10,0.04);
+  }
+  .panel h3{
+    font-size:12.5px; font-weight:700; letter-spacing:.03em; text-transform:uppercase;
+    color:var(--ink-text); margin:0 0 12px; display:flex; align-items:center; gap:7px;
+    border-bottom:2px solid var(--brass-tint); padding-bottom:10px;
+  }
+  .panel h3 .ic{ font-size:14px; }
+  .chart-wrap{ position:relative; height:220px; }
+  .chart-wrap.tall{ height:250px; }
+
+  .rank-list{ display:flex; flex-direction:column; gap:9px; }
+  .rank-row{ display:flex; align-items:center; gap:10px; font-size:13px; }
+  .rank-row .medal{ width:22px; text-align:center; font-size:14px;}
+  .rank-row .name{ flex:1; color:var(--ink-text); font-weight:500; }
+  .rank-row .amt{ font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:13px; }
+
+  .gauge-num{ font-family:'IBM Plex Mono',monospace; font-size:38px; font-weight:700; color:var(--brass-dark); text-align:center; margin:6px 0 4px;}
+  .gauge-bar{ height:10px; border-radius:6px; background:var(--card-line); overflow:hidden; margin:0 4px 10px; }
+  .gauge-fill{ height:100%; border-radius:6px; background:linear-gradient(90deg,var(--green),var(--brass),var(--red)); }
+  .gauge-lbl{ text-align:center; font-size:11.5px; color:var(--muted); }
+
+  table.year-table{ width:100%; border-collapse:collapse; font-size:12.5px; }
+  table.year-table th{
+    text-align:right; font-size:10px; letter-spacing:.05em; text-transform:uppercase;
+    color:#fff; background:var(--ink); padding:7px 8px; font-weight:600;
+  }
+  table.year-table th:first-child{ text-align:left; border-radius:6px 0 0 0;}
+  table.year-table th:last-child{ border-radius:0 6px 0 0;}
+  table.year-table td{ text-align:right; padding:6px 8px; font-family:'IBM Plex Mono',monospace; border-bottom:1px solid var(--card-line); }
+  table.year-table td:first-child{ text-align:left; font-family:'Inter',sans-serif; font-weight:600;}
+  table.year-table tr.current td{ background:var(--brass-tint); font-weight:700;}
+
+  table.txn-table{ width:100%; border-collapse:collapse; font-size:12.5px; }
+  table.txn-table th{
+    text-align:left; font-size:10px; letter-spacing:.05em; text-transform:uppercase;
+    color:#fff; background:var(--ink); padding:8px 10px; font-weight:600;
+  }
+  table.txn-table th:first-child{ border-radius:6px 0 0 0; }
+  table.txn-table th:last-child{ border-radius:0 6px 0 0; text-align:right; }
+  table.txn-table td{ padding:9px 10px; border-bottom:1px solid var(--card-line); vertical-align:middle; }
+  table.txn-table td.amt{ text-align:right; font-family:'IBM Plex Mono',monospace; font-weight:600; }
+  table.txn-table td.amt.pos{ color:var(--green); }
+  table.txn-table td.amt.neg{ color:var(--red); }
+  table.txn-table tr:last-child td{ border-bottom:none; }
+  .type-pill{ display:inline-block; padding:2px 9px; border-radius:999px; font-size:10.5px; font-weight:700; }
+  .type-pill.Income{ background:var(--green-tint); color:var(--green); }
+  .type-pill.Expense{ background:var(--red-tint); color:var(--red); }
+  .type-pill.Investment{ background:var(--purple-tint); color:var(--purple); }
+
+  .footnote{ margin-top:18px; font-size:11px; color:var(--muted); text-align:center; }
+  .footnote b{ color:var(--ink-text); }
+
+  @media (max-width:1200px){
+    .kpi-row{ grid-template-columns:repeat(3,1fr); }
+    .grid3{ grid-template-columns:1fr; }
+  }
+  @media (max-width:760px){
+    .kpi-row{ grid-template-columns:repeat(2,1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <main class="main">
+    <div class="topbar" id="sec-overview">
+      <div>
+        <h1>Finance Executive Dashboard</h1>
+        <div class="tag">Smart insights into your money, at a glance</div>
+      </div>
+      <div class="controls" id="sec-settings">
+        <label class="loadbtn" for="fileInput">📂 Load Excel Workbook</label>
+        <input type="file" id="fileInput" accept=".xlsx,.xlsm,.xls" hidden>
+        <div class="field">
+          <label>Year</label>
+          <select id="yearSelect"></select>
+        </div>
+        <div class="field">
+          <label>Last Updated</label>
+          <div class="val" id="lastUpdated">—</div>
+        </div>
+      </div>
+    </div>
+    <div id="dataStatus" class="data-status demo">Showing sample data — click <b>Load Excel Workbook</b> above and select your <code>.xlsm</code> file to see your real, current numbers.</div>
+
+    <div class="kpi-row">
+      <div class="kpi c-income"><div class="badge">💰</div><div class="lbl">Total Income</div><div class="num" id="kIncome">—</div><div class="delta" id="dIncome"></div></div>
+      <div class="kpi c-expense"><div class="badge">💸</div><div class="lbl">Total Expense</div><div class="num" id="kExpense">—</div><div class="delta" id="dExpense"></div></div>
+      <div class="kpi c-invest"><div class="badge">📈</div><div class="lbl">Total Investment</div><div class="num" id="kInvest">—</div><div class="delta" id="dInvest"></div></div>
+      <div class="kpi c-savings"><div class="badge">🏦</div><div class="lbl">Net Savings</div><div class="num" id="kSavings">—</div><div class="delta" id="dSavings">this year</div></div>
+      <div class="kpi c-rate"><div class="badge">🎯</div><div class="lbl">Savings Rate</div><div class="num" id="kRate">—</div><div class="delta" id="dRate">target 20%+</div></div>
+      <div class="kpi c-count"><div class="badge">🧾</div><div class="lbl">Transactions</div><div class="num" id="kCount">—</div><div class="delta">entries logged</div></div>
+    </div>
+
+    <div class="grid3">
+      <div class="panel">
+        <h3><span class="ic">📈</span> Monthly Income vs Expense</h3>
+        <div class="chart-wrap"><canvas id="chartTrend"></canvas></div>
+      </div>
+      <div class="panel" id="sec-categories">
+        <h3><span class="ic">◔</span> Expense by Category</h3>
+        <div class="chart-wrap"><canvas id="chartCategory"></canvas></div>
+      </div>
+      <div class="panel">
+        <h3><span class="ic">🏆</span> Top Expense Categories</h3>
+        <div class="chart-wrap"><canvas id="chartTopCat"></canvas></div>
+      </div>
+    </div>
+
+    <div class="grid3">
+      <div class="panel" id="sec-cashflow">
+        <h3><span class="ic">🏅</span> Top Lending Balances</h3>
+        <div class="rank-list" id="lenderList"></div>
+      </div>
+      <div class="panel">
+        <h3><span class="ic">💳</span> Expense by Payment Method</h3>
+        <div class="chart-wrap"><canvas id="chartPayment"></canvas></div>
+      </div>
+      <div class="panel">
+        <h3><span class="ic">📉</span> Monthly Savings Rate</h3>
+        <div class="chart-wrap"><canvas id="chartSavingsRate"></canvas></div>
+      </div>
+    </div>
+
+    <div class="grid3">
+      <div class="panel">
+        <h3><span class="ic">🍰</span> Transaction Mix</h3>
+        <div class="chart-wrap"><canvas id="chartMix"></canvas></div>
+      </div>
+      <div class="panel">
+        <h3><span class="ic">⚖️</span> Expense-to-Income Ratio</h3>
+        <div class="gauge-num" id="gaugeNum">—</div>
+        <div class="gauge-bar"><div class="gauge-fill" id="gaugeFill" style="width:0%"></div></div>
+        <div class="gauge-lbl">Expense as % of income this year — lower is healthier</div>
+      </div>
+      <div class="panel" id="sec-reports">
+        <h3><span class="ic">📅</span> Year-wise Summary</h3>
+        <table class="year-table">
+          <thead><tr><th>Year</th><th>Income</th><th>Expense</th><th>Net</th></tr></thead>
+          <tbody id="yearTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-bottom:16px;" id="sec-transactions">
+      <h3><span class="ic">🕒</span> Latest 5 Transactions <span style="text-transform:none;font-weight:500;color:var(--muted);font-size:11px;">(all-time, most recent first)</span></h3>
+      <table class="txn-table">
+        <thead><tr><th>Date</th><th>Description</th><th>Category</th><th>Type</th><th style="text-align:right">Amount</th></tr></thead>
+        <tbody id="recentBody"></tbody>
+      </table>
+    </div>
+
+    <div class="footnote">All values in <b>₹ (INR)</b> · Data source: Transactions, Cashflow &amp; Settings sheets · Fully dynamic — change the <b>Year</b> selector above to explore any year</div>
+  </main>
+</div>
+
+<script>
+const DEMO_DATA = {"years": [2021, 2022, 2023, 2024, 2025, 2026, 2027], "data": {"2021": {"income": 147316.0, "expense": 16122.98, "investment": 55000.0, "monthly_income": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 69316.0, 0.0, 52000.0, 26000.0], "monthly_expense": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -76407.02, 33500.0, 27210.0, 13100.0, 18720.0], "categories": [{"name": "Home", "value": 48440.0}, {"name": "Rajan", "value": 30300.0}, {"name": "Pawan", "value": 11000.0}, {"name": "Recharge", "value": 2560.0}, {"name": "Other", "value": 230.0}, {"name": "Cashflow", "value": -76407.02}], "payment": [{"name": "Net Banking", "value": -76407.02}], "count": 35}, "2022": {"income": 447176.0, "expense": 203940.0, "investment": 6800.0, "monthly_income": [26000.0, 26000.0, 26000.0, 26000.0, 151000.0, 26000.0, 26000.0, 26000.0, 26000.0, 26852.0, 30662.0, 30662.0], "monthly_expense": [1988.0, 3342.0, 5870.0, 14950.0, 10762.0, 10560.0, 20083.0, 43344.0, 22033.0, 27394.0, 13183.0, 30431.0], "categories": [{"name": "Pawan", "value": 66156.0}, {"name": "Rajan", "value": 61226.0}, {"name": "Home", "value": 39250.0}, {"name": "DRCC", "value": 31998.0}, {"name": "Recharge", "value": 3310.0}, {"name": "Delhi", "value": 2000.0}], "payment": [{"name": "UPI", "value": 5333.0}, {"name": "Net Banking", "value": 5333.0}], "count": 67}, "2023": {"income": 520304.0, "expense": 495895.0, "investment": 14504.0, "monthly_income": [30662.0, 30662.0, 55512.0, 34000.0, 34000.0, 34000.0, 34000.0, 34000.0, 131468.0, 34000.0, 34000.0, 34000.0], "monthly_expense": [21480.0, 36651.0, 59664.0, 43164.0, 23735.0, 31881.0, 65126.0, 85842.0, 36823.0, 22351.0, 31631.0, 37547.0], "categories": [{"name": "Nisha", "value": 135015.0}, {"name": "Pawan", "value": 95720.0}, {"name": "Rajan", "value": 91696.0}, {"name": "Ed LOAN", "value": 61929.0}, {"name": "Delhi", "value": 59040.0}, {"name": "DRCC", "value": 21332.0}, {"name": "Other", "value": 31163.0}], "payment": [], "count": 111}, "2024": {"income": 722110.0, "expense": 698384.53, "investment": 16512.0, "monthly_income": [46000.0, 46000.0, 54500.0, 97500.0, 46000.0, 85000.0, 46000.0, 48000.0, 107000.0, 50110.0, 48000.0, 48000.0], "monthly_expense": [79581.0, 55257.0, 44968.14, 46552.0, 32774.6, 90762.7, 44505.57, 92706.34, 49841.11, 33047.6, 62329.46, 66059.01], "categories": [{"name": "Nisha", "value": 230200.0}, {"name": "Delhi", "value": 101203.31}, {"name": "Home", "value": 94540.2}, {"name": "Pawan", "value": 91828.6}, {"name": "Rajan", "value": 85428.0}, {"name": "Ed LOAN", "value": 80708.02}, {"name": "Other", "value": 14476.4}], "payment": [], "count": 147}, "2025": {"income": 670000.0, "expense": 806992.07, "investment": 20792.0, "monthly_income": [78000.0, 48000.0, 48000.0, 48000.0, 107000.0, 48000.0, 48000.0, 48000.0, 48000.0, 48000.0, 50500.0, 50500.0], "monthly_expense": [120977.33, 120342.04, 70973.12, 65892.98, 39213.0, 113923.0, 17538.6, 36641.8, 101924.0, 40800.0, 31740.0, 47026.2], "categories": [{"name": "Nisha", "value": 252061.0}, {"name": "Rajan", "value": 174544.0}, {"name": "Delhi", "value": 95711.0}, {"name": "Home", "value": 84280.0}, {"name": "Pawan", "value": 59450.0}, {"name": "DRCC", "value": 50000.0}, {"name": "Other", "value": 90946.07}], "payment": [{"name": "Credit Card", "value": 44851.0}], "count": 140}, "2026": {"income": 375929.0, "expense": 479689.44, "investment": 67386.0, "monthly_income": [120874.0, 50500.0, 50500.0, 53055.0, 50500.0, 50500.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "monthly_expense": [33853.6, 143053.24, 65611.8, 79968.2, 103426.6, 34784.0, 18992.0, 0.0, 0.0, 0.0, 0.0, 0.0], "categories": [{"name": "Nisha", "value": 131700.0}, {"name": "Rajan", "value": 79206.55}, {"name": "Pawan", "value": 55171.0}, {"name": "Home", "value": 51509.0}, {"name": "Delhi", "value": 47375.89}, {"name": "Alka", "value": 44600.0}, {"name": "Other", "value": 70127.0}], "payment": [{"name": "UPI", "value": 77492.0}, {"name": "Net Banking", "value": 50500.0}, {"name": "Credit Card", "value": 26002.0}, {"name": "Cash", "value": 8200.0}], "count": 111}, "2027": {"income": 13392.0, "expense": 0.0, "investment": 0.0, "monthly_income": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 13392.0, 0.0, 0.0, 0.0, 0.0, 0.0], "monthly_expense": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "categories": [], "payment": [], "count": 2}}, "lenders": [{"name": "Papa", "balance": 112942}, {"name": "Anuj Bhaiya", "balance": 105000}, {"name": "Bholu bhaiya", "balance": 58772.2}, {"name": "Bitan Bhaiya", "balance": 43341.6}, {"name": "Ankit Tiwari", "balance": 20000}], "recent": [{"date": "2027-07-31", "desc": "MIsbalance not getting the value(1214 till 9 jun)", "type": "Income", "category": "Other Income", "amount": 9188, "payment": ""}, {"date": "2027-07-31", "desc": "11250-5000(21/5)-1971(07/09) Ebill + 500 folding- 575 wire", "type": "Income", "category": "Delhi", "amount": 4204, "payment": ""}, {"date": "2026-07-02", "desc": "Alka. ", "type": "Expense", "category": "Alka", "amount": 5000, "payment": ""}, {"date": "2026-07-02", "desc": "Nisha", "type": "Expense", "category": "Nisha", "amount": 300, "payment": ""}, {"date": "2026-07-01", "desc": "Rhishikesh", "type": "Expense", "category": "Rajan", "amount": 3860, "payment": "UPI"}]};
+
+const PALETTE = ['#33538A','#B23A48','#6B4E9E','#1F7A5C','#B8862E','#1B7F86','#9AA0AC'];
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const fmtINR = n => '₹' + Math.round(n).toLocaleString('en-IN');
+const fmtPct = n => (n*100).toFixed(1) + '%';
+
+Chart.defaults.font.family = "'Inter', sans-serif";
+Chart.defaults.font.size = 11;
+Chart.defaults.color = '#6E7686';
+
+let charts = {};
+function destroyAll(){ Object.values(charts).forEach(c=>c && c.destroy()); }
+
+function render(year){
+  const y = DATA.data[year];
+  const idx = DATA.years.indexOf(year);
+  const prevYear = idx > 0 ? DATA.years[idx-1] : null;
+  const py = prevYear ? DATA.data[prevYear] : null;
+
+  document.getElementById('lastUpdated').textContent = new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+  document.getElementById('kIncome').textContent = fmtINR(y.income);
+  document.getElementById('kExpense').textContent = fmtINR(y.expense);
+  document.getElementById('kInvest').textContent = fmtINR(y.investment);
+  const net = y.income - y.expense - y.investment;
+  document.getElementById('kSavings').textContent = fmtINR(net);
+  const rate = y.income ? net/y.income : 0;
+  document.getElementById('kRate').textContent = fmtPct(rate);
+  document.getElementById('kCount').textContent = y.count.toLocaleString('en-IN');
+
+  function delta(elId, cur, prev){
+    const el = document.getElementById(elId);
+    if(!prev){ el.textContent = 'no prior year'; el.className='delta flat'; return; }
+    const change = prev !== 0 ? (cur-prev)/Math.abs(prev) : 0;
+    const up = cur >= prev;
+    el.textContent = (up?'▲ ':'▼ ') + fmtPct(Math.abs(change)) + ' YoY';
+    el.className = 'delta ' + (up?'up':'down');
+  }
+  delta('dIncome', y.income, py?py.income:null);
+  delta('dExpense', y.expense, py?py.expense:null);
+  delta('dInvest', y.investment, py?py.investment:null);
+
+  // ---- Trend chart (bar expense + line income) ----
+  charts.trend && charts.trend.destroy();
+  charts.trend = new Chart(document.getElementById('chartTrend'), {
+    data:{
+      labels: MONTHS,
+      datasets:[
+        {type:'bar', label:'Expense', data:y.monthly_expense, backgroundColor:'#B23A48', borderRadius:4, order:2},
+        {type:'line', label:'Income', data:y.monthly_income, borderColor:'#1F7A5C', backgroundColor:'#1F7A5C', tension:.35, pointRadius:3, order:1}
+      ]
+    },
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom', labels:{boxWidth:10,padding:12}}},
+      scales:{ y:{ ticks:{callback:v=>'₹'+(v/1000)+'k'}, grid:{color:'#F0EBDD'} }, x:{grid:{display:false}} }
+    }
+  });
+
+  // ---- Category donut ----
+  charts.cat && charts.cat.destroy();
+  const catLabels = y.categories.map(c=>c.name);
+  const catVals = y.categories.map(c=>Math.max(c.value,0));
+  charts.cat = new Chart(document.getElementById('chartCategory'), {
+    type:'doughnut',
+    data:{ labels: catLabels, datasets:[{ data: catVals, backgroundColor: PALETTE, borderWidth:2, borderColor:'#fff' }] },
+    options:{ responsive:true, maintainAspectRatio:false, cutout:'62%',
+      plugins:{legend:{position:'right', labels:{boxWidth:9, font:{size:10.5}}}} }
+  });
+
+  // ---- Top categories bar (horizontal) ----
+  charts.topcat && charts.topcat.destroy();
+  const sortedCats = [...y.categories].sort((a,b)=>b.value-a.value).slice(0,6);
+  charts.topcat = new Chart(document.getElementById('chartTopCat'), {
+    type:'bar',
+    data:{ labels: sortedCats.map(c=>c.name), datasets:[{ data: sortedCats.map(c=>c.value), backgroundColor:'#6B4E9E', borderRadius:4 }] },
+    options:{ indexAxis:'y', responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{ x:{ ticks:{callback:v=>'₹'+(v/1000)+'k'}, grid:{color:'#F0EBDD'} }, y:{grid:{display:false}} } }
+  });
+
+  // ---- Lenders list ----
+  const medals = ['🥇','🥈','🥉','🏅','🏅'];
+  document.getElementById('lenderList').innerHTML = DATA.lenders.map((l,i)=>
+    `<div class="rank-row"><span class="medal">${medals[i]}</span><span class="name">${l.name}</span><span class="amt">${fmtINR(l.balance)}</span></div>`
+  ).join('');
+
+  // ---- Payment donut ----
+  charts.pay && charts.pay.destroy();
+  const payLabels = y.payment.map(p=>p.name);
+  const payVals = y.payment.map(p=>Math.max(p.value,0));
+  charts.pay = new Chart(document.getElementById('chartPayment'), {
+    type:'doughnut',
+    data:{ labels: payLabels.length?payLabels:['No data'], datasets:[{ data: payVals.length?payVals:[1], backgroundColor: payVals.length?PALETTE:['#E7E1D2'], borderWidth:2, borderColor:'#fff' }] },
+    options:{ responsive:true, maintainAspectRatio:false, cutout:'62%',
+      plugins:{legend:{position:'right', labels:{boxWidth:9, font:{size:10.5}}}} }
+  });
+
+  // ---- Monthly savings rate ----
+  charts.rate && charts.rate.destroy();
+  const rates = y.monthly_income.map((inc,i)=> inc ? (inc - y.monthly_expense[i])/inc : 0 );
+  charts.rate = new Chart(document.getElementById('chartSavingsRate'), {
+    type:'line',
+    data:{ labels: MONTHS, datasets:[{ data: rates, borderColor:'#1B7F86', backgroundColor:'rgba(27,127,134,0.12)', fill:true, tension:.3, pointRadius:3 }] },
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{ y:{ ticks:{callback:v=>(v*100).toFixed(0)+'%'}, grid:{color:'#F0EBDD'} }, x:{grid:{display:false}} } }
+  });
+
+  // ---- Transaction mix donut ----
+  charts.mix && charts.mix.destroy();
+  charts.mix = new Chart(document.getElementById('chartMix'), {
+    type:'doughnut',
+    data:{ labels:['Income','Expense','Investment'], datasets:[{ data:[y.income, y.expense, y.investment], backgroundColor:['#33538A','#B23A48','#6B4E9E'], borderWidth:2, borderColor:'#fff' }] },
+    options:{ responsive:true, maintainAspectRatio:false, cutout:'62%',
+      plugins:{legend:{position:'right', labels:{boxWidth:9}}} }
+  });
+
+  // ---- Gauge ----
+  const ratio = y.income ? y.expense / y.income : 0;
+  document.getElementById('gaugeNum').textContent = fmtPct(ratio);
+  document.getElementById('gaugeFill').style.width = Math.min(ratio*100, 150)/1.5 + '%';
+
+  // ---- Year table ----
+  document.getElementById('yearTableBody').innerHTML = DATA.years.map(yr=>{
+    const d = DATA.data[yr];
+    const n = d.income - d.expense - d.investment;
+    return `<tr class="${yr===year?'current':''}"><td>${yr}</td><td>${fmtINR(d.income)}</td><td>${fmtINR(d.expense)}</td><td>${fmtINR(n)}</td></tr>`;
+  }).join('');
+}
+
+let DATA = DEMO_DATA;
+function renderRecent(){
+  const body = document.getElementById('recentBody');
+  const list = DATA.recent || [];
+  if(!list.length){ body.innerHTML = '<tr><td colspan="5" style="color:var(--muted);text-align:center;padding:16px;">No transactions found</td></tr>'; return; }
+  body.innerHTML = list.map(t=>{
+    const cls = t.type==='Expense' ? 'neg' : 'pos';
+    const sign = t.type==='Expense' ? '−' : '+';
+    return `<tr>
+      <td>${t.date}</td>
+      <td>${t.desc || '—'}</td>
+      <td>${t.category || '—'}</td>
+      <td><span class="type-pill ${t.type}">${t.type}</span></td>
+      <td class="amt ${cls}">${sign}${fmtINR(Math.abs(t.amount))}</td>
+    </tr>`;
+  }).join('');
+}
+
+const sel = document.getElementById('yearSelect');
+
+function populateYearsAndRender(preferredYear){
+  sel.innerHTML = '';
+  DATA.years.forEach(y=>{
+    const opt = document.createElement('option');
+    opt.value = y; opt.textContent = y;
+    sel.appendChild(opt);
+  });
+  const target = DATA.years.includes(preferredYear) ? preferredYear : DATA.years[DATA.years.length-1];
+  sel.value = target;
+  render(target);
+  renderRecent();
+}
+sel.addEventListener('change', e=> render(parseInt(e.target.value)));
+
+// ---------------- Build DATA straight from an uploaded Excel workbook ----------------
+function findSheetByName(wb, target){
+  const names = wb.SheetNames;
+  let hit = names.find(n=>n.trim().toLowerCase()===target.toLowerCase());
+  if(!hit) hit = names.find(n=>n.trim().toLowerCase().includes(target.toLowerCase()));
+  return hit ? wb.Sheets[hit] : null;
+}
+
+function norm(v){ return (v==null?'':String(v)).trim().toLowerCase(); }
+
+// Scans the first ~20 rows for a header row containing DATE / TYPE / CATEGORY / AMOUNT
+// and returns {headerRowIdx, col:{date,desc,type,category,amount,payment}} using whichever
+// column each label actually sits in — so this works regardless of exact sheet layout.
+function detectColumns(rows){
+  const wanted = { date:['date'], desc:['description','desc'], type:['type'],
+    category:['category'], amount:['amount'], payment:['payment','payment mode','mode'] };
+  for(let r=0; r<Math.min(20, rows.length); r++){
+    const row = rows[r] || [];
+    const found = {};
+    row.forEach((cell,c)=>{
+      const v = norm(cell);
+      if(!v) return;
+      for(const key in wanted){
+        if(found[key]!=null) continue;
+        if(wanted[key].some(w=>v===w || v.includes(w))) found[key]=c;
+      }
+    });
+    if(found.date!=null && found.type!=null && found.category!=null && found.amount!=null){
+      return { headerRowIdx:r, col:found };
+    }
+  }
+  return null;
+}
+
+function buildDataFromWorkbook(wb){
+  const txnSheet = findSheetByName(wb, 'Transactions');
+  if(!txnSheet) throw new Error('No "Transactions" sheet found. Sheets in this file: ' + wb.SheetNames.join(', '));
+  const rows = XLSX.utils.sheet_to_json(txnSheet, {header:1, raw:true, defval:null});
+
+  const layout = detectColumns(rows);
+  if(!layout) throw new Error('Could not find the DATE / TYPE / CATEGORY / AMOUNT header row on the Transactions sheet — is this the right file?');
+  const { headerRowIdx, col } = layout;
+
+  const byYear = {};
+  const allTxns = [];
+  const ensureYear = y=>{
+    if(!byYear[y]) byYear[y] = { income:0, expense:0, investment:0, monthly_income:Array(12).fill(0),
+      monthly_expense:Array(12).fill(0), catTotals:{}, payTotals:{}, count:0 };
+    return byYear[y];
+  };
+
+  for(let i=headerRowIdx+1; i<rows.length; i++){
+    const r = rows[i];
+    if(!r) continue;
+    let date = r[col.date];
+    const desc = col.desc!=null ? r[col.desc] : null;
+    const type = r[col.type], cat = r[col.category], amount = r[col.amount];
+    const pay = col.payment!=null ? r[col.payment] : null;
+    if(date==null || amount==null || amount==='') continue;
+
+    let dateObj, dparts;
+    if(typeof date === 'number'){
+      const p = XLSX.SSF.parse_date_code(date);
+      if(!p) continue;
+      dateObj = new Date(p.y, (p.m||1)-1, p.d||1);
+      dparts = p;
+    } else if(date instanceof Date){
+      dateObj = date; dparts = {y:date.getFullYear(), m:date.getMonth()+1};
+    } else if(typeof date === 'string'){
+      const parsed = new Date(date);
+      if(isNaN(parsed)) continue;
+      dateObj = parsed; dparts = {y:parsed.getFullYear(), m:parsed.getMonth()+1};
+    } else continue;
+
+    const amt = Number(amount);
+    if(isNaN(amt)) continue;
+    const y = dparts.y, m = (dparts.m!=null?dparts.m:1)-1;
+    const yd = ensureYear(y);
+    yd.count++;
+    const typeNorm = norm(type);
+    if(typeNorm==='income'){ yd.income += amt; yd.monthly_income[m]+=amt; }
+    else if(typeNorm==='expense'){ yd.expense += amt; yd.monthly_expense[m]+=amt; if(cat) yd.catTotals[cat]=(yd.catTotals[cat]||0)+amt; }
+    else if(typeNorm==='investment'){ yd.investment += amt; }
+    if(pay) yd.payTotals[pay]=(yd.payTotals[pay]||0)+amt;
+    allTxns.push({ dateObj, date: dateObj.toISOString().slice(0,10), desc, type, category: cat, amount: amt, payment: pay });
+  }
+
+  if(!allTxns.length) throw new Error('Found the Transactions sheet but no valid dated rows with an amount — check the file has data below the header row.');
+
+  allTxns.sort((a,b)=> b.dateObj - a.dateObj);
+  const recent = allTxns.slice(0,5).map(t=>({date:t.date, desc:t.desc, type:t.type, category:t.category, amount:t.amount, payment:t.payment}));
+  const years = Object.keys(byYear).map(Number).sort((a,b)=>a-b);
+  const data = {};
+  years.forEach(y=>{
+    const yd = byYear[y];
+    const sortedCats = Object.entries(yd.catTotals).sort((a,b)=>b[1]-a[1]);
+    const top = sortedCats.slice(0,6);
+    const otherVal = sortedCats.slice(6).reduce((s,c)=>s+c[1],0);
+    const categories = top.map(([name,value])=>({name,value}));
+    if(otherVal>0) categories.push({name:'Other', value:otherVal});
+    data[y] = {
+      income: yd.income, expense: yd.expense, investment: yd.investment,
+      monthly_income: yd.monthly_income, monthly_expense: yd.monthly_expense,
+      categories, payment: Object.entries(yd.payTotals).sort((a,b)=>b[1]-a[1]).map(([name,value])=>({name,value})),
+      count: yd.count
+    };
+  });
+
+  // Lenders: look for a Settings sheet with lender name / balance pairs; tolerant of layout.
+  let lenders = [];
+  const settingsSheet = findSheetByName(wb, 'Settings');
+  if(settingsSheet){
+    const srows = XLSX.utils.sheet_to_json(settingsSheet, {header:1, raw:true, defval:null});
+    for(let i=0;i<srows.length;i++){
+      const r = srows[i];
+      if(!r) continue;
+      const name = r[4], bal = r[5];
+      if(name && typeof name === 'string' && typeof bal === 'number' && i>=10){
+        lenders.push({name, balance:bal});
+      }
+    }
+    lenders.sort((a,b)=>b.balance-a.balance);
+    lenders = lenders.slice(0,5);
+  }
+
+  return { years, data, lenders, recent };
+}
+
+document.getElementById('fileInput').addEventListener('change', function(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const statusEl = document.getElementById('dataStatus');
+  const reader = new FileReader();
+  reader.onload = function(evt){
+    try{
+      const wb = XLSX.read(evt.target.result, {type:'array', cellDates:true});
+      const newData = buildDataFromWorkbook(wb);
+      if(!newData.years.length) throw new Error('No dated transactions found in the Transactions sheet.');
+      DATA = newData;
+      statusEl.className = 'data-status live';
+      statusEl.innerHTML = '✅ Live data loaded from <b>' + file.name + '</b> — ' + DATA.years.length + ' year(s) found. Reload this file any time your Excel data changes.';
+      populateYearsAndRender(2026);
+    }catch(err){
+      statusEl.className = 'data-status error';
+      statusEl.textContent = '⚠️ Could not read that file: ' + err.message;
+    }
+  };
+  reader.readAsArrayBuffer(file);
+});
+
+populateYearsAndRender(2026);
+</script>
+</body>
+</html>
