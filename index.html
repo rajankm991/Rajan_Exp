@@ -572,6 +572,35 @@ function buildDataFromWorkbook(wb){
   return { years, data, lenders, recent };
 }
 
+const STORAGE_KEY = 'financeDashboard_savedData';
+
+function saveToStorage(newData, filename){
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      payload: newData,
+      filename: filename,
+      loadedAt: new Date().toISOString()
+    }));
+  }catch(err){ console.warn('Could not save to localStorage:', err); }
+}
+
+function loadFromStorage(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return null;
+    return JSON.parse(raw);
+  }catch(err){ return null; }
+}
+
+function clearStorage(){
+  localStorage.removeItem(STORAGE_KEY);
+  DATA = DEMO_DATA;
+  const statusEl = document.getElementById('dataStatus');
+  statusEl.className = 'data-status demo';
+  statusEl.innerHTML = 'Showing sample data — click <b>Load Excel Workbook</b> above and select your <code>.xlsm</code> file to see your real, current numbers.';
+  populateYearsAndRender(2026);
+}
+
 document.getElementById('fileInput').addEventListener('change', function(e){
   const file = e.target.files[0];
   if(!file) return;
@@ -583,8 +612,10 @@ document.getElementById('fileInput').addEventListener('change', function(e){
       const newData = buildDataFromWorkbook(wb);
       if(!newData.years.length) throw new Error('No dated transactions found in the Transactions sheet.');
       DATA = newData;
+      saveToStorage(newData, file.name);
       statusEl.className = 'data-status live';
-      statusEl.innerHTML = '✅ Live data loaded from <b>' + file.name + '</b> — ' + DATA.years.length + ' year(s) found. Reload this file any time your Excel data changes.';
+      statusEl.innerHTML = '✅ Live data loaded from <b>' + file.name + '</b> — ' + DATA.years.length + ' year(s) found. Saved in this browser, so it\'ll still be here next time you open this file. Load a new file any time to refresh it. <a href="#" id="clearSaved" style="color:inherit;text-decoration:underline;margin-left:8px;">Reset to sample data</a>';
+      document.getElementById('clearSaved').addEventListener('click', function(ev){ ev.preventDefault(); clearStorage(); });
       populateYearsAndRender(2026);
     }catch(err){
       statusEl.className = 'data-status error';
@@ -594,7 +625,19 @@ document.getElementById('fileInput').addEventListener('change', function(e){
   reader.readAsArrayBuffer(file);
 });
 
-populateYearsAndRender(2026);
+// On open: restore previously loaded data from this browser, if any
+const saved = loadFromStorage();
+if(saved && saved.payload && saved.payload.years && saved.payload.years.length){
+  DATA = saved.payload;
+  const statusEl = document.getElementById('dataStatus');
+  const when = new Date(saved.loadedAt).toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  statusEl.className = 'data-status live';
+  statusEl.innerHTML = '✅ Showing data loaded from <b>' + (saved.filename||'your file') + '</b> on ' + when + '. Load a new file any time to refresh it. <a href="#" id="clearSaved" style="color:inherit;text-decoration:underline;margin-left:8px;">Reset to sample data</a>';
+  document.getElementById('clearSaved').addEventListener('click', function(ev){ ev.preventDefault(); clearStorage(); });
+  populateYearsAndRender(2026);
+}else{
+  populateYearsAndRender(2026);
+}
 </script>
 </body>
 </html>
