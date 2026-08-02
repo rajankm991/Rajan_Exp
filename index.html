@@ -195,8 +195,8 @@
       </div>
       <div class="controls" id="sec-settings">
         <label class="loadbtn" for="fileInput">📂 Load Excel Workbook</label>
-        /* Link:  https://1drv.ms/x/c/78f278f98e3b3a0a/IQBaYkpiYDiYQL4j1_-es-UbASPizHoe1l_i-X4HISgnu9o?e=LqIsRw */
         <input type="file" id="fileInput" accept=".xlsx,.xlsm,.xls" hidden>
+        <button type="button" class="loadbtn" id="odSettingsBtn" style="background:#fff;color:var(--ink-text);border-color:var(--card-line);">🔗 OneDrive Link</button>
         <button type="button" class="loadbtn" id="ghSettingsBtn" style="background:#fff;color:var(--ink-text);border-color:var(--card-line);">⚙️ GitHub Sync</button>
         <div class="field">
           <label>Year</label>
@@ -210,6 +210,22 @@
     </div>
     <div id="dataStatus" class="data-status demo">Showing sample data — click <b>Load Excel Workbook</b> above and select your <code>.xlsm</code> file to see your real, current numbers.</div>
     <div id="downloadWrap" class="data-status" style="display:none;"></div>
+
+    <div id="odPanel" class="panel" style="display:none; margin-bottom:18px;">
+      <h3><span class="ic">🔗</span> Load from OneDrive <span style="text-transform:none;font-weight:500;color:var(--muted);font-size:11px;">(paste a share link, saved only in this browser)</span></h3>
+      <div style="display:flex; gap:10px; margin-bottom:10px; align-items:flex-end; flex-wrap:wrap;">
+        <div class="field" style="min-width:0; flex:1;">
+          <label>OneDrive share link to your .xlsx / .xlsm</label>
+          <input id="odLink" type="text" placeholder="https://1drv.ms/x/s!Axxxxxxxxxxxxx or https://onedrive.live.com/..." style="border:none;outline:none;font-family:'IBM Plex Mono',monospace;font-size:12.5px;width:100%;">
+        </div>
+        <button type="button" class="loadbtn" id="odFetchBtn">📥 Fetch &amp; Load</button>
+      </div>
+      <span id="odMsg" style="font-size:11.5px;"></span>
+      <p style="font-size:11px;color:var(--muted);margin:10px 0 0;line-height:1.6;">
+        In OneDrive: right-click the file → <b>Share</b> → set to <b>"Anyone with the link"</b> (view access is enough) → <b>Copy link</b> → paste it here.
+        The link is stored only in this browser's local storage. This works best with <b>personal OneDrive</b>; some organisation/SharePoint links block this kind of direct browser fetch (CORS) — if that happens, download the file and use <b>Load Excel Workbook</b> instead.
+      </p>
+    </div>
 
     <div id="ghPanel" class="panel" style="display:none; margin-bottom:18px;">
       <h3><span class="ic">⚙️</span> GitHub Auto-Sync <span style="text-transform:none;font-weight:500;color:var(--muted);font-size:11px;">(one-time setup, saved only in this browser)</span></h3>
@@ -312,6 +328,22 @@ const fmtDateNice = iso => {
   return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
 };
 
+// Prefer the exact last-transaction-date (present once data.json is regenerated with
+// the newer script). If an older data.json doesn't have it yet, fall back to an
+// approximate "Month Year" derived from the last month with any income/expense entry,
+// so the field never shows blank.
+function getLastUpdatedLabel(y, year){
+  if(y.lastDate) return fmtDateNice(y.lastDate);
+  const mi = y.monthly_income || [], me = y.monthly_expense || [];
+  let lastMonthIdx = -1;
+  for(let m=11; m>=0; m--){
+    if((mi[m] && mi[m]!==0) || (me[m] && me[m]!==0)){ lastMonthIdx = m; break; }
+  }
+  if(lastMonthIdx === -1) return '—';
+  const MONTHS_FULL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  return '~' + MONTHS_FULL[lastMonthIdx] + ' ' + year;
+}
+
 Chart.defaults.font.family = "'Inter', sans-serif";
 Chart.defaults.font.size = 11;
 Chart.defaults.color = '#6E7686';
@@ -325,7 +357,7 @@ function render(year){
   const prevYear = idx > 0 ? DATA.years[idx-1] : null;
   const py = prevYear ? DATA.data[prevYear] : null;
 
-  document.getElementById('lastUpdated').textContent = y.lastDate ? fmtDateNice(y.lastDate) : '—';
+  document.getElementById('lastUpdated').textContent = getLastUpdatedLabel(y, year);
   document.getElementById('kIncome').textContent = fmtINR(y.income);
   document.getElementById('kExpense').textContent = fmtINR(y.expense);
   document.getElementById('kInvest').textContent = fmtINR(y.investment);
@@ -601,6 +633,71 @@ function buildDataFromWorkbook(wb){
   return { years, data, lenders, recent };
 }
 
+const OD_KEY = 'financeDashboard_odSettings';
+
+function loadOdSettings(){
+  try{ return JSON.parse(localStorage.getItem(OD_KEY) || 'null'); }catch(e){ return null; }
+}
+function saveOdSettings(s){ localStorage.setItem(OD_KEY, JSON.stringify(s)); }
+
+// Converts a OneDrive/SharePoint "share" link into a direct-download content URL using
+// Microsoft's public shares API. Works for personal OneDrive links shared as
+// "Anyone with the link". See: https://docs.microsoft.com/onedrive/developer/rest-api/api/shares_get
+function oneDriveShareToDirectUrl(shareUrl){
+  const trimmed = shareUrl.trim();
+  if(!trimmed) throw new Error('Paste a OneDrive share link first.');
+  // base64-encode the URL, then make it URL-safe per the API's requirements
+  const b64 = btoa(unescape(encodeURIComponent(trimmed)))
+    .replace(/=+$/, '')
+    .replace(/\//g, '_')
+    .replace(/\+/g, '-');
+  const encoded = 'u!' + b64;
+  return `https://api.onedrive.com/v1.0/shares/${encoded}/root/content`;
+}
+
+async function fetchWorkbookFromOneDrive(shareUrl){
+  const directUrl = oneDriveShareToDirectUrl(shareUrl);
+  const resp = await fetch(directUrl);
+  if(!resp.ok) throw new Error('OneDrive returned HTTP ' + resp.status + ' — check the link is set to "Anyone with the link" can view.');
+  const buf = await resp.arrayBuffer();
+  const wb = XLSX.read(buf, {type:'array', cellDates:true});
+  return buildDataFromWorkbook(wb);
+}
+
+(function initOdPanel(){
+  const saved = loadOdSettings();
+  if(saved && saved.link) document.getElementById('odLink').value = saved.link;
+
+  document.getElementById('odSettingsBtn').addEventListener('click', ()=>{
+    const p = document.getElementById('odPanel');
+    p.style.display = p.style.display==='none' ? 'block' : 'none';
+  });
+
+  document.getElementById('odFetchBtn').addEventListener('click', async ()=>{
+    const link = document.getElementById('odLink').value.trim();
+    const msg = document.getElementById('odMsg');
+    const btn = document.getElementById('odFetchBtn');
+    if(!link){ msg.style.color = 'var(--red)'; msg.textContent = 'Paste a link first.'; return; }
+    saveOdSettings({ link });
+    btn.disabled = true; btn.textContent = '⏳ Fetching…';
+    msg.style.color = 'var(--muted)'; msg.textContent = 'Downloading and parsing…';
+    try{
+      const newData = await fetchWorkbookFromOneDrive(link);
+      if(!newData.years.length) throw new Error('No dated transactions found in the Transactions sheet.');
+      DATA = newData;
+      msg.style.color = 'var(--green)'; msg.textContent = '✓ Loaded from OneDrive';
+      showBanner('live', '👁️ Previewing data fetched from your <b>OneDrive link</b> (' + DATA.years.length + ' year(s) found). This is local-only — download & commit <code>data.json</code> below to make it visible on every device.');
+      offerDownload(newData, 'OneDrive');
+      populateYearsAndRender(2026);
+    }catch(err){
+      msg.style.color = 'var(--red)'; msg.textContent = '⚠️ ' + err.message;
+      showBanner('error', '⚠️ Could not fetch from OneDrive: ' + err.message);
+    }finally{
+      btn.disabled = false; btn.textContent = '📥 Fetch & Load';
+    }
+  });
+})();
+
 const GH_KEY = 'financeDashboard_ghSettings';
 
 function loadGhSettings(){
@@ -744,3 +841,4 @@ fetch(DATA_JSON_PATH, {cache:'no-store'})
 </script>
 </body>
 </html>
+ /* Link:  https://1drv.ms/x/c/78f278f98e3b3a0a/IQBaYkpiYDiYQL4j1_-es-UbASPizHoe1l_i-X4HISgnu9o?e=LqIsRw */
