@@ -139,7 +139,11 @@
       </select>
     </div>
     <div class="field">
-      <label>Search (description / category)</label>
+      <label>Category</label>
+      <select id="fCategory"><option value="">All</option></select>
+    </div>
+    <div class="field">
+      <label>Search (description)</label>
       <input type="text" id="fSearch" placeholder="e.g. Nisha, Rajan, Delhi...">
     </div>
     <div class="countInfo" id="countInfo"></div>
@@ -197,16 +201,28 @@ function populateYearFilter(txns){
   });
 }
 
+function populateCategoryFilter(txns){
+  const cats = Array.from(new Set(txns.map(t => t.category).filter(Boolean))).sort((a,b)=> String(a).localeCompare(String(b)));
+  const sel = document.getElementById('fCategory');
+  cats.forEach(c=>{
+    const opt = document.createElement('option');
+    opt.value = c; opt.textContent = c;
+    sel.appendChild(opt);
+  });
+}
+
 function applyFilters(){
   const year = document.getElementById('fYear').value;
   const type = document.getElementById('fType').value;
+  const category = document.getElementById('fCategory').value;
   const q = document.getElementById('fSearch').value.trim().toLowerCase();
 
   filtered = ALL_TXNS.filter(t=>{
     if(year && !(t.date||'').startsWith(year)) return false;
     if(type && t.type !== type) return false;
+    if(category && t.category !== category) return false;
     if(q){
-      const hay = ((t.desc||'') + ' ' + (t.category||'')).toLowerCase();
+      const hay = (t.desc||'').toLowerCase();
       if(!hay.includes(q)) return false;
     }
     return true;
@@ -262,6 +278,7 @@ function renderPage(){
 
 document.getElementById('fYear').addEventListener('change', applyFilters);
 document.getElementById('fType').addEventListener('change', applyFilters);
+document.getElementById('fCategory').addEventListener('change', applyFilters);
 document.getElementById('fSearch').addEventListener('input', applyFilters);
 document.getElementById('prevBtn').addEventListener('click', ()=>{ if(page>1){ page--; renderPage(); } });
 document.getElementById('nextBtn').addEventListener('click', ()=>{ page++; renderPage(); });
@@ -282,6 +299,7 @@ function loadFrom(data, label, cls){
   ALL_TXNS = (data.all && data.all.length) ? data.all : (data.recent || []);
   const usingFallback = !(data.all && data.all.length);
   populateYearFilter(ALL_TXNS);
+  populateCategoryFilter(ALL_TXNS);
   showBanner(cls, label + (usingFallback ? ' <br><span style="opacity:.85">Note: this data.json only has the latest 5 transactions (old format) — re-generate it (Load Excel Workbook → push) on the dashboard to see every row here.</span>' : ''));
   document.getElementById('arrow-date').textContent = '▼';
   applyFilters();
