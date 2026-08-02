@@ -194,9 +194,10 @@
         <div class="tag">Smart insights into your money, at a glance</div>
       </div>
       <div class="controls" id="sec-settings">
+        <a class="loadbtn" href="transactions.html" style="text-decoration:none;background:#fff;color:var(--ink-text);border-color:var(--card-line);">📋 All Transactions</a>
+        <a class="loadbtn" href="cashflow.html" style="text-decoration:none;background:#fff;color:var(--ink-text);border-color:var(--card-line);">💱 Cashflow Ledger</a>
         <label class="loadbtn" for="fileInput">📂 Load Excel Workbook</label>
         <input type="file" id="fileInput" accept=".xlsx,.xlsm,.xls" hidden>
-        <button type="button" class="loadbtn" id="odSettingsBtn" style="background:#fff;color:var(--ink-text);border-color:var(--card-line);">🔗 OneDrive Link</button>
         <button type="button" class="loadbtn" id="ghSettingsBtn" style="background:#fff;color:var(--ink-text);border-color:var(--card-line);">⚙️ GitHub Sync</button>
         <div class="field">
           <label>Year</label>
@@ -210,24 +211,6 @@
     </div>
     <div id="dataStatus" class="data-status demo">Showing sample data — click <b>Load Excel Workbook</b> above and select your <code>.xlsm</code> file to see your real, current numbers.</div>
     <div id="downloadWrap" class="data-status" style="display:none;"></div>
-
-    <div id="odPanel" class="panel" style="display:none; margin-bottom:18px;">
-      <h3><span class="ic">🔗</span> Load from OneDrive <span style="text-transform:none;font-weight:500;color:var(--muted);font-size:11px;">(paste a share link, saved only in this browser)</span></h3>
-      <div style="display:flex; gap:10px; margin-bottom:10px; align-items:flex-end; flex-wrap:wrap;">
-        <div class="field" style="min-width:0; flex:1;">
-          <label>OneDrive share link to your .xlsx / .xlsm</label>
-          <input id="odLink" type="text" value="https://1drv.ms/x/c/78f278f98e3b3a0a/IQBaYkpiYDiYQL4j1_-es-UbASPizHoe1l_i-X4HISgnu9o?e=LqIsRw" placeholder="https://1drv.ms/x/s!Axxxxxxxxxxxxx or https://onedrive.live.com/..." style="border:none;outline:none;font-family:'IBM Plex Mono',monospace;font-size:12.5px;width:100%;">
-        </div>
-        <button type="button" class="loadbtn" id="odFetchBtn">📥 Fetch &amp; Load</button>
-      </div>
-      <span id="odMsg" style="font-size:11.5px;"></span>
-      <p style="font-size:11px;color:var(--muted);margin:10px 0 0;line-height:1.6;">
-        In OneDrive: right-click the file → <b>Share</b> → set to <b>"Anyone with the link"</b> (view or edit both work) → <b>Copy link</b> → paste it here.
-        The link is stored only in this browser's local storage. This works for personal OneDrive Excel files — Microsoft retired the old direct-download API in 2024/2025,
-        so this now uses the simpler <code>&amp;download=1</code> link trick instead. If your browser blocks the fetch (shows a CORS error), OneDrive itself isn't allowing
-        this page's domain to read the file directly — in that case just download the file and use <b>Load Excel Workbook</b> above instead.
-      </p>
-    </div>
 
     <div id="ghPanel" class="panel" style="display:none; margin-bottom:18px;">
       <h3><span class="ic">⚙️</span> GitHub Auto-Sync <span style="text-transform:none;font-weight:500;color:var(--muted);font-size:11px;">(one-time setup, saved only in this browser)</span></h3>
@@ -317,7 +300,7 @@
 </div>
 
 <script>
-const DEMO_DATA = {"years": [2021, 2022, 2023, 2024, 2025, 2026, 2027], "data": {"2021": {"income": 147316.0, "expense": 16122.98, "investment": 55000.0, "monthly_income": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 69316.0, 0.0, 52000.0, 26000.0], "monthly_expense": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -76407.02, 33500.0, 27210.0, 13100.0, 18720.0], "categories": [{"name": "Home", "value": 48440.0}, {"name": "Rajan", "value": 30300.0}, {"name": "Pawan", "value": 11000.0}, {"name": "Recharge", "value": 2560.0}, {"name": "Other", "value": 230.0}, {"name": "Cashflow", "value": -76407.02}], "payment": [{"name": "Net Banking", "value": -76407.02}], "count": 35, "lastDate": "2021-12-31"}, "2022": {"income": 447176.0, "expense": 203940.0, "investment": 6800.0, "monthly_income": [26000.0, 26000.0, 26000.0, 26000.0, 151000.0, 26000.0, 26000.0, 26000.0, 26000.0, 26852.0, 30662.0, 30662.0], "monthly_expense": [1988.0, 3342.0, 5870.0, 14950.0, 10762.0, 10560.0, 20083.0, 43344.0, 22033.0, 27394.0, 13183.0, 30431.0], "categories": [{"name": "Pawan", "value": 66156.0}, {"name": "Rajan", "value": 61226.0}, {"name": "Home", "value": 39250.0}, {"name": "DRCC", "value": 31998.0}, {"name": "Recharge", "value": 3310.0}, {"name": "Delhi", "value": 2000.0}], "payment": [{"name": "UPI", "value": 5333.0}, {"name": "Net Banking", "value": 5333.0}], "count": 67, "lastDate": "2022-12-31"}, "2023": {"income": 520304.0, "expense": 495895.0, "investment": 14504.0, "monthly_income": [30662.0, 30662.0, 55512.0, 34000.0, 34000.0, 34000.0, 34000.0, 34000.0, 131468.0, 34000.0, 34000.0, 34000.0], "monthly_expense": [21480.0, 36651.0, 59664.0, 43164.0, 23735.0, 31881.0, 65126.0, 85842.0, 36823.0, 22351.0, 31631.0, 37547.0], "categories": [{"name": "Nisha", "value": 135015.0}, {"name": "Pawan", "value": 95720.0}, {"name": "Rajan", "value": 91696.0}, {"name": "Ed LOAN", "value": 61929.0}, {"name": "Delhi", "value": 59040.0}, {"name": "DRCC", "value": 21332.0}, {"name": "Other", "value": 31163.0}], "payment": [], "count": 111, "lastDate": "2023-12-31"}, "2024": {"income": 722110.0, "expense": 698384.53, "investment": 16512.0, "monthly_income": [46000.0, 46000.0, 54500.0, 97500.0, 46000.0, 85000.0, 46000.0, 48000.0, 107000.0, 50110.0, 48000.0, 48000.0], "monthly_expense": [79581.0, 55257.0, 44968.14, 46552.0, 32774.6, 90762.7, 44505.57, 92706.34, 49841.11, 33047.6, 62329.46, 66059.01], "categories": [{"name": "Nisha", "value": 230200.0}, {"name": "Delhi", "value": 101203.31}, {"name": "Home", "value": 94540.2}, {"name": "Pawan", "value": 91828.6}, {"name": "Rajan", "value": 85428.0}, {"name": "Ed LOAN", "value": 80708.02}, {"name": "Other", "value": 14476.4}], "payment": [], "count": 147, "lastDate": "2024-12-31"}, "2025": {"income": 670000.0, "expense": 806992.07, "investment": 20792.0, "monthly_income": [78000.0, 48000.0, 48000.0, 48000.0, 107000.0, 48000.0, 48000.0, 48000.0, 48000.0, 48000.0, 50500.0, 50500.0], "monthly_expense": [120977.33, 120342.04, 70973.12, 65892.98, 39213.0, 113923.0, 17538.6, 36641.8, 101924.0, 40800.0, 31740.0, 47026.2], "categories": [{"name": "Nisha", "value": 252061.0}, {"name": "Rajan", "value": 174544.0}, {"name": "Delhi", "value": 95711.0}, {"name": "Home", "value": 84280.0}, {"name": "Pawan", "value": 59450.0}, {"name": "DRCC", "value": 50000.0}, {"name": "Other", "value": 90946.07}], "payment": [{"name": "Credit Card", "value": 44851.0}], "count": 140, "lastDate": "2025-12-31"}, "2026": {"income": 375929.0, "expense": 479689.44, "investment": 67386.0, "monthly_income": [120874.0, 50500.0, 50500.0, 53055.0, 50500.0, 50500.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "monthly_expense": [33853.6, 143053.24, 65611.8, 79968.2, 103426.6, 34784.0, 18992.0, 0.0, 0.0, 0.0, 0.0, 0.0], "categories": [{"name": "Nisha", "value": 131700.0}, {"name": "Rajan", "value": 79206.55}, {"name": "Pawan", "value": 55171.0}, {"name": "Home", "value": 51509.0}, {"name": "Delhi", "value": 47375.89}, {"name": "Alka", "value": 44600.0}, {"name": "Other", "value": 70127.0}], "payment": [{"name": "UPI", "value": 77492.0}, {"name": "Net Banking", "value": 50500.0}, {"name": "Credit Card", "value": 26002.0}, {"name": "Cash", "value": 8200.0}], "count": 111, "lastDate": "2026-07-02"}, "2027": {"income": 13392.0, "expense": 0.0, "investment": 0.0, "monthly_income": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 13392.0, 0.0, 0.0, 0.0, 0.0, 0.0], "monthly_expense": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "categories": [], "payment": [], "count": 2, "lastDate": "2027-07-31"}}, "lenders": [{"name": "Papa", "balance": 112942}, {"name": "Anuj Bhaiya", "balance": 105000}, {"name": "Bholu bhaiya", "balance": 58772.2}, {"name": "Bitan Bhaiya", "balance": 43341.6}, {"name": "Ankit Tiwari", "balance": 20000}], "recent": [{"date": "2027-07-31", "desc": "MIsbalance not getting the value(1214 till 9 jun)", "type": "Income", "category": "Other Income", "amount": 9188, "payment": ""}, {"date": "2027-07-31", "desc": "11250-5000(21/5)-1971(07/09) Ebill + 500 folding- 575 wire", "type": "Income", "category": "Delhi", "amount": 4204, "payment": ""}, {"date": "2026-07-02", "desc": "Alka. ", "type": "Expense", "category": "Alka", "amount": 5000, "payment": ""}, {"date": "2026-07-02", "desc": "Nisha", "type": "Expense", "category": "Nisha", "amount": 300, "payment": ""}, {"date": "2026-07-01", "desc": "Rhishikesh", "type": "Expense", "category": "Rajan", "amount": 3860, "payment": "UPI"}]};
+const DEMO_DATA = {"years": [2021, 2022, 2023, 2024, 2025, 2026, 2027], "data": {"2021": {"income": 147316.0, "expense": 16122.98, "investment": 55000.0, "monthly_income": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 69316.0, 0.0, 52000.0, 26000.0], "monthly_expense": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -76407.02, 33500.0, 27210.0, 13100.0, 18720.0], "categories": [{"name": "Home", "value": 48440.0}, {"name": "Rajan", "value": 30300.0}, {"name": "Pawan", "value": 11000.0}, {"name": "Recharge", "value": 2560.0}, {"name": "Other", "value": 230.0}, {"name": "Cashflow", "value": -76407.02}], "payment": [{"name": "Net Banking", "value": -76407.02}], "count": 35, "lastDate": "2021-12-31"}, "2022": {"income": 447176.0, "expense": 203940.0, "investment": 6800.0, "monthly_income": [26000.0, 26000.0, 26000.0, 26000.0, 151000.0, 26000.0, 26000.0, 26000.0, 26000.0, 26852.0, 30662.0, 30662.0], "monthly_expense": [1988.0, 3342.0, 5870.0, 14950.0, 10762.0, 10560.0, 20083.0, 43344.0, 22033.0, 27394.0, 13183.0, 30431.0], "categories": [{"name": "Pawan", "value": 66156.0}, {"name": "Rajan", "value": 61226.0}, {"name": "Home", "value": 39250.0}, {"name": "DRCC", "value": 31998.0}, {"name": "Recharge", "value": 3310.0}, {"name": "Delhi", "value": 2000.0}], "payment": [{"name": "UPI", "value": 5333.0}, {"name": "Net Banking", "value": 5333.0}], "count": 67, "lastDate": "2022-12-31"}, "2023": {"income": 520304.0, "expense": 495895.0, "investment": 14504.0, "monthly_income": [30662.0, 30662.0, 55512.0, 34000.0, 34000.0, 34000.0, 34000.0, 34000.0, 131468.0, 34000.0, 34000.0, 34000.0], "monthly_expense": [21480.0, 36651.0, 59664.0, 43164.0, 23735.0, 31881.0, 65126.0, 85842.0, 36823.0, 22351.0, 31631.0, 37547.0], "categories": [{"name": "Nisha", "value": 135015.0}, {"name": "Pawan", "value": 95720.0}, {"name": "Rajan", "value": 91696.0}, {"name": "Ed LOAN", "value": 61929.0}, {"name": "Delhi", "value": 59040.0}, {"name": "DRCC", "value": 21332.0}, {"name": "Other", "value": 31163.0}], "payment": [], "count": 111, "lastDate": "2023-12-31"}, "2024": {"income": 722110.0, "expense": 698384.53, "investment": 16512.0, "monthly_income": [46000.0, 46000.0, 54500.0, 97500.0, 46000.0, 85000.0, 46000.0, 48000.0, 107000.0, 50110.0, 48000.0, 48000.0], "monthly_expense": [79581.0, 55257.0, 44968.14, 46552.0, 32774.6, 90762.7, 44505.57, 92706.34, 49841.11, 33047.6, 62329.46, 66059.01], "categories": [{"name": "Nisha", "value": 230200.0}, {"name": "Delhi", "value": 101203.31}, {"name": "Home", "value": 94540.2}, {"name": "Pawan", "value": 91828.6}, {"name": "Rajan", "value": 85428.0}, {"name": "Ed LOAN", "value": 80708.02}, {"name": "Other", "value": 14476.4}], "payment": [], "count": 147, "lastDate": "2024-12-31"}, "2025": {"income": 670000.0, "expense": 806992.07, "investment": 20792.0, "monthly_income": [78000.0, 48000.0, 48000.0, 48000.0, 107000.0, 48000.0, 48000.0, 48000.0, 48000.0, 48000.0, 50500.0, 50500.0], "monthly_expense": [120977.33, 120342.04, 70973.12, 65892.98, 39213.0, 113923.0, 17538.6, 36641.8, 101924.0, 40800.0, 31740.0, 47026.2], "categories": [{"name": "Nisha", "value": 252061.0}, {"name": "Rajan", "value": 174544.0}, {"name": "Delhi", "value": 95711.0}, {"name": "Home", "value": 84280.0}, {"name": "Pawan", "value": 59450.0}, {"name": "DRCC", "value": 50000.0}, {"name": "Other", "value": 90946.07}], "payment": [{"name": "Credit Card", "value": 44851.0}], "count": 140, "lastDate": "2025-12-31"}, "2026": {"income": 375929.0, "expense": 479689.44, "investment": 67386.0, "monthly_income": [120874.0, 50500.0, 50500.0, 53055.0, 50500.0, 50500.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "monthly_expense": [33853.6, 143053.24, 65611.8, 79968.2, 103426.6, 34784.0, 18992.0, 0.0, 0.0, 0.0, 0.0, 0.0], "categories": [{"name": "Nisha", "value": 131700.0}, {"name": "Rajan", "value": 79206.55}, {"name": "Pawan", "value": 55171.0}, {"name": "Home", "value": 51509.0}, {"name": "Delhi", "value": 47375.89}, {"name": "Alka", "value": 44600.0}, {"name": "Other", "value": 70127.0}], "payment": [{"name": "UPI", "value": 77492.0}, {"name": "Net Banking", "value": 50500.0}, {"name": "Credit Card", "value": 26002.0}, {"name": "Cash", "value": 8200.0}], "count": 111, "lastDate": "2026-07-02"}, "2027": {"income": 13392.0, "expense": 0.0, "investment": 0.0, "monthly_income": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 13392.0, 0.0, 0.0, 0.0, 0.0, 0.0], "monthly_expense": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "categories": [], "payment": [], "count": 2, "lastDate": "2027-07-31"}}, "lenders": [{"name": "Papa", "balance": 112942}, {"name": "Anuj Bhaiya", "balance": 105000}, {"name": "Bholu bhaiya", "balance": 58772.2}, {"name": "Bitan Bhaiya", "balance": 43341.6}, {"name": "Ankit Tiwari", "balance": 20000}], "recent": [{"date": "2027-07-31", "desc": "MIsbalance not getting the value(1214 till 9 jun)", "type": "Income", "category": "Other Income", "amount": 9188, "payment": ""}, {"date": "2027-07-31", "desc": "11250-5000(21/5)-1971(07/09) Ebill + 500 folding- 575 wire", "type": "Income", "category": "Delhi", "amount": 4204, "payment": ""}, {"date": "2026-07-02", "desc": "Alka. ", "type": "Expense", "category": "Alka", "amount": 5000, "payment": ""}, {"date": "2026-07-02", "desc": "Nisha", "type": "Expense", "category": "Nisha", "amount": 300, "payment": ""}, {"date": "2026-07-01", "desc": "Rhishikesh", "type": "Expense", "category": "Rajan", "amount": 3860, "payment": "UPI"}], "all": [{"date": "2027-07-31", "desc": "MIsbalance not getting the value(1214 till 9 jun)", "type": "Income", "category": "Other Income", "amount": 9188, "payment": ""}, {"date": "2027-07-31", "desc": "11250-5000(21/5)-1971(07/09) Ebill + 500 folding- 575 wire", "type": "Income", "category": "Delhi", "amount": 4204, "payment": ""}, {"date": "2026-07-02", "desc": "Alka. ", "type": "Expense", "category": "Alka", "amount": 5000, "payment": ""}, {"date": "2026-07-02", "desc": "Nisha", "type": "Expense", "category": "Nisha", "amount": 300, "payment": ""}, {"date": "2026-07-01", "desc": "Rhishikesh", "type": "Expense", "category": "Rajan", "amount": 3860, "payment": "UPI"}]};
 
 const PALETTE = ['#33538A','#B23A48','#6B4E9E','#1F7A5C','#B8862E','#1B7F86','#9AA0AC'];
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -596,7 +579,9 @@ function buildDataFromWorkbook(wb){
   if(!allTxns.length) throw new Error('Found the Transactions sheet but no valid dated rows with an amount — check the file has data below the header row.');
 
   allTxns.sort((a,b)=> b.dateObj - a.dateObj);
-  const recent = allTxns.slice(0,5).map(t=>({date:t.date, desc:t.desc, type:t.type, category:t.category, amount:t.amount, payment:t.payment}));
+  // Full list (every row from the Transactions sheet) — powers the "All Transactions" page.
+  const all = allTxns.map(t=>({date:t.date, desc:t.desc, type:t.type, category:t.category, amount:t.amount, payment:t.payment}));
+  const recent = all.slice(0,5);
   const years = Object.keys(byYear).map(Number).sort((a,b)=>a-b);
   const data = {};
   years.forEach(y=>{
@@ -632,75 +617,70 @@ function buildDataFromWorkbook(wb){
     lenders = lenders.slice(0,5);
   }
 
-  return { years, data, lenders, recent };
+  const cashflow = parseCashflowSheet(wb);
+
+  return { years, data, lenders, recent, all, cashflow };
 }
 
-const OD_KEY = 'financeDashboard_odSettings';
-const DEFAULT_ONEDRIVE_LINK = 'https://1drv.ms/x/c/78f278f98e3b3a0a/IQBaYkpiYDiYQL4j1_-es-UbASPizHoe1l_i-X4HISgnu9o?e=LqIsRw';
+// Parses the "Cashflow" sheet (lender ledger: DATE / Name / TYPE (Given|Received) / CATEGORY /
+// AMOUNT / Notes) into a flat, sorted list — powers the "Cashflow Ledger" page.
+function parseCashflowSheet(wb){
+  const sheet = findSheetByName(wb, 'Cashflow');
+  if(!sheet) return [];
+  const rows = XLSX.utils.sheet_to_json(sheet, {header:1, raw:true, defval:null});
 
-function loadOdSettings(){
-  try{ return JSON.parse(localStorage.getItem(OD_KEY) || 'null'); }catch(e){ return null; }
-}
-function saveOdSettings(s){ localStorage.setItem(OD_KEY, JSON.stringify(s)); }
-
-// Converts a OneDrive "share" link into a direct-download URL.
-// NOTE: Microsoft deprecated the old api.onedrive.com "u!" encoding trick in 2024/2025 —
-// it now returns 401 Unauthorized for everyone, regardless of sharing permissions.
-// The method that still works (as of 2025+) for Office files (.xlsx/.xlsm/.docx/.pptx)
-// shared as "Anyone with the link" is simply appending &download=1 (or ?download=1) to
-// the share URL itself — no encoding needed.
-function oneDriveShareToDirectUrl(shareUrl){
-  const trimmed = shareUrl.trim();
-  if(!trimmed) throw new Error('Paste a OneDrive share link first.');
-  const sep = trimmed.includes('?') ? '&' : '?';
-  return trimmed + sep + 'download=1';
-}
-
-async function fetchWorkbookArrayBufferFromOneDrive(shareUrl){
-  const directUrl = oneDriveShareToDirectUrl(shareUrl);
-  const resp = await fetch(directUrl);
-  if(!resp.ok) throw new Error('OneDrive returned HTTP ' + resp.status + ' — check the link is set to "Anyone with the link" can view.');
-  return await resp.arrayBuffer();
-}
-
-(function initOdPanel(){
-  const saved = loadOdSettings();
-  document.getElementById('odLink').value = (saved && saved.link) ? saved.link : DEFAULT_ONEDRIVE_LINK;
-
-  document.getElementById('odSettingsBtn').addEventListener('click', ()=>{
-    const p = document.getElementById('odPanel');
-    p.style.display = p.style.display==='none' ? 'block' : 'none';
-  });
-
-  document.getElementById('odFetchBtn').addEventListener('click', async ()=>{
-    const link = document.getElementById('odLink').value.trim();
-    const msg = document.getElementById('odMsg');
-    const btn = document.getElementById('odFetchBtn');
-    if(!link){ msg.style.color = 'var(--red)'; msg.textContent = 'Paste a link first.'; return; }
-    saveOdSettings({ link });
-    btn.disabled = true; btn.textContent = '⏳ Fetching…';
-    msg.style.color = 'var(--muted)'; msg.textContent = 'Downloading and parsing…';
-    try{
-      const buf = await fetchWorkbookArrayBufferFromOneDrive(link);
-      const ok = processWorkbookArrayBuffer(buf, 'OneDrive workbook');
-      msg.style.color = ok ? 'var(--green)' : 'var(--red)';
-      msg.textContent = ok ? '✓ Loaded from OneDrive' : '⚠️ See message above';
-    }catch(err){
-      // A CORS-blocked cross-origin request surfaces as a generic "Failed to fetch"
-      // TypeError with no HTTP status — that specifically means OneDrive's server
-      // isn't allowing this page's domain to read the file directly, and no client-side
-      // fix exists for that; the manual "Load Excel Workbook" button is the reliable fallback.
-      const isCors = err instanceof TypeError;
-      const friendly = isCors
-        ? 'Browser blocked this (CORS) — OneDrive isn\'t allowing this site to fetch the file directly. Use "Load Excel Workbook" instead: download the file from OneDrive, then pick it there.'
-        : err.message;
-      msg.style.color = 'var(--red)'; msg.textContent = '⚠️ ' + friendly;
-      showBanner('error', '⚠️ Could not fetch from OneDrive: ' + friendly);
-    }finally{
-      btn.disabled = false; btn.textContent = '📥 Fetch & Load';
+  const wanted = { date:['date'], name:['name'], type:['type'], category:['category'],
+    amount:['amount'], given:['given'], received:['received'], notes:['notes'] };
+  let layout = null;
+  for(let r=0; r<Math.min(20, rows.length); r++){
+    const row = rows[r] || [];
+    const found = {};
+    row.forEach((cell,c)=>{
+      const v = norm(cell);
+      if(!v) return;
+      for(const key in wanted){
+        if(found[key]!=null) continue;
+        if(wanted[key].some(w=>v===w || v.includes(w))) found[key]=c;
+      }
+    });
+    if(found.date!=null && found.name!=null && found.type!=null && found.amount!=null){
+      layout = { headerRowIdx:r, col:found };
+      break;
     }
-  });
-})();
+  }
+  if(!layout) return [];
+  const { headerRowIdx, col } = layout;
+
+  const list = [];
+  for(let i=headerRowIdx+1; i<rows.length; i++){
+    const r = rows[i];
+    if(!r) continue;
+    let date = r[col.date];
+    const name = r[col.name], type = r[col.type], cat = col.category!=null ? r[col.category] : null;
+    const amount = r[col.amount];
+    const notes = col.notes!=null ? r[col.notes] : null;
+    if(date==null || name==null || amount==null || amount==='') continue;
+
+    let dateObj;
+    if(typeof date === 'number'){
+      const p = XLSX.SSF.parse_date_code(date);
+      if(!p) continue;
+      dateObj = new Date(p.y, (p.m||1)-1, p.d||1);
+    } else if(date instanceof Date){
+      dateObj = date;
+    } else if(typeof date === 'string'){
+      const parsed = new Date(date);
+      if(isNaN(parsed)) continue;
+      dateObj = parsed;
+    } else continue;
+
+    const amt = Number(amount);
+    if(isNaN(amt)) continue;
+    list.push({ dateObj, date: dateObj.toISOString().slice(0,10), name, type, category: cat, amount: amt, notes });
+  }
+  list.sort((a,b)=> b.dateObj - a.dateObj);
+  return list.map(t=>({date:t.date, name:t.name, type:t.type, category:t.category, amount:t.amount, notes:t.notes}));
+}
 
 const GH_KEY = 'financeDashboard_ghSettings';
 
@@ -805,8 +785,8 @@ function offerDownload(newData, sourceLabel){
   }
 }
 
-// Shared processing: takes a raw Excel ArrayBuffer (from a local file OR a fetched OneDrive
-// file — same downstream logic either way) and updates the page, preview, and push options.
+// Shared processing: takes a raw Excel ArrayBuffer from a locally chosen file and
+// updates the page, preview, and push options.
 function processWorkbookArrayBuffer(arrayBuffer, sourceLabel){
   try{
     const wb = XLSX.read(arrayBuffer, {type:'array', cellDates:true});
