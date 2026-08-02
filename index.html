@@ -296,6 +296,7 @@
     </div>
 
     <div class="footnote">All values in <b>₹ (INR)</b> · Data source: Transactions, Cashflow &amp; Settings sheets · Fully dynamic — change the <b>Year</b> selector above to explore any year</div>
+    <div class="footnote">🔑 <b>All Transactions</b> &amp; <b>Cashflow Ledger</b> pages are password-protected — the password is set in a single shared file, <code>auth-config.js</code>, in this repo</div>
   </main>
 </div>
 
@@ -479,7 +480,9 @@ function populateYearsAndRender(preferredYear){
     opt.value = y; opt.textContent = y;
     sel.appendChild(opt);
   });
-  const target = DATA.years.includes(preferredYear) ? preferredYear : DATA.years[DATA.years.length-1];
+  // Default to the most recent year in the data unless a specific (valid) year was requested.
+  const latest = DATA.years[DATA.years.length-1];
+  const target = (preferredYear!=null && DATA.years.includes(preferredYear)) ? preferredYear : latest;
   sel.value = target;
   render(target);
   renderRecent();
@@ -495,6 +498,15 @@ function findSheetByName(wb, target){
 }
 
 function norm(v){ return (v==null?'':String(v)).trim().toLowerCase(); }
+
+// IMPORTANT: use this instead of dateObj.toISOString().slice(0,10) for date-only values.
+// toISOString() converts to UTC — for a browser in India (UTC+5:30), a local midnight
+// gets pushed back to 18:30 the PREVIOUS day in UTC, so every date came out one day early.
+// This formats using the date's own local Y/M/D instead, so it matches what's in the sheet.
+function toLocalISODate(d){
+  const y = d.getFullYear(), m = String(d.getMonth()+1).padStart(2,'0'), day = String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
+}
 
 // Scans the first ~20 rows for a header row containing DATE / TYPE / CATEGORY / AMOUNT
 // and returns {headerRowIdx, col:{date,desc,type,category,amount,payment}} using whichever
@@ -573,7 +585,7 @@ function buildDataFromWorkbook(wb){
     else if(typeNorm==='expense'){ yd.expense += amt; yd.monthly_expense[m]+=amt; if(cat) yd.catTotals[cat]=(yd.catTotals[cat]||0)+amt; }
     else if(typeNorm==='investment'){ yd.investment += amt; }
     if(pay) yd.payTotals[pay]=(yd.payTotals[pay]||0)+amt;
-    allTxns.push({ dateObj, date: dateObj.toISOString().slice(0,10), desc, type, category: cat, amount: amt, payment: pay });
+    allTxns.push({ dateObj, date: toLocalISODate(dateObj), desc, type, category: cat, amount: amt, payment: pay });
   }
 
   if(!allTxns.length) throw new Error('Found the Transactions sheet but no valid dated rows with an amount — check the file has data below the header row.');
@@ -596,7 +608,7 @@ function buildDataFromWorkbook(wb){
       monthly_income: yd.monthly_income, monthly_expense: yd.monthly_expense,
       categories, payment: Object.entries(yd.payTotals).sort((a,b)=>b[1]-a[1]).map(([name,value])=>({name,value})),
       count: yd.count,
-      lastDate: yd.lastDateObj ? yd.lastDateObj.toISOString().slice(0,10) : null
+      lastDate: yd.lastDateObj ? toLocalISODate(yd.lastDateObj) : null
     };
   });
 
@@ -676,7 +688,7 @@ function parseCashflowSheet(wb){
 
     const amt = Number(amount);
     if(isNaN(amt)) continue;
-    list.push({ dateObj, date: dateObj.toISOString().slice(0,10), name, type, category: cat, amount: amt, notes });
+    list.push({ dateObj, date: toLocalISODate(dateObj), name, type, category: cat, amount: amt, notes });
   }
   list.sort((a,b)=> b.dateObj - a.dateObj);
   return list.map(t=>({date:t.date, name:t.name, type:t.type, category:t.category, amount:t.amount, notes:t.notes}));
@@ -795,7 +807,7 @@ function processWorkbookArrayBuffer(arrayBuffer, sourceLabel){
     DATA = newData;
     showBanner('live', '👁️ Previewing <b>' + sourceLabel + '</b> in this tab (' + DATA.years.length + ' year(s) found). This is local-only — download & commit <code>data.json</code> below to make it visible on every device.');
     offerDownload(newData, sourceLabel);
-    populateYearsAndRender(2026);
+    populateYearsAndRender();
     return true;
   }catch(err){
     showBanner('error', '⚠️ Could not read "' + sourceLabel + '": ' + err.message);
@@ -822,11 +834,11 @@ fetch(DATA_JSON_PATH, {cache:'no-store'})
     if(!json || !json.years || !json.years.length) throw new Error('data.json is empty');
     DATA = json;
     showBanner('live', '✅ Live data loaded from <b>data.json</b> in this repo — same on every browser and device. Use <b>Load Excel Workbook</b> above whenever you want to refresh it.');
-    populateYearsAndRender(2026);
+    populateYearsAndRender();
   })
   .catch(()=>{
     showBanner('demo', 'Showing sample data — this page could not reach <code>data.json</code> (normal if opened directly from disk instead of a hosted URL, or if you haven\'t generated it yet). Click <b>Load Excel Workbook</b> to preview your real numbers, then download &amp; commit <code>data.json</code> so it shows up everywhere.');
-    populateYearsAndRender(2026);
+    populateYearsAndRender();
   });
 </script>
 </body>
