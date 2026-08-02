@@ -101,6 +101,7 @@
     .countInfo{ margin-left:0; }
   }
 </style>
+<script src="auth-config.js"></script>
 </head>
 <body>
 <div id="pwGate" style="position:fixed;inset:0;background:var(--paper);display:flex;align-items:center;justify-content:center;z-index:9999;">
@@ -111,6 +112,7 @@
     <input type="password" id="pwInput" placeholder="Password" style="width:100%;padding:10px 12px;border:1px solid var(--card-line);border-radius:8px;font-family:'IBM Plex Mono',monospace;font-size:14px;margin-bottom:10px;outline:none;box-sizing:border-box;">
     <button type="button" id="pwSubmit" style="width:100%;background:var(--ink);color:#F3EFE4;border:none;border-radius:8px;padding:10px;font-size:13px;font-weight:600;cursor:pointer;">Unlock</button>
     <div id="pwErr" style="color:var(--red);font-size:12px;margin-top:10px;min-height:14px;"></div>
+    <p style="font-size:10.5px;color:var(--muted);margin:14px 0 0;line-height:1.5;">🔑 Password is configured in <code style="font-family:'IBM Plex Mono',monospace;">auth-config.js</code> — edit that one file to change it for both this page and the Cashflow Ledger.</p>
   </div>
 </div>
 <div class="main">
@@ -252,7 +254,9 @@ function renderPage(){
   const start = (page-1) * PAGE_SIZE;
   const pageItems = filtered.slice(start, start + PAGE_SIZE);
 
-  document.getElementById('countInfo').textContent = total.toLocaleString('en-IN') + ' transaction' + (total===1?'':'s') + ' matched · Total ' + fmtINR(filtered.reduce((s,t)=> s + (Number(t.amount)||0), 0));
+  const netTotal = filtered.reduce((s,t)=> s + (t.type === 'Expense' ? -1 : 1) * (Number(t.amount)||0), 0);
+  const netCls = netTotal < 0 ? 'style="color:var(--red)"' : 'style="color:var(--green)"';
+  document.getElementById('countInfo').innerHTML = total.toLocaleString('en-IN') + ' transaction' + (total===1?'':'s') + ' matched · Net <span ' + netCls + '>' + (netTotal<0?'−':'+') + fmtINR(netTotal) + '</span>';
   document.getElementById('pageInfo').textContent = 'Page ' + page + ' of ' + totalPages;
   document.getElementById('prevBtn').disabled = page <= 1;
   document.getElementById('nextBtn').disabled = page >= totalPages;
@@ -321,7 +325,8 @@ function initPage(){
 // This is a client-side-only check (there's no server to authenticate against on
 // GitHub Pages) — it hides this page's UI from casual visitors, but data.json itself
 // is still a public file at its URL if someone knows/guesses the link directly.
-const PW_HASH = 'aae4f67aa77a61416f948ac2927c83f5d8dd2c408f9c5ace8d4171c54db0789c';
+// PW_HASH itself comes from auth-config.js (loaded in <head>) — that is the ONE
+// place to edit if you want to change the password; see the comment in that file.
 const PW_SESSION_KEY = 'financeLedger_unlocked';
 
 async function sha256Hex(str){
