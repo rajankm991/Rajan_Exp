@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>All Transactions — Rajan's Finance Ledger</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#10151F;
+    --ink-2:#171F2E;
+    --paper:#F5F2EA;
+    --card:#FFFFFF;
+    --card-line:#E7E1D2;
+    --brass:#B8862E;
+    --brass-dark:#8C6621;
+    --brass-tint:#F4E9D3;
+    --green:#1F7A5C;
+    --green-tint:#E1EFE8;
+    --red:#B23A48;
+    --red-tint:#F6E4E6;
+    --purple:#6B4E9E;
+    --purple-tint:#EBE4F4;
+    --ink-text:#1B2333;
+    --muted:#7C7460;
+    --muted-cool:#6E7686;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Inter',sans-serif;
+    background:var(--paper);
+    color:var(--ink-text);
+    -webkit-font-smoothing:antialiased;
+  }
+  .main{ max-width:1220px; margin:0 auto; padding:26px 34px 50px; }
+
+  .topbar{ display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:18px; flex-wrap:wrap; gap:16px; }
+  .topbar h1{ font-family:'Fraunces',serif; font-weight:600; font-size:24px; margin:0 0 4px; letter-spacing:-0.01em; }
+  .topbar .tag{ font-size:12.5px; color:var(--muted); }
+  .backlink{
+    display:inline-flex; align-items:center; gap:7px; background:var(--ink); color:#F3EFE4;
+    border-radius:10px; padding:10px 16px; font-size:13px; font-weight:600; text-decoration:none;
+    white-space:nowrap;
+  }
+  .backlink:hover{ background:var(--ink-2); }
+
+  .data-status{ font-size:12px; padding:9px 14px; border-radius:8px; margin-bottom:16px; border:1px solid transparent; }
+  .data-status.demo{ background:var(--brass-tint); color:var(--brass-dark); border-color:#E8D5A8; }
+  .data-status.live{ background:var(--green-tint); color:var(--green); border-color:#BFE0CE; }
+  .data-status.error{ background:var(--red-tint); color:var(--red); border-color:#E8C1C6; }
+  .data-status code{ font-family:'IBM Plex Mono',monospace; }
+
+  .toolbar{
+    background:var(--card); border:1px solid var(--card-line); border-radius:12px;
+    padding:14px 16px; display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end; margin-bottom:16px;
+    box-shadow:0 1px 2px rgba(20,20,10,0.04);
+  }
+  .field{ display:flex; flex-direction:column; gap:4px; }
+  .field label{ font-size:10px; letter-spacing:.07em; text-transform:uppercase; color:var(--muted-cool); font-weight:700; }
+  .field select, .field input{
+    border:1px solid var(--card-line); border-radius:8px; padding:8px 10px; font-family:'Inter',sans-serif;
+    font-size:13px; color:var(--ink-text); background:#fff; outline:none; min-width:130px;
+  }
+  .field input[type="text"]{ min-width:220px; }
+  .field select:focus, .field input:focus{ border-color:var(--brass); }
+  .countInfo{ margin-left:auto; font-size:12.5px; color:var(--muted); font-family:'IBM Plex Mono',monospace; align-self:center; }
+
+  .panel{ background:var(--card); border:1px solid var(--card-line); border-radius:12px; padding:0; overflow:hidden; box-shadow:0 1px 2px rgba(20,20,10,0.04); }
+  table.txn-table{ width:100%; border-collapse:collapse; font-size:12.8px; }
+  table.txn-table th{
+    text-align:left; font-size:10px; letter-spacing:.05em; text-transform:uppercase;
+    color:#fff; background:var(--ink); padding:10px 12px; font-weight:600; cursor:pointer; user-select:none;
+    white-space:nowrap;
+  }
+  table.txn-table th.amtcol{ text-align:right; }
+  table.txn-table th .arrow{ opacity:.55; font-size:9px; margin-left:3px; }
+  table.txn-table td{ padding:9px 12px; border-bottom:1px solid var(--card-line); vertical-align:middle; }
+  table.txn-table tbody tr:hover{ background:#FAF7EE; }
+  table.txn-table td.amt{ text-align:right; font-family:'IBM Plex Mono',monospace; font-weight:600; white-space:nowrap; }
+  table.txn-table td.amt.pos{ color:var(--green); }
+  table.txn-table td.amt.neg{ color:var(--red); }
+  table.txn-table tr:last-child td{ border-bottom:none; }
+  .type-pill{ display:inline-block; padding:2px 9px; border-radius:999px; font-size:10.5px; font-weight:700; white-space:nowrap; }
+  .type-pill.Income{ background:var(--green-tint); color:var(--green); }
+  .type-pill.Expense{ background:var(--red-tint); color:var(--red); }
+  .type-pill.Investment{ background:var(--purple-tint); color:var(--purple); }
+  .emptyRow{ text-align:center; color:var(--muted); padding:30px !important; }
+
+  .pager{ display:flex; align-items:center; justify-content:center; gap:14px; margin-top:16px; }
+  .pager button{
+    background:var(--card); border:1px solid var(--card-line); border-radius:8px; padding:8px 14px;
+    font-size:13px; font-weight:600; cursor:pointer; color:var(--ink-text);
+  }
+  .pager button:disabled{ opacity:.4; cursor:not-allowed; }
+  .pager span{ font-size:12.5px; color:var(--muted); font-family:'IBM Plex Mono',monospace; }
+
+  @media (max-width:760px){
+    .toolbar{ flex-direction:column; align-items:stretch; }
+    .countInfo{ margin-left:0; }
+  }
+</style>
+</head>
+<body>
+<div id="pwGate" style="position:fixed;inset:0;background:var(--paper);display:flex;align-items:center;justify-content:center;z-index:9999;">
+  <div style="background:var(--card);border:1px solid var(--card-line);border-radius:14px;padding:30px 32px;max-width:340px;width:90%;box-shadow:0 4px 24px rgba(0,0,0,0.08);text-align:center;">
+    <div style="font-size:30px;margin-bottom:8px;">🔒</div>
+    <h2 style="font-family:'Fraunces',serif;font-weight:600;font-size:18px;margin:0 0 6px;color:var(--ink-text);">Protected Page</h2>
+    <p style="font-size:12.5px;color:var(--muted);margin:0 0 16px;">Enter the password to view this data.</p>
+    <input type="password" id="pwInput" placeholder="Password" style="width:100%;padding:10px 12px;border:1px solid var(--card-line);border-radius:8px;font-family:'IBM Plex Mono',monospace;font-size:14px;margin-bottom:10px;outline:none;box-sizing:border-box;">
+    <button type="button" id="pwSubmit" style="width:100%;background:var(--ink);color:#F3EFE4;border:none;border-radius:8px;padding:10px;font-size:13px;font-weight:600;cursor:pointer;">Unlock</button>
+    <div id="pwErr" style="color:var(--red);font-size:12px;margin-top:10px;min-height:14px;"></div>
+  </div>
+</div>
+<div class="main">
+  <div class="topbar">
+    <div>
+      <h1>All Transactions</h1>
+      <div class="tag">Every row from the Transactions sheet — searchable, filterable, sortable</div>
+    </div>
+    <a class="backlink" href="./">← Back to Dashboard</a>
+  </div>
+
+  <div id="dataStatus" class="data-status demo">Loading…</div>
+
+  <div class="toolbar">
+    <div class="field">
+      <label>Year</label>
+      <select id="fYear"><option value="">All</option></select>
+    </div>
+    <div class="field">
+      <label>Type</label>
+      <select id="fType">
+        <option value="">All</option>
+        <option value="Income">Income</option>
+        <option value="Expense">Expense</option>
+        <option value="Investment">Investment</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Search (description / category)</label>
+      <input type="text" id="fSearch" placeholder="e.g. Nisha, Rajan, Delhi...">
+    </div>
+    <div class="countInfo" id="countInfo"></div>
+  </div>
+
+  <div class="panel">
+    <table class="txn-table">
+      <thead>
+        <tr>
+          <th data-key="date">Date <span class="arrow" id="arrow-date"></span></th>
+          <th data-key="desc">Description <span class="arrow" id="arrow-desc"></span></th>
+          <th data-key="category">Category <span class="arrow" id="arrow-category"></span></th>
+          <th data-key="type">Type <span class="arrow" id="arrow-type"></span></th>
+          <th data-key="payment">Payment <span class="arrow" id="arrow-payment"></span></th>
+          <th data-key="amount" class="amtcol">Amount <span class="arrow" id="arrow-amount"></span></th>
+        </tr>
+      </thead>
+      <tbody id="txnBody"></tbody>
+    </table>
+  </div>
+
+  <div class="pager">
+    <button id="prevBtn">← Prev</button>
+    <span id="pageInfo"></span>
+    <button id="nextBtn">Next →</button>
+  </div>
+</div>
+
+<script>
+const DEMO_FALLBACK = {"all": [{"date": "2027-07-31", "desc": "MIsbalance not getting the value(1214 till 9 jun)", "type": "Income", "category": "Other Income", "amount": 9188, "payment": ""}, {"date": "2027-07-31", "desc": "11250-5000(21/5)-1971(07/09) Ebill + 500 folding- 575 wire", "type": "Income", "category": "Delhi", "amount": 4204, "payment": ""}, {"date": "2026-07-02", "desc": "Alka. ", "type": "Expense", "category": "Alka", "amount": 5000, "payment": ""}, {"date": "2026-07-02", "desc": "Nisha", "type": "Expense", "category": "Nisha", "amount": 300, "payment": ""}, {"date": "2026-07-01", "desc": "Rhishikesh", "type": "Expense", "category": "Rajan", "amount": 3860, "payment": "UPI"}]};
+
+const DATA_JSON_PATH = 'data.json';
+const PAGE_SIZE = 50;
+const fmtINR = n => '₹' + Math.round(Math.abs(n)).toLocaleString('en-IN');
+
+let ALL_TXNS = [];
+let filtered = [];
+let sortKey = 'date';
+let sortDir = -1; // -1 = desc, 1 = asc
+let page = 1;
+
+function showBanner(cls, html){
+  const el = document.getElementById('dataStatus');
+  el.className = 'data-status ' + cls;
+  el.innerHTML = html;
+}
+
+function populateYearFilter(txns){
+  const years = Array.from(new Set(txns.map(t => (t.date||'').slice(0,4)).filter(Boolean))).sort((a,b)=>b-a);
+  const sel = document.getElementById('fYear');
+  years.forEach(y=>{
+    const opt = document.createElement('option');
+    opt.value = y; opt.textContent = y;
+    sel.appendChild(opt);
+  });
+}
+
+function applyFilters(){
+  const year = document.getElementById('fYear').value;
+  const type = document.getElementById('fType').value;
+  const q = document.getElementById('fSearch').value.trim().toLowerCase();
+
+  filtered = ALL_TXNS.filter(t=>{
+    if(year && !(t.date||'').startsWith(year)) return false;
+    if(type && t.type !== type) return false;
+    if(q){
+      const hay = ((t.desc||'') + ' ' + (t.category||'')).toLowerCase();
+      if(!hay.includes(q)) return false;
+    }
+    return true;
+  });
+
+  sortFiltered();
+  page = 1;
+  renderPage();
+}
+
+function sortFiltered(){
+  filtered.sort((a,b)=>{
+    let av = a[sortKey], bv = b[sortKey];
+    if(sortKey === 'amount'){ av = Number(av)||0; bv = Number(bv)||0; }
+    else { av = (av==null?'':String(av)).toLowerCase(); bv = (bv==null?'':String(bv)).toLowerCase(); }
+    if(av < bv) return -1 * sortDir;
+    if(av > bv) return 1 * sortDir;
+    return 0;
+  });
+}
+
+function renderPage(){
+  const body = document.getElementById('txnBody');
+  const total = filtered.length;
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  if(page > totalPages) page = totalPages;
+  const start = (page-1) * PAGE_SIZE;
+  const pageItems = filtered.slice(start, start + PAGE_SIZE);
+
+  document.getElementById('countInfo').textContent = total.toLocaleString('en-IN') + ' transaction' + (total===1?'':'s') + ' matched · Total ' + fmtINR(filtered.reduce((s,t)=> s + (Number(t.amount)||0), 0));
+  document.getElementById('pageInfo').textContent = 'Page ' + page + ' of ' + totalPages;
+  document.getElementById('prevBtn').disabled = page <= 1;
+  document.getElementById('nextBtn').disabled = page >= totalPages;
+
+  if(!pageItems.length){
+    body.innerHTML = '<tr><td colspan="6" class="emptyRow">No transactions match these filters</td></tr>';
+    return;
+  }
+
+  body.innerHTML = pageItems.map(t=>{
+    const cls = t.type === 'Expense' ? 'neg' : 'pos';
+    const sign = t.type === 'Expense' ? '−' : '+';
+    return `<tr>
+      <td>${t.date || '—'}</td>
+      <td>${t.desc || '—'}</td>
+      <td>${t.category || '—'}</td>
+      <td><span class="type-pill ${t.type||''}">${t.type||'—'}</span></td>
+      <td>${t.payment || '—'}</td>
+      <td class="amt ${cls}">${sign}${fmtINR(t.amount||0)}</td>
+    </tr>`;
+  }).join('');
+}
+
+document.getElementById('fYear').addEventListener('change', applyFilters);
+document.getElementById('fType').addEventListener('change', applyFilters);
+document.getElementById('fSearch').addEventListener('input', applyFilters);
+document.getElementById('prevBtn').addEventListener('click', ()=>{ if(page>1){ page--; renderPage(); } });
+document.getElementById('nextBtn').addEventListener('click', ()=>{ page++; renderPage(); });
+
+document.querySelectorAll('table.txn-table th[data-key]').forEach(th=>{
+  th.addEventListener('click', ()=>{
+    const key = th.getAttribute('data-key');
+    if(sortKey === key){ sortDir *= -1; } else { sortKey = key; sortDir = key === 'date' ? -1 : 1; }
+    document.querySelectorAll('.arrow').forEach(a=> a.textContent = '');
+    document.getElementById('arrow-' + key).textContent = sortDir === 1 ? '▲' : '▼';
+    sortFiltered();
+    page = 1;
+    renderPage();
+  });
+});
+
+function loadFrom(data, label, cls){
+  ALL_TXNS = (data.all && data.all.length) ? data.all : (data.recent || []);
+  const usingFallback = !(data.all && data.all.length);
+  populateYearFilter(ALL_TXNS);
+  showBanner(cls, label + (usingFallback ? ' <br><span style="opacity:.85">Note: this data.json only has the latest 5 transactions (old format) — re-generate it (Load Excel Workbook → push) on the dashboard to see every row here.</span>' : ''));
+  document.getElementById('arrow-date').textContent = '▼';
+  applyFilters();
+}
+
+function initPage(){
+  fetch(DATA_JSON_PATH, {cache:'no-store'})
+    .then(r=> r.ok ? r.json() : Promise.reject(new Error('data.json not found (' + r.status + ')')))
+    .then(json=>{
+      if(!json || !json.years || !json.years.length) throw new Error('data.json is empty');
+      loadFrom(json, '✅ Live data loaded from <b>data.json</b>.', 'live');
+    })
+    .catch(()=>{
+      loadFrom(DEMO_FALLBACK, 'Showing sample data — this page could not reach <code>data.json</code> yet.', 'demo');
+    });
+}
+
+// ---- Password gate ----
+// This is a client-side-only check (there's no server to authenticate against on
+// GitHub Pages) — it hides this page's UI from casual visitors, but data.json itself
+// is still a public file at its URL if someone knows/guesses the link directly.
+const PW_HASH = 'aae4f67aa77a61416f948ac2927c83f5d8dd2c408f9c5ace8d4171c54db0789c';
+const PW_SESSION_KEY = 'financeLedger_unlocked';
+
+async function sha256Hex(str){
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+async function tryUnlock(){
+  const input = document.getElementById('pwInput');
+  const err = document.getElementById('pwErr');
+  const hash = await sha256Hex(input.value);
+  if(hash === PW_HASH){
+    sessionStorage.setItem(PW_SESSION_KEY, '1');
+    document.getElementById('pwGate').remove();
+    initPage();
+  } else {
+    err.textContent = 'Incorrect password — try again.';
+    input.value = '';
+    input.focus();
+  }
+}
+
+document.getElementById('pwSubmit').addEventListener('click', tryUnlock);
+document.getElementById('pwInput').addEventListener('keydown', e=>{ if(e.key === 'Enter') tryUnlock(); });
+
+if(sessionStorage.getItem(PW_SESSION_KEY) === '1'){
+  document.getElementById('pwGate').remove();
+  initPage();
+} else {
+  document.getElementById('pwInput').focus();
+}
+</script>
+</body>
+</html>
