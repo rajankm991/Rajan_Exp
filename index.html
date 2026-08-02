@@ -655,13 +655,11 @@ function oneDriveShareToDirectUrl(shareUrl){
   return `https://api.onedrive.com/v1.0/shares/${encoded}/root/content`;
 }
 
-async function fetchWorkbookFromOneDrive(shareUrl){
+async function fetchWorkbookArrayBufferFromOneDrive(shareUrl){
   const directUrl = oneDriveShareToDirectUrl(shareUrl);
   const resp = await fetch(directUrl);
   if(!resp.ok) throw new Error('OneDrive returned HTTP ' + resp.status + ' — check the link is set to "Anyone with the link" can view.');
-  const buf = await resp.arrayBuffer();
-  const wb = XLSX.read(buf, {type:'array', cellDates:true});
-  return buildDataFromWorkbook(wb);
+  return await resp.arrayBuffer();
 }
 
 (function initOdPanel(){
@@ -682,13 +680,10 @@ async function fetchWorkbookFromOneDrive(shareUrl){
     btn.disabled = true; btn.textContent = '⏳ Fetching…';
     msg.style.color = 'var(--muted)'; msg.textContent = 'Downloading and parsing…';
     try{
-      const newData = await fetchWorkbookFromOneDrive(link);
-      if(!newData.years.length) throw new Error('No dated transactions found in the Transactions sheet.');
-      DATA = newData;
-      msg.style.color = 'var(--green)'; msg.textContent = '✓ Loaded from OneDrive';
-      showBanner('live', '👁️ Previewing data fetched from your <b>OneDrive link</b> (' + DATA.years.length + ' year(s) found). This is local-only — download & commit <code>data.json</code> below to make it visible on every device.');
-      offerDownload(newData, 'OneDrive');
-      populateYearsAndRender(2026);
+      const buf = await fetchWorkbookArrayBufferFromOneDrive(link);
+      const ok = processWorkbookArrayBuffer(buf, 'OneDrive workbook');
+      msg.style.color = ok ? 'var(--green)' : 'var(--red)';
+      msg.textContent = ok ? '✓ Loaded from OneDrive' : '⚠️ See message above';
     }catch(err){
       msg.style.color = 'var(--red)'; msg.textContent = '⚠️ ' + err.message;
       showBanner('error', '⚠️ Could not fetch from OneDrive: ' + err.message);
@@ -801,25 +796,31 @@ function offerDownload(newData, sourceLabel){
   }
 }
 
+// Shared processing: takes a raw Excel ArrayBuffer (from a local file OR a fetched OneDrive
+// file — same downstream logic either way) and updates the page, preview, and push options.
+function processWorkbookArrayBuffer(arrayBuffer, sourceLabel){
+  try{
+    const wb = XLSX.read(arrayBuffer, {type:'array', cellDates:true});
+    const newData = buildDataFromWorkbook(wb);
+    if(!newData.years.length) throw new Error('No dated transactions found in the Transactions sheet.');
+    DATA = newData;
+    showBanner('live', '👁️ Previewing <b>' + sourceLabel + '</b> in this tab (' + DATA.years.length + ' year(s) found). This is local-only — download & commit <code>data.json</code> below to make it visible on every device.');
+    offerDownload(newData, sourceLabel);
+    populateYearsAndRender(2026);
+    return true;
+  }catch(err){
+    showBanner('error', '⚠️ Could not read "' + sourceLabel + '": ' + err.message);
+    return false;
+  }
+}
+
 // Parse a locally chosen Excel file — this previews instantly in THIS browser tab only.
 // To make it visible everywhere (any browser/device via git), download data.json and commit it.
 document.getElementById('fileInput').addEventListener('change', function(e){
   const file = e.target.files[0];
   if(!file) return;
   const reader = new FileReader();
-  reader.onload = function(evt){
-    try{
-      const wb = XLSX.read(evt.target.result, {type:'array', cellDates:true});
-      const newData = buildDataFromWorkbook(wb);
-      if(!newData.years.length) throw new Error('No dated transactions found in the Transactions sheet.');
-      DATA = newData;
-      showBanner('live', '👁️ Previewing <b>' + file.name + '</b> in this tab (' + DATA.years.length + ' year(s) found). This is local-only — download & commit <code>data.json</code> below to make it visible on every device.');
-      offerDownload(newData, file.name);
-      populateYearsAndRender(2026);
-    }catch(err){
-      showBanner('error', '⚠️ Could not read that file: ' + err.message);
-    }
-  };
+  reader.onload = function(evt){ processWorkbookArrayBuffer(evt.target.result, file.name); };
   reader.readAsArrayBuffer(file);
 });
 
@@ -841,4 +842,3 @@ fetch(DATA_JSON_PATH, {cache:'no-store'})
 </script>
 </body>
 </html>
- /* Link:  https://1drv.ms/x/c/78f278f98e3b3a0a/IQBaYkpiYDiYQL4j1_-es-UbASPizHoe1l_i-X4HISgnu9o?e=LqIsRw */
