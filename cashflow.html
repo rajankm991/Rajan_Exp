@@ -155,8 +155,8 @@
       </select>
     </div>
     <div class="field">
-      <label>Search (notes / category)</label>
-      <input type="text" id="fSearch" placeholder="e.g. UPI, phnpe, Return...">
+      <label>Search (Name)</label>
+      <input type="text" id="fSearch" placeholder="e.g. Bholu, Papa, Anuj...">
     </div>
     <div class="countInfo" id="countInfo"></div>
   </div>
@@ -227,7 +227,7 @@ function applyFilters(){
     if(name && t.name !== name) return false;
     if(type && t.type !== type) return false;
     if(q){
-      const hay = ((t.notes||'') + ' ' + (t.category||'') + ' ' + (t.name||'')).toLowerCase();
+      const hay = (t.name||'').toLowerCase();
       if(!hay.includes(q)) return false;
     }
     return true;
