@@ -216,7 +216,7 @@
       <div style="display:flex; gap:10px; margin-bottom:10px; align-items:flex-end; flex-wrap:wrap;">
         <div class="field" style="min-width:0; flex:1;">
           <label>OneDrive share link to your .xlsx / .xlsm</label>
-          <input id="odLink" type="text" placeholder="https://1drv.ms/x/s!Axxxxxxxxxxxxx or https://onedrive.live.com/..." style="border:none;outline:none;font-family:'IBM Plex Mono',monospace;font-size:12.5px;width:100%;">
+          <input id="odLink" type="text" value="https://1drv.ms/x/c/78f278f98e3b3a0a/IQBaYkpiYDiYQL4j1_-es-UbASPizHoe1l_i-X4HISgnu9o?e=LqIsRw" placeholder="https://1drv.ms/x/s!Axxxxxxxxxxxxx or https://onedrive.live.com/..." style="border:none;outline:none;font-family:'IBM Plex Mono',monospace;font-size:12.5px;width:100%;">
         </div>
         <button type="button" class="loadbtn" id="odFetchBtn">📥 Fetch &amp; Load</button>
       </div>
@@ -634,6 +634,7 @@ function buildDataFromWorkbook(wb){
 }
 
 const OD_KEY = 'financeDashboard_odSettings';
+const DEFAULT_ONEDRIVE_LINK = 'https://1drv.ms/x/c/78f278f98e3b3a0a/IQBaYkpiYDiYQL4j1_-es-UbASPizHoe1l_i-X4HISgnu9o?e=LqIsRw';
 
 function loadOdSettings(){
   try{ return JSON.parse(localStorage.getItem(OD_KEY) || 'null'); }catch(e){ return null; }
@@ -664,7 +665,7 @@ async function fetchWorkbookArrayBufferFromOneDrive(shareUrl){
 
 (function initOdPanel(){
   const saved = loadOdSettings();
-  if(saved && saved.link) document.getElementById('odLink').value = saved.link;
+  document.getElementById('odLink').value = (saved && saved.link) ? saved.link : DEFAULT_ONEDRIVE_LINK;
 
   document.getElementById('odSettingsBtn').addEventListener('click', ()=>{
     const p = document.getElementById('odPanel');
