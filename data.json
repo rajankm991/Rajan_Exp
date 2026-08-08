@@ -5,8 +5,7 @@
     2023,
     2024,
     2025,
-    2026,
-    2027
+    2026
   ],
   "data": {
     "2021": {
@@ -351,7 +350,7 @@
       "lastDate": "2025-12-30"
     },
     "2026": {
-      "income": 375929,
+      "income": 389321,
       "expense": 493898.4199999999,
       "investment": 67386,
       "monthly_income": [
@@ -362,7 +361,7 @@
         50500,
         50500,
         0,
-        0,
+        13392,
         0,
         0,
         0,
@@ -430,45 +429,8 @@
           "value": 8200
         }
       ],
-      "count": 112,
+      "count": 114,
       "lastDate": "2026-09-01"
-    },
-    "2027": {
-      "income": 13392,
-      "expense": 0,
-      "investment": 0,
-      "monthly_income": [
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        13392,
-        0,
-        0,
-        0,
-        0,
-        0
-      ],
-      "monthly_expense": [
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0
-      ],
-      "categories": [],
-      "payment": [],
-      "count": 2,
-      "lastDate": "2027-07-30"
     }
   },
   "lenders": [
@@ -495,7 +457,15 @@
   ],
   "recent": [
     {
-      "date": "2027-07-30",
+      "date": "2026-09-01",
+      "desc": "Rajan ",
+      "type": "Expense",
+      "category": "Rajan",
+      "amount": 14208.98,
+      "payment": null
+    },
+    {
+      "date": "2026-08-30",
       "desc": "MIsbalance not getting the value(1214 till 9 jun)",
       "type": "Income",
       "category": "Other Income",
@@ -503,19 +473,11 @@
       "payment": null
     },
     {
-      "date": "2027-07-30",
+      "date": "2026-08-30",
       "desc": "11250-5000(21/5)-1971(07/09) Ebill + 500 folding- 575 wire",
       "type": "Income",
       "category": "Delhi",
       "amount": 4204,
-      "payment": null
-    },
-    {
-      "date": "2026-09-01",
-      "desc": "Rajan ",
-      "type": "Expense",
-      "category": "Rajan",
-      "amount": 14208.98,
       "payment": null
     },
     {
@@ -537,7 +499,15 @@
   ],
   "all": [
     {
-      "date": "2027-07-30",
+      "date": "2026-09-01",
+      "desc": "Rajan ",
+      "type": "Expense",
+      "category": "Rajan",
+      "amount": 14208.98,
+      "payment": null
+    },
+    {
+      "date": "2026-08-30",
       "desc": "MIsbalance not getting the value(1214 till 9 jun)",
       "type": "Income",
       "category": "Other Income",
@@ -545,19 +515,11 @@
       "payment": null
     },
     {
-      "date": "2027-07-30",
+      "date": "2026-08-30",
       "desc": "11250-5000(21/5)-1971(07/09) Ebill + 500 folding- 575 wire",
       "type": "Income",
       "category": "Delhi",
       "amount": 4204,
-      "payment": null
-    },
-    {
-      "date": "2026-09-01",
-      "desc": "Rajan ",
-      "type": "Expense",
-      "category": "Rajan",
-      "amount": 14208.98,
       "payment": null
     },
     {
