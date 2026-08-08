@@ -234,7 +234,7 @@ function renderPage(){
   const body = document.getElementById('txnBody');
   const total = filtered.length;
 
-  const netTotal = filtered.reduce((s,t)=> s + (t.type === 'Expense' ? -1 : 1) * (Number(t.amount)||0), 0);
+  const netTotal = filtered.reduce((s,t)=> s + (t.type === 'Income' ? 1 : -1) * (Number(t.amount)||0), 0);
   const netCls = netTotal < 0 ? 'style="color:var(--red)"' : 'style="color:var(--green)"';
   document.getElementById('countInfo').innerHTML = total.toLocaleString('en-IN') + ' transaction' + (total===1?'':'s') + ' matched · Net <span ' + netCls + '>' + (netTotal<0?'−':'+') + fmtINR(netTotal) + '</span>';
 
