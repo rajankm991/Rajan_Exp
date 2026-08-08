@@ -244,8 +244,8 @@ function renderPage(){
   }
 
   body.innerHTML = filtered.map(t=>{
-    const cls = t.type === 'Expense' ? 'neg' : 'pos';
-    const sign = t.type === 'Expense' ? '−' : '+';
+    const cls = t.type === 'Income' ? 'pos' : 'neg';
+    const sign = t.type === 'Income' ? '+' : '-';
     return `<tr>
       <td>${t.date || '—'}</td>
       <td>${t.desc || '—'}</td>
