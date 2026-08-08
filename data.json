@@ -352,7 +352,7 @@
     },
     "2026": {
       "income": 375929,
-      "expense": 479689.43999999994,
+      "expense": 493898.4199999999,
       "investment": 67386,
       "monthly_income": [
         120874,
@@ -377,7 +377,7 @@
         37476,
         5300,
         0,
-        0,
+        14208.98,
         0,
         0,
         0
@@ -389,7 +389,7 @@
         },
         {
           "name": "Rajan",
-          "value": 79206.55
+          "value": 93415.53
         },
         {
           "name": "Pawan",
@@ -430,8 +430,8 @@
           "value": 8200
         }
       ],
-      "count": 111,
-      "lastDate": "2026-07-01"
+      "count": 112,
+      "lastDate": "2026-09-01"
     },
     "2027": {
       "income": 13392,
@@ -511,6 +511,14 @@
       "payment": null
     },
     {
+      "date": "2026-09-01",
+      "desc": "Rajan ",
+      "type": "Expense",
+      "category": "Rajan",
+      "amount": 14208.98,
+      "payment": null
+    },
+    {
       "date": "2026-07-01",
       "desc": "Alka. ",
       "type": "Expense",
@@ -525,14 +533,6 @@
       "category": "Nisha",
       "amount": 300,
       "payment": null
-    },
-    {
-      "date": "2026-06-30",
-      "desc": "Rhishikesh",
-      "type": "Expense",
-      "category": "Rajan",
-      "amount": 3860,
-      "payment": "UPI"
     }
   ],
   "all": [
@@ -550,6 +550,14 @@
       "type": "Income",
       "category": "Delhi",
       "amount": 4204,
+      "payment": null
+    },
+    {
+      "date": "2026-09-01",
+      "desc": "Rajan ",
+      "type": "Expense",
+      "category": "Rajan",
+      "amount": 14208.98,
       "payment": null
     },
     {
