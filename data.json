@@ -351,7 +351,7 @@
     },
     "2026": {
       "income": 389321,
-      "expense": 493898.4199999999,
+      "expense": 479689.43999999994,
       "investment": 67386,
       "monthly_income": [
         120874,
@@ -376,7 +376,7 @@
         37476,
         5300,
         0,
-        14208.98,
+        0,
         0,
         0,
         0
@@ -388,7 +388,7 @@
         },
         {
           "name": "Rajan",
-          "value": 93415.53
+          "value": 79206.55
         },
         {
           "name": "Pawan",
@@ -429,8 +429,8 @@
           "value": 8200
         }
       ],
-      "count": 114,
-      "lastDate": "2026-09-01"
+      "count": 113,
+      "lastDate": "2026-08-30"
     }
   },
   "lenders": [
@@ -456,14 +456,6 @@
     }
   ],
   "recent": [
-    {
-      "date": "2026-09-01",
-      "desc": "Rajan ",
-      "type": "Expense",
-      "category": "Rajan",
-      "amount": 14208.98,
-      "payment": null
-    },
     {
       "date": "2026-08-30",
       "desc": "MIsbalance not getting the value(1214 till 9 jun)",
@@ -495,17 +487,17 @@
       "category": "Nisha",
       "amount": 300,
       "payment": null
+    },
+    {
+      "date": "2026-06-30",
+      "desc": "Rhishikesh",
+      "type": "Expense",
+      "category": "Rajan",
+      "amount": 3860,
+      "payment": "UPI"
     }
   ],
   "all": [
-    {
-      "date": "2026-09-01",
-      "desc": "Rajan ",
-      "type": "Expense",
-      "category": "Rajan",
-      "amount": 14208.98,
-      "payment": null
-    },
     {
       "date": "2026-08-30",
       "desc": "MIsbalance not getting the value(1214 till 9 jun)",
