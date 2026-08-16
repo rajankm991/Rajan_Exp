@@ -34,9 +34,9 @@
     color:var(--ink-text);
     -webkit-font-smoothing:antialiased;
   }
-  .main{ max-width:1560px; margin:0 auto; padding:24px 26px 50px; }
+  .main{ max-width:1560px; margin:0 auto; padding:16px 20px 32px; }
 
-  .topbar{ display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:18px; flex-wrap:wrap; gap:16px; }
+  .topbar{ display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:14px; }
   .topbar h1{ font-family:'Fraunces',serif; font-weight:600; font-size:24px; margin:0 0 4px; letter-spacing:-0.01em; }
   .topbar .tag{ font-size:12.5px; color:var(--muted); }
   .backlink{
@@ -46,25 +46,25 @@
   }
   .backlink:hover{ background:var(--ink-2); }
 
-  .data-status{ font-size:12px; padding:9px 14px; border-radius:8px; margin-bottom:16px; border:1px solid transparent; }
+  .data-status{ font-size:12px; padding:7px 14px; border-radius:8px; margin-bottom:10px; border:1px solid transparent; }
   .data-status.demo{ background:var(--brass-tint); color:var(--brass-dark); border-color:#E8D5A8; }
   .data-status.live{ background:var(--green-tint); color:var(--green); border-color:#BFE0CE; }
   .data-status.error{ background:var(--red-tint); color:var(--red); border-color:#E8C1C6; }
   .data-status code{ font-family:'IBM Plex Mono',monospace; }
 
-  .kpi-row{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:16px; }
-  .kpi{ background:var(--card); border:1px solid var(--card-line); border-radius:12px; padding:14px 16px 12px; position:relative; overflow:hidden; box-shadow:0 1px 2px rgba(20,20,10,0.04); }
+  .kpi-row{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:12px; }
+  .kpi{ background:var(--card); border:1px solid var(--card-line); border-radius:12px; padding:12px 14px 10px; position:relative; overflow:hidden; box-shadow:0 1px 2px rgba(20,20,10,0.04); }
   .kpi::before{ content:""; position:absolute; left:0; top:0; bottom:0; width:4px; }
   .kpi.c-given::before{ background:var(--red); }
   .kpi.c-received::before{ background:var(--green); }
   .kpi.c-net::before{ background:var(--brass); }
   .kpi.c-count::before{ background:#1B7F86; }
-  .kpi .lbl{ font-size:10px; letter-spacing:.07em; text-transform:uppercase; color:var(--muted-cool); font-weight:700; margin-bottom:6px; }
+  .kpi .lbl{ font-size:10px; letter-spacing:.07em; text-transform:uppercase; color:var(--muted-cool); font-weight:700; margin-bottom:4px; }
   .kpi .num{ font-family:'IBM Plex Mono',monospace; font-size:19px; font-weight:600; color:var(--ink-text); letter-spacing:-0.01em; }
 
   .toolbar{
     background:var(--card); border:1px solid var(--card-line); border-radius:12px;
-    padding:14px 16px; display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end; margin-bottom:16px;
+    padding:11px 14px; display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end; margin-bottom:12px;
     box-shadow:0 1px 2px rgba(20,20,10,0.04);
   }
   .field{ display:flex; flex-direction:column; gap:4px; }
@@ -139,7 +139,9 @@
 <div class="main">
   <div class="topbar">
     <div style="display:flex;align-items:center;gap:10px;">
-      <img src="logo.gif" alt="Logo" style="height:32px;width:32px;border-radius:8px;object-fit:cover;flex-shrink:0;" onerror="this.style.display='none'">
+      <div style="height:28px;width:28px;border-radius:50%;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+        <img src="logo.gif" alt="Logo" style="height:150%;width:150%;object-fit:cover;" onerror="this.parentElement.style.display='none'">
+      </div>
       <div>
         <h1>Cashflow Ledger</h1>
         <div class="tag">Every Given / Received row from the Cashflow sheet — per lender, searchable &amp; sortable</div>
@@ -232,7 +234,7 @@ function applyFilters(){
     if(name && t.name !== name) return false;
     if(type && t.type !== type) return false;
     if(q){
-      const hay = (t.name||'').toLowerCase();
+      const hay = String(t.name||'').toLowerCase();
       if(!hay.includes(q)) return false;
     }
     return true;

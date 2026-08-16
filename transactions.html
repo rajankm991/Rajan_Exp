@@ -34,9 +34,9 @@
     color:var(--ink-text);
     -webkit-font-smoothing:antialiased;
   }
-  .main{ max-width:1560px; margin:0 auto; padding:24px 26px 50px; }
+  .main{ max-width:1560px; margin:0 auto; padding:16px 20px 32px; }
 
-  .topbar{ display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:18px; flex-wrap:wrap; gap:16px; }
+  .topbar{ display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:14px; }
   .topbar h1{ font-family:'Fraunces',serif; font-weight:600; font-size:24px; margin:0 0 4px; letter-spacing:-0.01em; }
   .topbar .tag{ font-size:12.5px; color:var(--muted); }
   .backlink{
@@ -46,7 +46,7 @@
   }
   .backlink:hover{ background:var(--ink-2); }
 
-  .data-status{ font-size:12px; padding:9px 14px; border-radius:8px; margin-bottom:16px; border:1px solid transparent; }
+  .data-status{ font-size:12px; padding:7px 14px; border-radius:8px; margin-bottom:10px; border:1px solid transparent; }
   .data-status.demo{ background:var(--brass-tint); color:var(--brass-dark); border-color:#E8D5A8; }
   .data-status.live{ background:var(--green-tint); color:var(--green); border-color:#BFE0CE; }
   .data-status.error{ background:var(--red-tint); color:var(--red); border-color:#E8C1C6; }
@@ -54,7 +54,7 @@
 
   .toolbar{
     background:var(--card); border:1px solid var(--card-line); border-radius:12px;
-    padding:14px 16px; display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end; margin-bottom:16px;
+    padding:11px 14px; display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end; margin-bottom:12px;
     box-shadow:0 1px 2px rgba(20,20,10,0.04);
   }
   .field{ display:flex; flex-direction:column; gap:4px; }
@@ -131,7 +131,9 @@
 <div class="main">
   <div class="topbar">
     <div style="display:flex;align-items:center;gap:10px;">
-      <img src="logo.gif" alt="Logo" style="height:32px;width:32px;border-radius:8px;object-fit:cover;flex-shrink:0;" onerror="this.style.display='none'">
+      <div style="height:28px;width:28px;border-radius:50%;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+        <img src="logo.gif" alt="Logo" style="height:150%;width:150%;object-fit:cover;" onerror="this.parentElement.style.display='none'">
+      </div>
       <div>
         <h1>All Transactions</h1>
         <div class="tag">Every row from the Transactions sheet — searchable, filterable, sortable</div>
@@ -234,7 +236,7 @@ function applyFilters(){
     if(type && t.type !== type) return false;
     if(category && t.category !== category) return false;
     if(q){
-      const hay = (t.desc||'').toLowerCase();
+      const hay = String(t.desc||'').toLowerCase();
       if(!hay.includes(q)) return false;
     }
     return true;

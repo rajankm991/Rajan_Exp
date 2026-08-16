@@ -54,11 +54,11 @@
   .app{ display:flex; min-height:100vh; }
 
   /* ---------------- MAIN ---------------- */
-  .main{ flex:1; padding:20px 30px 40px; max-width:1420px; margin:0 auto; }
+  .main{ flex:1; padding:14px 22px 28px; max-width:1420px; margin:0 auto; }
 
   .topbar{
     display:flex; align-items:center; justify-content:space-between;
-    margin-bottom:16px; flex-wrap:nowrap; gap:14px;
+    margin-bottom:12px; flex-wrap:nowrap; gap:14px;
   }
   .topbar .titleblock{ display:flex; align-items:center; gap:10px; flex-shrink:1; min-width:0; overflow:hidden; }
   .topbar h1{
@@ -69,7 +69,7 @@
   .controls{ display:flex; gap:8px; align-items:center; flex-wrap:nowrap; flex-shrink:0; }
   .field{
     background:var(--card); border:1px solid var(--card-line); border-radius:10px;
-    padding:5px 12px; display:flex; flex-direction:column; gap:1px; min-width:88px;
+    padding:4px 11px; display:flex; flex-direction:column; gap:1px; min-width:88px;
   }
   .field label{ font-size:9px; letter-spacing:.08em; color:var(--muted); text-transform:uppercase; font-weight:600;}
   .field select{
@@ -81,12 +81,12 @@
   .loadbtn{
     display:flex; align-items:center; gap:6px;
     background:var(--ink); color:#F3EFE4; border:1px solid var(--ink);
-    border-radius:9px; padding:8px 12px; font-size:12px; font-weight:600;
+    border-radius:9px; padding:7px 11px; font-size:12px; font-weight:600;
     cursor:pointer; white-space:nowrap; transition:background .15s;
   }
   .loadbtn:hover{ background:var(--ink-2); }
   .data-status{
-    font-size:12px; padding:8px 14px; border-radius:8px; margin-bottom:12px;
+    font-size:12px; padding:7px 14px; border-radius:8px; margin-bottom:9px;
     border:1px solid transparent;
   }
   .data-status.demo{ background:var(--brass-tint); color:var(--brass-dark); border-color:#E8D5A8; }
@@ -98,11 +98,11 @@
   .kpi-row{
     /* auto-fit keeps every card — the original 6 and any new ones — at the same
        uniform size automatically, instead of hand-tuning a fixed column count. */
-    display:grid; grid-template-columns:repeat(auto-fit,minmax(148px,1fr)); gap:14px; margin-bottom:18px;
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(148px,1fr)); gap:12px; margin-bottom:14px;
   }
   .kpi{
     background:var(--card); border:1px solid var(--card-line); border-radius:12px;
-    padding:16px 16px 14px; position:relative; overflow:hidden;
+    padding:13px 14px 11px; position:relative; overflow:hidden;
     box-shadow:0 1px 2px rgba(20,20,10,0.04);
   }
   .kpi::before{
@@ -117,8 +117,8 @@
   .kpi.c-balance::before{ background:var(--ink); }
   .kpi.c-ratio::before{ background:var(--brass); }
   .kpi .badge{
-    width:30px;height:30px;border-radius:8px; display:flex;align-items:center;justify-content:center;
-    font-size:15px; margin-bottom:10px;
+    width:28px;height:28px;border-radius:8px; display:flex;align-items:center;justify-content:center;
+    font-size:14px; margin-bottom:7px;
   }
   .kpi.c-income .badge{ background:var(--blue-tint); }
   .kpi.c-expense .badge{ background:var(--red-tint); }
@@ -128,28 +128,28 @@
   .kpi.c-count .badge{ background:var(--teal-tint); }
   .kpi.c-balance .badge{ background:var(--card-line); }
   .kpi.c-ratio .badge{ background:var(--brass-tint); }
-  .kpi .lbl{ font-size:10px; letter-spacing:.07em; text-transform:uppercase; color:var(--muted-cool); font-weight:700; margin-bottom:6px;}
-  .kpi .num{ font-family:'IBM Plex Mono',monospace; font-size:21px; font-weight:600; color:var(--ink-text); letter-spacing:-0.01em;}
-  .kpi .delta{ font-size:11.5px; margin-top:6px; font-weight:600; font-family:'IBM Plex Mono',monospace;}
+  .kpi .lbl{ font-size:10px; letter-spacing:.07em; text-transform:uppercase; color:var(--muted-cool); font-weight:700; margin-bottom:4px;}
+  .kpi .num{ font-family:'IBM Plex Mono',monospace; font-size:20px; font-weight:600; color:var(--ink-text); letter-spacing:-0.01em;}
+  .kpi .delta{ font-size:11.5px; margin-top:4px; font-weight:600; font-family:'IBM Plex Mono',monospace;}
   .kpi .delta.up{ color:var(--green); }
   .kpi .delta.down{ color:var(--red); }
   .kpi .delta.flat{ color:var(--muted); }
 
   /* ---------------- PANEL GRID ---------------- */
-  .grid3{ display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:16px; margin-bottom:16px; }
-  .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
+  .grid3{ display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:14px; margin-bottom:14px; }
+  .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px; }
   .panel{
     background:var(--card); border:1px solid var(--card-line); border-radius:12px;
-    padding:16px 18px 14px; box-shadow:0 1px 2px rgba(20,20,10,0.04);
+    padding:13px 15px 11px; box-shadow:0 1px 2px rgba(20,20,10,0.04);
   }
   .panel h3{
     font-size:12.5px; font-weight:700; letter-spacing:.03em; text-transform:uppercase;
-    color:var(--ink-text); margin:0 0 12px; display:flex; align-items:center; gap:7px;
-    border-bottom:2px solid var(--brass-tint); padding-bottom:10px;
+    color:var(--ink-text); margin:0 0 9px; display:flex; align-items:center; gap:7px;
+    border-bottom:2px solid var(--brass-tint); padding-bottom:8px;
   }
   .panel h3 .ic{ font-size:14px; }
-  .chart-wrap{ position:relative; height:220px; }
-  .chart-wrap.tall{ height:250px; }
+  .chart-wrap{ position:relative; height:205px; }
+  .chart-wrap.tall{ height:230px; }
 
   .rank-list{ display:flex; flex-direction:column; gap:9px; }
   .rank-row{ display:flex; align-items:center; gap:10px; font-size:13px; }
@@ -190,7 +190,7 @@
   .type-pill.Expense{ background:var(--red-tint); color:var(--red); }
   .type-pill.Investment{ background:var(--purple-tint); color:var(--purple); }
 
-  .footnote{ margin-top:18px; font-size:11px; color:var(--muted); text-align:center; }
+  .footnote{ margin-top:12px; font-size:11px; color:var(--muted); text-align:center; }
   .footnote b{ color:var(--ink-text); }
 
   @media (max-width:1200px){
@@ -214,7 +214,9 @@
   <main class="main">
     <div class="topbar" id="sec-overview">
       <div class="titleblock">
-        <img src="logo.gif" alt="Logo" style="height:34px;width:34px;border-radius:8px;object-fit:cover;flex-shrink:0;" onerror="this.style.display='none'">
+        <div style="height:30px;width:30px;border-radius:50%;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+          <img src="logo.gif" alt="Logo" style="height:150%;width:150%;object-fit:cover;" onerror="this.parentElement.style.display='none'">
+        </div>
         <h1>Rajan's Finance Executive Dashboard</h1>
         <div class="tag">Smart insights into your money, at a glance</div>
       </div>
@@ -237,7 +239,7 @@
     <div id="dataStatus" class="data-status demo">No data loaded yet — click <b>Load Excel Workbook</b> above and select your <code>.xlsm</code> file to see your real, current numbers.</div>
     <div id="downloadWrap" class="data-status" style="display:none;"></div>
 
-    <div id="ghPanel" class="panel" style="display:none; margin-bottom:18px;">
+    <div id="ghPanel" class="panel" style="display:none; margin-bottom:12px;">
       <h3><span class="ic">⚙️</span> GitHub Auto-Sync <span style="text-transform:none;font-weight:500;color:var(--muted);font-size:11px;">(one-time setup, saved only in this browser)</span></h3>
       <div style="display:grid; grid-template-columns:1fr 1fr 2fr; gap:10px; margin-bottom:10px;">
         <div class="field" style="min-width:0;"><label>Repo (owner/name)</label><input id="ghRepo" type="text" placeholder="rajan/finance-dashboard" style="border:none;outline:none;font-family:'IBM Plex Mono',monospace;font-size:13px;"></div>
@@ -257,7 +259,7 @@
       <div class="kpi c-income"><div class="badge">💰</div><div class="lbl">Total Income</div><div class="num" id="kIncome">—</div><div class="delta" id="dIncome"></div></div>
       <div class="kpi c-expense"><div class="badge">💸</div><div class="lbl">Total Expense</div><div class="num" id="kExpense">—</div><div class="delta" id="dExpense"></div></div>
       <div class="kpi c-invest"><div class="badge">📈</div><div class="lbl">Total Investment</div><div class="num" id="kInvest">—</div><div class="delta" id="dInvest"></div></div>
-      <div class="kpi c-savings"><div class="badge">🏦</div><div class="lbl">Net Savings</div><div class="num" id="kSavings">—</div><div class="delta" id="dSavings">this year</div></div>
+      <div class="kpi c-savings"><div class="badge">🏦</div><div class="lbl">Net Savings</div><div class="num" id="kSavings">—</div><div class="delta" id="dSavings"></div></div>
       <div class="kpi c-rate"><div class="badge">🎯</div><div class="lbl">Savings Rate</div><div class="num" id="kRate">—</div><div class="delta" id="dRate">target 20%+</div></div>
       <div class="kpi c-count"><div class="badge">🧾</div><div class="lbl">Transactions</div><div class="num" id="kCount">—</div><div class="delta">entries logged</div></div>
       <div class="kpi c-balance"><div class="badge">🏛️</div><div class="lbl">Balance in A/C</div><div class="num" id="kBalance">—</div><div class="delta flat">as of latest entry · all years</div></div>
@@ -283,7 +285,7 @@
     <div class="grid2">
       <div class="panel">
         <h3><span class="ic">📦</span> Categories <span style="text-transform:none;font-weight:500;color:var(--muted);font-size:11px;">(all-time expense)</span></h3>
-        <div class="chart-wrap"><canvas id="chartCategoriesAll"></canvas></div>
+        <div class="chart-wrap" id="chartCategoriesAllWrap"><canvas id="chartCategoriesAll"></canvas></div>
       </div>
       <div class="panel" id="sec-reports">
         <h3><span class="ic">📅</span> Year-wise Summary</h3>
@@ -294,12 +296,12 @@
       </div>
     </div>
 
-    <div class="panel" style="margin-bottom:16px;">
+    <div class="panel" style="margin-bottom:12px;">
       <h3><span class="ic">📈</span> Annual Income vs Expenses + Net Savings Trend</h3>
-      <div class="chart-wrap tall"><canvas id="chartAnnualCombo"></canvas></div>
+      <div class="chart-wrap tall" id="chartAnnualComboWrap"><canvas id="chartAnnualCombo"></canvas></div>
     </div>
 
-    <div class="panel" style="margin-bottom:16px;" id="sec-transactions">
+    <div class="panel" style="margin-bottom:12px;" id="sec-transactions">
       <h3>
         <span class="ic">🕒</span> Latest 5 Transactions <span style="text-transform:none;font-weight:500;color:var(--muted);font-size:11px;">(all-time, most recent first)</span>
         <button type="button" id="txnToggleBtn" style="margin-left:auto;background:#fff;border:1px solid var(--card-line);border-radius:8px;padding:5px 12px;font-size:11.5px;font-weight:700;color:var(--ink-text);cursor:pointer;text-transform:none;letter-spacing:0;">🔒 Show</button>
@@ -417,20 +419,26 @@ function render(year){
   delta('dIncome', y.income, py?py.income:null);
   delta('dExpense', y.expense, py?py.expense:null);
   delta('dInvest', y.investment, py?py.investment:null);
+  // Net Savings' delta used to be a hardcoded "this year" label, which stayed wrong when
+  // "All Years" or an early year was selected. It now behaves exactly like the three
+  // deltas above — real YoY comparison, or "all years combined" / "no prior year".
+  delta('dSavings', net, py?(py.income - py.expense - py.investment):null);
 
-  // ---- Top categories bar (horizontal): ALL categories for the selected year, sorted
-  // by size — the chart's height grows dynamically so every bar stays readable. ----
+  // ---- All Expense Categories bar (VERTICAL, selected year): every category for the
+  // selected year, sorted by size. Stays in a normal fixed-size chart-wrap (same safe
+  // pattern as every other chart on this page) — as more categories show up, labels
+  // rotate and auto-skip instead of the container growing, which avoids CSS-grid/
+  // percentage-width sizing quirks that could leave the canvas blank. ----
   charts.topcat && charts.topcat.destroy();
   const sortedCats = [...y.categories].sort((a,b)=>b.value-a.value);
-  const topCatWrap = document.getElementById('chartTopCatWrap');
-  topCatWrap.style.height = Math.max(220, sortedCats.length*32) + 'px';
   charts.topcat = new Chart(document.getElementById('chartTopCat'), {
     type:'bar',
     data:{ labels: sortedCats.map(c=>c.name), datasets:[{ label:'Expense', data: sortedCats.map(c=>c.value), backgroundColor:KPI_COLORS.expense, borderRadius:4 }] },
-    options:{ indexAxis:'y', responsive:true, maintainAspectRatio:false,
+    options:{ responsive:true, maintainAspectRatio:false,
       plugins:{legend:{display:false},
-        tooltip:{ callbacks:{ label: ctx => ctx.dataset.label + ': ' + fmtINR(ctx.parsed.x) } }},
-      scales:{ x:{ ticks:{callback:v=>'₹'+(v/1000)+'k'}, grid:{color:'#F0EBDD'} }, y:{grid:{display:false}} } }
+        tooltip:{ callbacks:{ label: ctx => ctx.dataset.label + ': ' + fmtINR(ctx.parsed.y) } }},
+      scales:{ y:{ ticks:{callback:v=>'₹'+(v/1000)+'k'}, grid:{color:'#F0EBDD'} },
+        x:{ grid:{display:false}, ticks:{font:{size:9.5}, autoSkip:false, maxRotation:60, minRotation:sortedCats.length>6?45:0} } } }
   });
 
   // ---- Monthly combo (selected year): Income/Expense bars + Investment/Net Savings lines ----
@@ -444,7 +452,7 @@ function render(year){
         {type:'bar', label:'Income', data:y.monthly_income, backgroundColor:KPI_COLORS.income, borderRadius:4, order:2},
         {type:'bar', label:'Expenses', data:y.monthly_expense, backgroundColor:KPI_COLORS.expense, borderRadius:4, order:2},
         {type:'line', label:'Investment', data:monthlyInvest, borderColor:KPI_COLORS.investment, backgroundColor:KPI_COLORS.investment, tension:.35, pointRadius:3, order:1},
-        {type:'line', label:'Net Savings', data:monthlyNet, borderColor:KPI_COLORS.savings, backgroundColor:KPI_COLORS.savings, tension:.35, pointRadius:3, order:1}
+        {type:'line', label:'Net Savings', data:monthlyNet, borderColor:KPI_COLORS.savings, backgroundColor:KPI_COLORS.savings, borderDash:[6,4], tension:.35, pointRadius:3, order:1}
       ]
     },
     options:{ responsive:true, maintainAspectRatio:false,
@@ -457,7 +465,10 @@ function render(year){
     }
   });
 
-  // ---- Annual combo (ALL years): Income/Expense/Investment bars + Net Savings line ----
+  // ---- Annual combo (ALL years): Income/Expense/Investment bars + Net Savings line.
+  // Fixed-size container (same safe pattern as every other chart here); as more years
+  // accumulate, Chart.js narrows the bars and rotates year labels automatically instead
+  // of the container growing — avoids the same sizing quirk fixed above. ----
   const annualIncome = DATA.years.map(yr=>DATA.data[yr].income);
   const annualExpense = DATA.years.map(yr=>DATA.data[yr].expense);
   const annualInvest = DATA.years.map(yr=>DATA.data[yr].investment);
@@ -470,7 +481,7 @@ function render(year){
         {type:'bar', label:'Income', data:annualIncome, backgroundColor:KPI_COLORS.income, borderRadius:4},
         {type:'bar', label:'Expense', data:annualExpense, backgroundColor:KPI_COLORS.expense, borderRadius:4},
         {type:'bar', label:'Investment', data:annualInvest, backgroundColor:KPI_COLORS.investment, borderRadius:4},
-        {type:'line', label:'Net Savings', data:annualSavings, borderColor:KPI_COLORS.savings, backgroundColor:KPI_COLORS.savings, tension:.35, pointRadius:3}
+        {type:'line', label:'Net Savings', data:annualSavings, borderColor:KPI_COLORS.savings, backgroundColor:KPI_COLORS.savings, borderDash:[6,4], tension:.35, pointRadius:3}
       ]
     },
     options:{ responsive:true, maintainAspectRatio:false,
@@ -478,22 +489,25 @@ function render(year){
       interaction:{ mode:'index', intersect:false },
       plugins:{legend:{position:'bottom', labels:{boxWidth:10,padding:10,font:{size:10}}},
         tooltip:{ mode:'index', intersect:false, callbacks:{ label: ctx => ctx.dataset.label + ': ' + fmtINR(ctx.parsed.y) } }},
-      scales:{ y:{ ticks:{callback:v=>'₹'+(v/1000)+'k'}, grid:{color:'#F0EBDD'} }, x:{grid:{display:false}} }
+      scales:{ y:{ ticks:{callback:v=>'₹'+(v/1000)+'k'}, grid:{color:'#F0EBDD'} },
+        x:{ grid:{display:false}, ticks:{autoSkip:false, maxRotation:60, minRotation:DATA.years.length>8?45:0} } }
     }
   });
 
-  // ---- Categories bar: all-time expense-by-category totals (matches the workbook's
-  // "Categories" chart on the 🏠 Dashboard sheet) — not affected by the Year selector ----
+  // ---- Categories bar (HORIZONTAL, all-time expense totals — matches the workbook's
+  // "Categories" chart on the 🏠 Dashboard sheet, not affected by the Year selector).
+  // Height grows with the number of categories so every bar/label stays readable. ----
   const catAll = DATA.categoryAll || [];
   charts.catAll && charts.catAll.destroy();
+  const catAllWrap = document.getElementById('chartCategoriesAllWrap');
+  catAllWrap.style.height = Math.max(220, catAll.length*32) + 'px';
   charts.catAll = new Chart(document.getElementById('chartCategoriesAll'), {
     type:'bar',
     data:{ labels: catAll.map(c=>c.name), datasets:[{ label:'Expense', data: catAll.map(c=>c.value), backgroundColor:KPI_COLORS.expense, borderRadius:4 }] },
-    options:{ responsive:true, maintainAspectRatio:false,
-      interaction:{ mode:'index', intersect:false },
+    options:{ indexAxis:'y', responsive:true, maintainAspectRatio:false,
       plugins:{legend:{display:false},
-        tooltip:{ callbacks:{ label: ctx => ctx.dataset.label + ': ' + fmtINR(ctx.parsed.y) } }},
-      scales:{ y:{ ticks:{callback:v=>'₹'+(v/1000)+'k'}, grid:{color:'#F0EBDD'} }, x:{grid:{display:false}, ticks:{font:{size:9}}} } }
+        tooltip:{ callbacks:{ label: ctx => ctx.dataset.label + ': ' + fmtINR(ctx.parsed.x) } }},
+      scales:{ x:{ ticks:{callback:v=>'₹'+(v/1000)+'k'}, grid:{color:'#F0EBDD'} }, y:{grid:{display:false}, ticks:{font:{size:10}}} } }
   });
 
   // ---- Gauge ----
@@ -595,6 +609,13 @@ function findSheetByName(wb, target){
 }
 
 function norm(v){ return (v==null?'':String(v)).trim().toLowerCase(); }
+// Some sheets have the odd stray cell that's typed as a date/number even though the
+// column is meant to hold text (e.g. a Description cell someone accidentally entered
+// as a date). Without this, such a value stays a raw number/Date object, and any code
+// that calls .toLowerCase() on it later (like the search box on the Transactions page)
+// throws and silently breaks filtering for every row, not just that one. Coercing text
+// fields to plain strings right here prevents that class of bug everywhere downstream.
+function asText(v){ return (v==null || v==='') ? null : (typeof v === 'string' ? v : String(v)); }
 
 // IMPORTANT: use this instead of dateObj.toISOString().slice(0,10) for date-only values.
 // toISOString() converts to UTC — for a browser in India (UTC+5:30), a local midnight
@@ -685,9 +706,9 @@ function buildDataFromWorkbook(wb){
     const r = rows[i];
     if(!r) continue;
     let date = r[col.date];
-    const desc = col.desc!=null ? r[col.desc] : null;
-    const type = r[col.type], cat = r[col.category], amount = r[col.amount];
-    const pay = col.payment!=null ? r[col.payment] : null;
+    const desc = asText(col.desc!=null ? r[col.desc] : null);
+    const type = asText(r[col.type]), cat = asText(r[col.category]), amount = r[col.amount];
+    const pay = asText(col.payment!=null ? r[col.payment] : null);
     if(date==null || amount==null || amount==='') continue;
 
     const dp = dateCellToParts(date);
@@ -796,9 +817,9 @@ function parseCashflowSheet(wb){
     const r = rows[i];
     if(!r) continue;
     let date = r[col.date];
-    const name = r[col.name], type = r[col.type], cat = col.category!=null ? r[col.category] : null;
+    const name = asText(r[col.name]), type = asText(r[col.type]), cat = asText(col.category!=null ? r[col.category] : null);
     const amount = r[col.amount];
-    const notes = col.notes!=null ? r[col.notes] : null;
+    const notes = asText(col.notes!=null ? r[col.notes] : null);
     if(date==null || name==null || amount==null || amount==='') continue;
 
     const dp = dateCellToParts(date);
