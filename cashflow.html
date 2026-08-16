@@ -105,6 +105,10 @@
   }
 </style>
 <script src="auth-config.js"></script>
+<!-- data.js embeds the live data as window.EMBEDDED_DATA — a plain <script> tag, so it
+     loads the same way whether this page is opened online or straight from disk
+     (fetch() of a local data.json is blocked by browsers over file://). -->
+<script src="data.js"></script>
 </head>
 <body>
 <div id="pwGate" style="position:fixed;inset:0;background:var(--paper);display:flex;align-items:center;justify-content:center;z-index:9999;">
@@ -120,9 +124,12 @@
 </div>
 <div class="main">
   <div class="topbar">
-    <div>
-      <h1>Cashflow Ledger</h1>
-      <div class="tag">Every Given / Received row from the Cashflow sheet — per lender, searchable &amp; sortable</div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <img src="https://raw.githubusercontent.com/rajankm991/rkm/main/image/logo.gif" alt="Logo" style="height:32px;width:32px;border-radius:8px;object-fit:cover;flex-shrink:0;">
+      <div>
+        <h1>Cashflow Ledger</h1>
+        <div class="tag">Every Given / Received row from the Cashflow sheet — per lender, searchable &amp; sortable</div>
+      </div>
     </div>
     <a class="backlink" href="./">← Back to Dashboard</a>
   </div>
@@ -177,12 +184,9 @@
 const DATA_JSON_PATH = 'data.json';
 const fmtINR = n => '₹' + Math.round(Math.abs(n)).toLocaleString('en-IN');
 
-const DEMO_FALLBACK = {"cashflow": [
-  {"date":"2021-01-01","name":"Vinod Mama","type":"Given","category":"Cashflow","amount":1500,"notes":"Hafta"},
-  {"date":"2021-01-01","name":"Vinod Mama","type":"Given","category":"Cashflow","amount":450,"notes":"tkt"},
-  {"date":"2026-02-09","name":"Bholu bhaiya","type":"Received","category":"Cashflow","amount":5000,"notes":"Return"},
-  {"date":"2026-06-19","name":"Bholu bhaiya","type":"Given","category":"Cashflow","amount":300,"notes":"Nagendra jaiswal"}
-]};
+// Empty scaffold — used only if neither data.js nor data.json can be found. No
+// fake/sample rows are shown; the table just displays an empty state.
+const DEMO_FALLBACK = {"cashflow": []};
 
 let ALL_TXNS = [];
 let filtered = [];
@@ -300,6 +304,12 @@ function loadFrom(data, label, cls){
 }
 
 function initPage(){
+  // Prefer data.js (window.EMBEDDED_DATA) — works over file:// as well as http(s) — then
+  // fall back to fetching data.json (hosted only), then to the small built-in demo data.
+  if(window.EMBEDDED_DATA && window.EMBEDDED_DATA.cashflow){
+    loadFrom(window.EMBEDDED_DATA, '✅ Live data loaded from <b>data.js</b> — works the same whether this page is opened online or straight from disk.', 'live');
+    return;
+  }
   fetch(DATA_JSON_PATH, {cache:'no-store'})
     .then(r=> r.ok ? r.json() : Promise.reject(new Error('data.json not found (' + r.status + ')')))
     .then(json=>{
@@ -307,7 +317,7 @@ function initPage(){
       loadFrom(json, '✅ Live data loaded from <b>data.json</b>.', 'live');
     })
     .catch(()=>{
-      loadFrom(DEMO_FALLBACK, 'Showing sample data — this page could not reach <code>data.json</code> yet.', 'demo');
+      loadFrom(DEMO_FALLBACK, 'No data loaded — this page could not reach <code>data.js</code> or <code>data.json</code> yet.', 'demo');
     });
 }
 

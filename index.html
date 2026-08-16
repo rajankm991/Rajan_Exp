@@ -8,6 +8,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<!-- Same password as the All Transactions / Cashflow Ledger pages, used to gate the
+     "Latest 5 Transactions" panel below (session-shared via sessionStorage). -->
+<script src="auth-config.js"></script>
+<!-- data.js embeds the live data as a plain JS variable (window.EMBEDDED_DATA).
+     Script tags load fine over file:// as well as http(s), unlike fetch() of data.json —
+     so this is what makes the page show the SAME data whether opened online or straight
+     from disk locally. If data.js is missing/empty the page falls back to fetching
+     data.json (works when hosted), then to the small built-in demo data. -->
+<script src="data.js"></script>
 <style>
   :root{
     --ink:#10151F;
@@ -45,38 +54,39 @@
   .app{ display:flex; min-height:100vh; }
 
   /* ---------------- MAIN ---------------- */
-  .main{ flex:1; padding:26px 34px 50px; max-width:1420px; margin:0 auto; }
+  .main{ flex:1; padding:20px 30px 40px; max-width:1420px; margin:0 auto; }
 
   .topbar{
-    display:flex; align-items:flex-end; justify-content:space-between;
-    margin-bottom:22px; flex-wrap:wrap; gap:16px;
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:16px; flex-wrap:nowrap; gap:14px;
   }
+  .topbar .titleblock{ display:flex; align-items:center; gap:10px; flex-shrink:1; min-width:0; overflow:hidden; }
   .topbar h1{
-    font-family:'Fraunces',serif; font-weight:600; font-size:26px; margin:0 0 4px;
-    color:var(--ink-text); letter-spacing:-0.01em;
+    font-family:'Fraunces',serif; font-weight:600; font-size:19px; margin:0;
+    color:var(--ink-text); letter-spacing:-0.01em; white-space:nowrap;
   }
-  .topbar .tag{ font-size:12.5px; color:var(--muted); }
-  .controls{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  .topbar .tag{ font-size:11px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .controls{ display:flex; gap:8px; align-items:center; flex-wrap:nowrap; flex-shrink:0; }
   .field{
     background:var(--card); border:1px solid var(--card-line); border-radius:10px;
-    padding:7px 14px; display:flex; flex-direction:column; gap:1px; min-width:108px;
+    padding:5px 12px; display:flex; flex-direction:column; gap:1px; min-width:88px;
   }
-  .field label{ font-size:9.5px; letter-spacing:.08em; color:var(--muted); text-transform:uppercase; font-weight:600;}
+  .field label{ font-size:9px; letter-spacing:.08em; color:var(--muted); text-transform:uppercase; font-weight:600;}
   .field select{
-    border:none; background:transparent; font-family:'IBM Plex Mono',monospace; font-size:14px;
+    border:none; background:transparent; font-family:'IBM Plex Mono',monospace; font-size:12.5px;
     font-weight:600; color:var(--ink-text); padding:0; outline:none;
   }
-  .field .val{ font-family:'IBM Plex Mono',monospace; font-size:13px; font-weight:600; color:var(--ink-text); }
+  .field .val{ font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:600; color:var(--ink-text); white-space:nowrap; }
 
   .loadbtn{
-    display:flex; align-items:center; gap:7px;
+    display:flex; align-items:center; gap:6px;
     background:var(--ink); color:#F3EFE4; border:1px solid var(--ink);
-    border-radius:10px; padding:11px 16px; font-size:13px; font-weight:600;
+    border-radius:9px; padding:8px 12px; font-size:12px; font-weight:600;
     cursor:pointer; white-space:nowrap; transition:background .15s;
   }
   .loadbtn:hover{ background:var(--ink-2); }
   .data-status{
-    font-size:12px; padding:9px 14px; border-radius:8px; margin-bottom:18px;
+    font-size:12px; padding:8px 14px; border-radius:8px; margin-bottom:12px;
     border:1px solid transparent;
   }
   .data-status.demo{ background:var(--brass-tint); color:var(--brass-dark); border-color:#E8D5A8; }
@@ -86,7 +96,9 @@
 
   /* ---------------- KPI CARDS ---------------- */
   .kpi-row{
-    display:grid; grid-template-columns:repeat(6,1fr); gap:14px; margin-bottom:22px;
+    /* auto-fit keeps every card — the original 6 and any new ones — at the same
+       uniform size automatically, instead of hand-tuning a fixed column count. */
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(148px,1fr)); gap:14px; margin-bottom:18px;
   }
   .kpi{
     background:var(--card); border:1px solid var(--card-line); border-radius:12px;
@@ -102,6 +114,8 @@
   .kpi.c-savings::before{ background:var(--green); }
   .kpi.c-rate::before{ background:var(--brass); }
   .kpi.c-count::before{ background:var(--teal); }
+  .kpi.c-balance::before{ background:var(--ink); }
+  .kpi.c-ratio::before{ background:var(--brass); }
   .kpi .badge{
     width:30px;height:30px;border-radius:8px; display:flex;align-items:center;justify-content:center;
     font-size:15px; margin-bottom:10px;
@@ -112,6 +126,8 @@
   .kpi.c-savings .badge{ background:var(--green-tint); }
   .kpi.c-rate .badge{ background:var(--brass-tint); }
   .kpi.c-count .badge{ background:var(--teal-tint); }
+  .kpi.c-balance .badge{ background:var(--card-line); }
+  .kpi.c-ratio .badge{ background:var(--brass-tint); }
   .kpi .lbl{ font-size:10px; letter-spacing:.07em; text-transform:uppercase; color:var(--muted-cool); font-weight:700; margin-bottom:6px;}
   .kpi .num{ font-family:'IBM Plex Mono',monospace; font-size:21px; font-weight:600; color:var(--ink-text); letter-spacing:-0.01em;}
   .kpi .delta{ font-size:11.5px; margin-top:6px; font-weight:600; font-family:'IBM Plex Mono',monospace;}
@@ -121,6 +137,7 @@
 
   /* ---------------- PANEL GRID ---------------- */
   .grid3{ display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:16px; margin-bottom:16px; }
+  .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
   .panel{
     background:var(--card); border:1px solid var(--card-line); border-radius:12px;
     padding:16px 18px 14px; box-shadow:0 1px 2px rgba(20,20,10,0.04);
@@ -179,6 +196,13 @@
   @media (max-width:1200px){
     .kpi-row{ grid-template-columns:repeat(3,1fr); }
     .grid3{ grid-template-columns:1fr; }
+    .grid2{ grid-template-columns:1fr; }
+    /* Below desktop width there isn't room for title + all controls on one line —
+       fall back to wrapping instead of clipping/overflowing. */
+    .topbar{ flex-wrap:wrap; }
+    .topbar .titleblock{ flex-basis:100%; overflow:visible; }
+    .topbar h1{ white-space:normal; }
+    .controls{ flex-wrap:wrap; }
   }
   @media (max-width:760px){
     .kpi-row{ grid-template-columns:repeat(2,1fr); }
@@ -189,7 +213,8 @@
 <div class="app">
   <main class="main">
     <div class="topbar" id="sec-overview">
-      <div>
+      <div class="titleblock">
+        <img src="https://raw.githubusercontent.com/rajankm991/rkm/main/image/logo.gif" alt="Logo" style="height:34px;width:34px;border-radius:8px;object-fit:cover;flex-shrink:0;">
         <h1>Rajan's Finance Executive Dashboard</h1>
         <div class="tag">Smart insights into your money, at a glance</div>
       </div>
@@ -209,7 +234,7 @@
         </div>
       </div>
     </div>
-    <div id="dataStatus" class="data-status demo">Showing sample data — click <b>Load Excel Workbook</b> above and select your <code>.xlsm</code> file to see your real, current numbers.</div>
+    <div id="dataStatus" class="data-status demo">No data loaded yet — click <b>Load Excel Workbook</b> above and select your <code>.xlsm</code> file to see your real, current numbers.</div>
     <div id="downloadWrap" class="data-status" style="display:none;"></div>
 
     <div id="ghPanel" class="panel" style="display:none; margin-bottom:18px;">
@@ -235,61 +260,57 @@
       <div class="kpi c-savings"><div class="badge">🏦</div><div class="lbl">Net Savings</div><div class="num" id="kSavings">—</div><div class="delta" id="dSavings">this year</div></div>
       <div class="kpi c-rate"><div class="badge">🎯</div><div class="lbl">Savings Rate</div><div class="num" id="kRate">—</div><div class="delta" id="dRate">target 20%+</div></div>
       <div class="kpi c-count"><div class="badge">🧾</div><div class="lbl">Transactions</div><div class="num" id="kCount">—</div><div class="delta">entries logged</div></div>
+      <div class="kpi c-balance"><div class="badge">🏛️</div><div class="lbl">Balance in A/C</div><div class="num" id="kBalance">—</div><div class="delta flat">as of latest entry · all years</div></div>
+      <div class="kpi c-ratio">
+        <div class="badge">⚖️</div><div class="lbl">Expense-to-Income</div>
+        <div class="num" id="gaugeNum" style="font-size:19px;">—</div>
+        <div class="gauge-bar" style="margin:6px 0 2px;"><div class="gauge-fill" id="gaugeFill" style="width:0%"></div></div>
+        <div class="delta flat" style="font-size:10px;">lower is healthier</div>
+      </div>
     </div>
 
-    <div class="grid3">
+    <div class="grid2">
       <div class="panel">
-        <h3><span class="ic">📈</span> Monthly Income vs Expense</h3>
-        <div class="chart-wrap"><canvas id="chartTrend"></canvas></div>
+        <h3><span class="ic">📊</span> Monthly Income vs Expenses + Net Savings</h3>
+        <div class="chart-wrap"><canvas id="chartMonthlyCombo"></canvas></div>
       </div>
       <div class="panel" id="sec-categories">
-        <h3><span class="ic">◔</span> Expense by Category</h3>
-        <div class="chart-wrap"><canvas id="chartCategory"></canvas></div>
-      </div>
-      <div class="panel">
-        <h3><span class="ic">🏆</span> Top Expense Categories</h3>
-        <div class="chart-wrap"><canvas id="chartTopCat"></canvas></div>
+        <h3><span class="ic">🏆</span> All Expense Categories <span style="text-transform:none;font-weight:500;color:var(--muted);font-size:11px;">(Selected Year)</span></h3>
+        <div class="chart-wrap" id="chartTopCatWrap"><canvas id="chartTopCat"></canvas></div>
       </div>
     </div>
 
-    <div class="grid3">
-      <div class="panel" id="sec-cashflow">
-        <h3><span class="ic">🏅</span> Top Lending Balances</h3>
-        <div class="rank-list" id="lenderList"></div>
-      </div>
+    <div class="grid2">
       <div class="panel">
-        <h3><span class="ic">💳</span> Expense by Payment Method</h3>
-        <div class="chart-wrap"><canvas id="chartPayment"></canvas></div>
-      </div>
-      <div class="panel">
-        <h3><span class="ic">📉</span> Monthly Savings Rate</h3>
-        <div class="chart-wrap"><canvas id="chartSavingsRate"></canvas></div>
-      </div>
-    </div>
-
-    <div class="grid3">
-      <div class="panel">
-        <h3><span class="ic">🍰</span> Transaction Mix</h3>
-        <div class="chart-wrap"><canvas id="chartMix"></canvas></div>
-      </div>
-      <div class="panel">
-        <h3><span class="ic">⚖️</span> Expense-to-Income Ratio</h3>
-        <div class="gauge-num" id="gaugeNum">—</div>
-        <div class="gauge-bar"><div class="gauge-fill" id="gaugeFill" style="width:0%"></div></div>
-        <div class="gauge-lbl">Expense as % of income this year — lower is healthier</div>
+        <h3><span class="ic">📦</span> Categories <span style="text-transform:none;font-weight:500;color:var(--muted);font-size:11px;">(all-time expense)</span></h3>
+        <div class="chart-wrap"><canvas id="chartCategoriesAll"></canvas></div>
       </div>
       <div class="panel" id="sec-reports">
         <h3><span class="ic">📅</span> Year-wise Summary</h3>
         <table class="year-table">
-          <thead><tr><th>Year</th><th>Income</th><th>Expense</th><th>Net</th></tr></thead>
+          <thead><tr><th>Year</th><th>Income</th><th>Expense</th><th>Investment</th><th>Net</th></tr></thead>
           <tbody id="yearTableBody"></tbody>
         </table>
       </div>
     </div>
 
+    <div class="panel" style="margin-bottom:16px;">
+      <h3><span class="ic">📈</span> Annual Income vs Expenses + Net Savings Trend</h3>
+      <div class="chart-wrap tall"><canvas id="chartAnnualCombo"></canvas></div>
+    </div>
+
     <div class="panel" style="margin-bottom:16px;" id="sec-transactions">
-      <h3><span class="ic">🕒</span> Latest 5 Transactions <span style="text-transform:none;font-weight:500;color:var(--muted);font-size:11px;">(all-time, most recent first)</span></h3>
-      <table class="txn-table">
+      <h3>
+        <span class="ic">🕒</span> Latest 5 Transactions <span style="text-transform:none;font-weight:500;color:var(--muted);font-size:11px;">(all-time, most recent first)</span>
+        <button type="button" id="txnToggleBtn" style="margin-left:auto;background:#fff;border:1px solid var(--card-line);border-radius:8px;padding:5px 12px;font-size:11.5px;font-weight:700;color:var(--ink-text);cursor:pointer;text-transform:none;letter-spacing:0;">🔒 Show</button>
+      </h3>
+      <div id="txnLockedMsg" style="font-size:12px;color:var(--muted);padding:6px 0 4px;">Password protected — same password as <b>All Transactions</b> / <b>Cashflow Ledger</b>. Click <b>Show</b> above to unlock.</div>
+      <div id="txnUnlockRow" style="display:none;gap:8px;align-items:center;margin:4px 0 10px;">
+        <input type="password" id="txnPwInput" placeholder="Password" style="border:1px solid var(--card-line);border-radius:8px;padding:7px 10px;font-family:'IBM Plex Mono',monospace;font-size:13px;outline:none;">
+        <button type="button" id="txnPwSubmit" style="background:var(--ink);color:#F3EFE4;border:none;border-radius:8px;padding:7px 14px;font-size:12.5px;font-weight:600;cursor:pointer;">Unlock</button>
+        <span id="txnPwErr" style="color:var(--red);font-size:11.5px;"></span>
+      </div>
+      <table class="txn-table" id="txnRecentTable" style="display:none;">
         <thead><tr><th>Date</th><th>Description</th><th>Category</th><th>Type</th><th style="text-align:right">Amount</th></tr></thead>
         <tbody id="recentBody"></tbody>
       </table>
@@ -300,9 +321,14 @@
 </div>
 
 <script>
-const DEMO_DATA = {"years": [2021, 2022, 2023, 2024, 2025, 2026, 2027], "data": {"2021": {"income": 147316.0, "expense": 16122.98, "investment": 55000.0, "monthly_income": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 69316.0, 0.0, 52000.0, 26000.0], "monthly_expense": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -76407.02, 33500.0, 27210.0, 13100.0, 18720.0], "categories": [{"name": "Home", "value": 48440.0}, {"name": "Rajan", "value": 30300.0}, {"name": "Pawan", "value": 11000.0}, {"name": "Recharge", "value": 2560.0}, {"name": "Other", "value": 230.0}, {"name": "Cashflow", "value": -76407.02}], "payment": [{"name": "Net Banking", "value": -76407.02}], "count": 35, "lastDate": "2021-12-31"}, "2022": {"income": 447176.0, "expense": 203940.0, "investment": 6800.0, "monthly_income": [26000.0, 26000.0, 26000.0, 26000.0, 151000.0, 26000.0, 26000.0, 26000.0, 26000.0, 26852.0, 30662.0, 30662.0], "monthly_expense": [1988.0, 3342.0, 5870.0, 14950.0, 10762.0, 10560.0, 20083.0, 43344.0, 22033.0, 27394.0, 13183.0, 30431.0], "categories": [{"name": "Pawan", "value": 66156.0}, {"name": "Rajan", "value": 61226.0}, {"name": "Home", "value": 39250.0}, {"name": "DRCC", "value": 31998.0}, {"name": "Recharge", "value": 3310.0}, {"name": "Delhi", "value": 2000.0}], "payment": [{"name": "UPI", "value": 5333.0}, {"name": "Net Banking", "value": 5333.0}], "count": 67, "lastDate": "2022-12-31"}, "2023": {"income": 520304.0, "expense": 495895.0, "investment": 14504.0, "monthly_income": [30662.0, 30662.0, 55512.0, 34000.0, 34000.0, 34000.0, 34000.0, 34000.0, 131468.0, 34000.0, 34000.0, 34000.0], "monthly_expense": [21480.0, 36651.0, 59664.0, 43164.0, 23735.0, 31881.0, 65126.0, 85842.0, 36823.0, 22351.0, 31631.0, 37547.0], "categories": [{"name": "Nisha", "value": 135015.0}, {"name": "Pawan", "value": 95720.0}, {"name": "Rajan", "value": 91696.0}, {"name": "Ed LOAN", "value": 61929.0}, {"name": "Delhi", "value": 59040.0}, {"name": "DRCC", "value": 21332.0}, {"name": "Other", "value": 31163.0}], "payment": [], "count": 111, "lastDate": "2023-12-31"}, "2024": {"income": 722110.0, "expense": 698384.53, "investment": 16512.0, "monthly_income": [46000.0, 46000.0, 54500.0, 97500.0, 46000.0, 85000.0, 46000.0, 48000.0, 107000.0, 50110.0, 48000.0, 48000.0], "monthly_expense": [79581.0, 55257.0, 44968.14, 46552.0, 32774.6, 90762.7, 44505.57, 92706.34, 49841.11, 33047.6, 62329.46, 66059.01], "categories": [{"name": "Nisha", "value": 230200.0}, {"name": "Delhi", "value": 101203.31}, {"name": "Home", "value": 94540.2}, {"name": "Pawan", "value": 91828.6}, {"name": "Rajan", "value": 85428.0}, {"name": "Ed LOAN", "value": 80708.02}, {"name": "Other", "value": 14476.4}], "payment": [], "count": 147, "lastDate": "2024-12-31"}, "2025": {"income": 670000.0, "expense": 806992.07, "investment": 20792.0, "monthly_income": [78000.0, 48000.0, 48000.0, 48000.0, 107000.0, 48000.0, 48000.0, 48000.0, 48000.0, 48000.0, 50500.0, 50500.0], "monthly_expense": [120977.33, 120342.04, 70973.12, 65892.98, 39213.0, 113923.0, 17538.6, 36641.8, 101924.0, 40800.0, 31740.0, 47026.2], "categories": [{"name": "Nisha", "value": 252061.0}, {"name": "Rajan", "value": 174544.0}, {"name": "Delhi", "value": 95711.0}, {"name": "Home", "value": 84280.0}, {"name": "Pawan", "value": 59450.0}, {"name": "DRCC", "value": 50000.0}, {"name": "Other", "value": 90946.07}], "payment": [{"name": "Credit Card", "value": 44851.0}], "count": 140, "lastDate": "2025-12-31"}, "2026": {"income": 375929.0, "expense": 479689.44, "investment": 67386.0, "monthly_income": [120874.0, 50500.0, 50500.0, 53055.0, 50500.0, 50500.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "monthly_expense": [33853.6, 143053.24, 65611.8, 79968.2, 103426.6, 34784.0, 18992.0, 0.0, 0.0, 0.0, 0.0, 0.0], "categories": [{"name": "Nisha", "value": 131700.0}, {"name": "Rajan", "value": 79206.55}, {"name": "Pawan", "value": 55171.0}, {"name": "Home", "value": 51509.0}, {"name": "Delhi", "value": 47375.89}, {"name": "Alka", "value": 44600.0}, {"name": "Other", "value": 70127.0}], "payment": [{"name": "UPI", "value": 77492.0}, {"name": "Net Banking", "value": 50500.0}, {"name": "Credit Card", "value": 26002.0}, {"name": "Cash", "value": 8200.0}], "count": 111, "lastDate": "2026-07-02"}, "2027": {"income": 13392.0, "expense": 0.0, "investment": 0.0, "monthly_income": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 13392.0, 0.0, 0.0, 0.0, 0.0, 0.0], "monthly_expense": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "categories": [], "payment": [], "count": 2, "lastDate": "2027-07-31"}}, "lenders": [{"name": "Papa", "balance": 112942}, {"name": "Anuj Bhaiya", "balance": 105000}, {"name": "Bholu bhaiya", "balance": 58772.2}, {"name": "Bitan Bhaiya", "balance": 43341.6}, {"name": "Ankit Tiwari", "balance": 20000}], "recent": [{"date": "2027-07-31", "desc": "MIsbalance not getting the value(1214 till 9 jun)", "type": "Income", "category": "Other Income", "amount": 9188, "payment": ""}, {"date": "2027-07-31", "desc": "11250-5000(21/5)-1971(07/09) Ebill + 500 folding- 575 wire", "type": "Income", "category": "Delhi", "amount": 4204, "payment": ""}, {"date": "2026-07-02", "desc": "Alka. ", "type": "Expense", "category": "Alka", "amount": 5000, "payment": ""}, {"date": "2026-07-02", "desc": "Nisha", "type": "Expense", "category": "Nisha", "amount": 300, "payment": ""}, {"date": "2026-07-01", "desc": "Rhishikesh", "type": "Expense", "category": "Rajan", "amount": 3860, "payment": "UPI"}], "all": [{"date": "2027-07-31", "desc": "MIsbalance not getting the value(1214 till 9 jun)", "type": "Income", "category": "Other Income", "amount": 9188, "payment": ""}, {"date": "2027-07-31", "desc": "11250-5000(21/5)-1971(07/09) Ebill + 500 folding- 575 wire", "type": "Income", "category": "Delhi", "amount": 4204, "payment": ""}, {"date": "2026-07-02", "desc": "Alka. ", "type": "Expense", "category": "Alka", "amount": 5000, "payment": ""}, {"date": "2026-07-02", "desc": "Nisha", "type": "Expense", "category": "Nisha", "amount": 300, "payment": ""}, {"date": "2026-07-01", "desc": "Rhishikesh", "type": "Expense", "category": "Rajan", "amount": 3860, "payment": "UPI"}]};
+// Empty scaffold — used only if neither data.js nor data.json can be found (e.g. this
+// file was opened alone, without the rest of the repo). No fake/sample numbers are
+// shown; the dashboard just displays an empty state until real data is loaded.
+const EMPTY_DATA = { years: [], data: {}, lenders: [], recent: [], all: [], categoryAll: [], balance: 0 };
 
 const PALETTE = ['#33538A','#B23A48','#6B4E9E','#1F7A5C','#B8862E','#1B7F86','#9AA0AC'];
+// Consistent colour scheme for the KPI/combo charts (Monthly & Annual):
+const KPI_COLORS = { income:'#1F7A5C', expense:'#D9737E', investment:'#E8B93A', savings:'#6B4E9E' };
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const fmtINR = n => '₹' + Math.round(n).toLocaleString('en-IN');
 const fmtPct = n => (n*100).toFixed(1) + '%';
@@ -336,13 +362,38 @@ Chart.defaults.color = '#6E7686';
 let charts = {};
 function destroyAll(){ Object.values(charts).forEach(c=>c && c.destroy()); }
 
+// Builds the "y" object render() works with — either one real year (DATA.data[year])
+// or, when sel === 'ALL', a synthetic aggregate summed across every year in DATA.
+function getViewData(sel){
+  if(sel === 'ALL'){
+    const agg = { income:0, expense:0, investment:0, count:0,
+      monthly_income:Array(12).fill(0), monthly_expense:Array(12).fill(0), monthly_investment:Array(12).fill(0),
+      lastDate:null };
+    DATA.years.forEach(yr=>{
+      const d = DATA.data[yr];
+      agg.income += d.income; agg.expense += d.expense; agg.investment += d.investment; agg.count += d.count;
+      for(let m=0;m<12;m++){
+        agg.monthly_income[m] += d.monthly_income[m];
+        agg.monthly_expense[m] += d.monthly_expense[m];
+        agg.monthly_investment[m] += (d.monthly_investment[m]||0);
+      }
+      if(d.lastDate && (!agg.lastDate || d.lastDate > agg.lastDate)) agg.lastDate = d.lastDate;
+    });
+    // "All Expense Categories" for the ALL-years view = the same all-time expense
+    // breakdown used by the Categories chart, so the two stay consistent.
+    agg.categories = DATA.categoryAll || [];
+    return agg;
+  }
+  return DATA.data[sel];
+}
+
 function render(year){
-  const y = DATA.data[year];
-  const idx = DATA.years.indexOf(year);
+  const y = getViewData(year);
+  const idx = year==='ALL' ? -1 : DATA.years.indexOf(year);
   const prevYear = idx > 0 ? DATA.years[idx-1] : null;
   const py = prevYear ? DATA.data[prevYear] : null;
 
-  document.getElementById('lastUpdated').textContent = getLastUpdatedLabel(y, year);
+  document.getElementById('lastUpdated').textContent = year==='ALL' ? 'All years' : getLastUpdatedLabel(y, year);
   document.getElementById('kIncome').textContent = fmtINR(y.income);
   document.getElementById('kExpense').textContent = fmtINR(y.expense);
   document.getElementById('kInvest').textContent = fmtINR(y.investment);
@@ -351,10 +402,13 @@ function render(year){
   const rate = y.income ? net/y.income : 0;
   document.getElementById('kRate').textContent = fmtPct(rate);
   document.getElementById('kCount').textContent = y.count.toLocaleString('en-IN');
+  // Balance in A/C is a running total across ALL years (like the bank balance in the
+  // workbook's Dashboard sheet) — it does not change when the Year selector changes.
+  document.getElementById('kBalance').textContent = fmtINR(DATA.balance || 0);
 
   function delta(elId, cur, prev){
     const el = document.getElementById(elId);
-    if(!prev){ el.textContent = 'no prior year'; el.className='delta flat'; return; }
+    if(!prev){ el.textContent = year==='ALL' ? 'all years combined' : 'no prior year'; el.className='delta flat'; return; }
     const change = prev !== 0 ? (cur-prev)/Math.abs(prev) : 0;
     const up = cur >= prev;
     el.textContent = (up?'▲ ':'▼ ') + fmtPct(Math.abs(change)) + ' YoY';
@@ -364,79 +418,82 @@ function render(year){
   delta('dExpense', y.expense, py?py.expense:null);
   delta('dInvest', y.investment, py?py.investment:null);
 
-  // ---- Trend chart (bar expense + line income) ----
-  charts.trend && charts.trend.destroy();
-  charts.trend = new Chart(document.getElementById('chartTrend'), {
+  // ---- Top categories bar (horizontal): ALL categories for the selected year, sorted
+  // by size — the chart's height grows dynamically so every bar stays readable. ----
+  charts.topcat && charts.topcat.destroy();
+  const sortedCats = [...y.categories].sort((a,b)=>b.value-a.value);
+  const topCatWrap = document.getElementById('chartTopCatWrap');
+  topCatWrap.style.height = Math.max(220, sortedCats.length*32) + 'px';
+  charts.topcat = new Chart(document.getElementById('chartTopCat'), {
+    type:'bar',
+    data:{ labels: sortedCats.map(c=>c.name), datasets:[{ label:'Expense', data: sortedCats.map(c=>c.value), backgroundColor:KPI_COLORS.expense, borderRadius:4 }] },
+    options:{ indexAxis:'y', responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false},
+        tooltip:{ callbacks:{ label: ctx => ctx.dataset.label + ': ' + fmtINR(ctx.parsed.x) } }},
+      scales:{ x:{ ticks:{callback:v=>'₹'+(v/1000)+'k'}, grid:{color:'#F0EBDD'} }, y:{grid:{display:false}} } }
+  });
+
+  // ---- Monthly combo (selected year): Income/Expense bars + Investment/Net Savings lines ----
+  const monthlyInvest = y.monthly_investment || Array(12).fill(0);
+  const monthlyNet = y.monthly_income.map((inc,i)=> inc - y.monthly_expense[i] - monthlyInvest[i]);
+  charts.monthlyCombo && charts.monthlyCombo.destroy();
+  charts.monthlyCombo = new Chart(document.getElementById('chartMonthlyCombo'), {
     data:{
       labels: MONTHS,
       datasets:[
-        {type:'bar', label:'Expense', data:y.monthly_expense, backgroundColor:'#B23A48', borderRadius:4, order:2},
-        {type:'line', label:'Income', data:y.monthly_income, borderColor:'#1F7A5C', backgroundColor:'#1F7A5C', tension:.35, pointRadius:3, order:1}
+        {type:'bar', label:'Income', data:y.monthly_income, backgroundColor:KPI_COLORS.income, borderRadius:4, order:2},
+        {type:'bar', label:'Expenses', data:y.monthly_expense, backgroundColor:KPI_COLORS.expense, borderRadius:4, order:2},
+        {type:'line', label:'Investment', data:monthlyInvest, borderColor:KPI_COLORS.investment, backgroundColor:KPI_COLORS.investment, tension:.35, pointRadius:3, order:1},
+        {type:'line', label:'Net Savings', data:monthlyNet, borderColor:KPI_COLORS.savings, backgroundColor:KPI_COLORS.savings, tension:.35, pointRadius:3, order:1}
       ]
     },
     options:{ responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{position:'bottom', labels:{boxWidth:10,padding:12}}},
+      // mode:'index' + intersect:false → hovering anywhere over a month shows ALL four
+      // series (Income, Expenses, Investment, Net Savings) for that month together.
+      interaction:{ mode:'index', intersect:false },
+      plugins:{legend:{position:'bottom', labels:{boxWidth:10,padding:10,font:{size:10}}},
+        tooltip:{ mode:'index', intersect:false, callbacks:{ label: ctx => ctx.dataset.label + ': ' + fmtINR(ctx.parsed.y) } }},
       scales:{ y:{ ticks:{callback:v=>'₹'+(v/1000)+'k'}, grid:{color:'#F0EBDD'} }, x:{grid:{display:false}} }
     }
   });
 
-  // ---- Category donut ----
-  charts.cat && charts.cat.destroy();
-  const catLabels = y.categories.map(c=>c.name);
-  const catVals = y.categories.map(c=>Math.max(c.value,0));
-  charts.cat = new Chart(document.getElementById('chartCategory'), {
-    type:'doughnut',
-    data:{ labels: catLabels, datasets:[{ data: catVals, backgroundColor: PALETTE, borderWidth:2, borderColor:'#fff' }] },
-    options:{ responsive:true, maintainAspectRatio:false, cutout:'62%',
-      plugins:{legend:{position:'right', labels:{boxWidth:9, font:{size:10.5}}}} }
-  });
-
-  // ---- Top categories bar (horizontal) ----
-  charts.topcat && charts.topcat.destroy();
-  const sortedCats = [...y.categories].sort((a,b)=>b.value-a.value).slice(0,6);
-  charts.topcat = new Chart(document.getElementById('chartTopCat'), {
-    type:'bar',
-    data:{ labels: sortedCats.map(c=>c.name), datasets:[{ data: sortedCats.map(c=>c.value), backgroundColor:'#6B4E9E', borderRadius:4 }] },
-    options:{ indexAxis:'y', responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{display:false}},
-      scales:{ x:{ ticks:{callback:v=>'₹'+(v/1000)+'k'}, grid:{color:'#F0EBDD'} }, y:{grid:{display:false}} } }
-  });
-
-  // ---- Lenders list ----
-  const medals = ['🥇','🥈','🥉','🏅','🏅'];
-  document.getElementById('lenderList').innerHTML = DATA.lenders.map((l,i)=>
-    `<div class="rank-row"><span class="medal">${medals[i]}</span><span class="name">${l.name}</span><span class="amt">${fmtINR(l.balance)}</span></div>`
-  ).join('');
-
-  // ---- Payment donut ----
-  charts.pay && charts.pay.destroy();
-  const payLabels = y.payment.map(p=>p.name);
-  const payVals = y.payment.map(p=>Math.max(p.value,0));
-  charts.pay = new Chart(document.getElementById('chartPayment'), {
-    type:'doughnut',
-    data:{ labels: payLabels.length?payLabels:['No data'], datasets:[{ data: payVals.length?payVals:[1], backgroundColor: payVals.length?PALETTE:['#E7E1D2'], borderWidth:2, borderColor:'#fff' }] },
-    options:{ responsive:true, maintainAspectRatio:false, cutout:'62%',
-      plugins:{legend:{position:'right', labels:{boxWidth:9, font:{size:10.5}}}} }
-  });
-
-  // ---- Monthly savings rate ----
-  charts.rate && charts.rate.destroy();
-  const rates = y.monthly_income.map((inc,i)=> inc ? (inc - y.monthly_expense[i])/inc : 0 );
-  charts.rate = new Chart(document.getElementById('chartSavingsRate'), {
-    type:'line',
-    data:{ labels: MONTHS, datasets:[{ data: rates, borderColor:'#1B7F86', backgroundColor:'rgba(27,127,134,0.12)', fill:true, tension:.3, pointRadius:3 }] },
+  // ---- Annual combo (ALL years): Income/Expense/Investment bars + Net Savings line ----
+  const annualIncome = DATA.years.map(yr=>DATA.data[yr].income);
+  const annualExpense = DATA.years.map(yr=>DATA.data[yr].expense);
+  const annualInvest = DATA.years.map(yr=>DATA.data[yr].investment);
+  const annualSavings = DATA.years.map(yr=>DATA.data[yr].income - DATA.data[yr].expense - DATA.data[yr].investment);
+  charts.annualCombo && charts.annualCombo.destroy();
+  charts.annualCombo = new Chart(document.getElementById('chartAnnualCombo'), {
+    data:{
+      labels: DATA.years,
+      datasets:[
+        {type:'bar', label:'Income', data:annualIncome, backgroundColor:KPI_COLORS.income, borderRadius:4},
+        {type:'bar', label:'Expense', data:annualExpense, backgroundColor:KPI_COLORS.expense, borderRadius:4},
+        {type:'bar', label:'Investment', data:annualInvest, backgroundColor:KPI_COLORS.investment, borderRadius:4},
+        {type:'line', label:'Net Savings', data:annualSavings, borderColor:KPI_COLORS.savings, backgroundColor:KPI_COLORS.savings, tension:.35, pointRadius:3}
+      ]
+    },
     options:{ responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{display:false}},
-      scales:{ y:{ ticks:{callback:v=>(v*100).toFixed(0)+'%'}, grid:{color:'#F0EBDD'} }, x:{grid:{display:false}} } }
+      // Same fix here — hovering a year shows Income + Expense + Investment + Net Savings together.
+      interaction:{ mode:'index', intersect:false },
+      plugins:{legend:{position:'bottom', labels:{boxWidth:10,padding:10,font:{size:10}}},
+        tooltip:{ mode:'index', intersect:false, callbacks:{ label: ctx => ctx.dataset.label + ': ' + fmtINR(ctx.parsed.y) } }},
+      scales:{ y:{ ticks:{callback:v=>'₹'+(v/1000)+'k'}, grid:{color:'#F0EBDD'} }, x:{grid:{display:false}} }
+    }
   });
 
-  // ---- Transaction mix donut ----
-  charts.mix && charts.mix.destroy();
-  charts.mix = new Chart(document.getElementById('chartMix'), {
-    type:'doughnut',
-    data:{ labels:['Income','Expense','Investment'], datasets:[{ data:[y.income, y.expense, y.investment], backgroundColor:['#33538A','#B23A48','#6B4E9E'], borderWidth:2, borderColor:'#fff' }] },
-    options:{ responsive:true, maintainAspectRatio:false, cutout:'62%',
-      plugins:{legend:{position:'right', labels:{boxWidth:9}}} }
+  // ---- Categories bar: all-time expense-by-category totals (matches the workbook's
+  // "Categories" chart on the 🏠 Dashboard sheet) — not affected by the Year selector ----
+  const catAll = DATA.categoryAll || [];
+  charts.catAll && charts.catAll.destroy();
+  charts.catAll = new Chart(document.getElementById('chartCategoriesAll'), {
+    type:'bar',
+    data:{ labels: catAll.map(c=>c.name), datasets:[{ label:'Expense', data: catAll.map(c=>c.value), backgroundColor:KPI_COLORS.expense, borderRadius:4 }] },
+    options:{ responsive:true, maintainAspectRatio:false,
+      interaction:{ mode:'index', intersect:false },
+      plugins:{legend:{display:false},
+        tooltip:{ callbacks:{ label: ctx => ctx.dataset.label + ': ' + fmtINR(ctx.parsed.y) } }},
+      scales:{ y:{ ticks:{callback:v=>'₹'+(v/1000)+'k'}, grid:{color:'#F0EBDD'} }, x:{grid:{display:false}, ticks:{font:{size:9}}} } }
   });
 
   // ---- Gauge ----
@@ -444,22 +501,31 @@ function render(year){
   document.getElementById('gaugeNum').textContent = fmtPct(ratio);
   document.getElementById('gaugeFill').style.width = Math.min(ratio*100, 150)/1.5 + '%';
 
-  // ---- Year table ----
+  // ---- Year table (now includes Investment + a Total/Gross row across all years) ----
   document.getElementById('yearTableBody').innerHTML = DATA.years.map(yr=>{
     const d = DATA.data[yr];
     const n = d.income - d.expense - d.investment;
-    return `<tr class="${yr===year?'current':''}"><td>${yr}</td><td>${fmtINR(d.income)}</td><td>${fmtINR(d.expense)}</td><td>${fmtINR(n)}</td></tr>`;
-  }).join('');
+    return `<tr class="${yr===year?'current':''}"><td>${yr}</td><td>${fmtINR(d.income)}</td><td>${fmtINR(d.expense)}</td><td>${fmtINR(d.investment)}</td><td>${fmtINR(n)}</td></tr>`;
+  }).join('') + (()=>{
+    const tot = DATA.years.reduce((s,yr)=>{
+      const d = DATA.data[yr];
+      s.income += d.income; s.expense += d.expense; s.investment += d.investment;
+      return s;
+    }, {income:0, expense:0, investment:0});
+    const totNet = tot.income - tot.expense - tot.investment;
+    return `<tr style="font-weight:700;border-top:2px solid var(--ink);"><td>Total (Gross)</td><td>${fmtINR(tot.income)}</td><td>${fmtINR(tot.expense)}</td><td>${fmtINR(tot.investment)}</td><td>${fmtINR(totNet)}</td></tr>`;
+  })();
 }
 
-let DATA = DEMO_DATA;
+let DATA = EMPTY_DATA;
 function renderRecent(){
   const body = document.getElementById('recentBody');
   const list = DATA.recent || [];
   if(!list.length){ body.innerHTML = '<tr><td colspan="5" style="color:var(--muted);text-align:center;padding:16px;">No transactions found</td></tr>'; return; }
   body.innerHTML = list.map(t=>{
-    const cls = t.type==='Expense' ? 'neg' : 'pos';
-    const sign = t.type==='Expense' ? '−' : '+';
+    const isOut = t.type==='Expense' || t.type==='Investment';
+    const cls = isOut ? 'neg' : 'pos';
+    const sign = isOut ? '−' : '+';
     return `<tr>
       <td>${t.date}</td>
       <td>${t.desc || '—'}</td>
@@ -474,19 +540,51 @@ const sel = document.getElementById('yearSelect');
 
 function populateYearsAndRender(preferredYear){
   sel.innerHTML = '';
+  if(!DATA.years || !DATA.years.length){
+    // No data at all yet (nothing in data.js/data.json, nothing loaded from Excel) —
+    // show a genuinely empty state instead of any placeholder numbers.
+    const opt = document.createElement('option');
+    opt.value = ''; opt.textContent = 'No data';
+    sel.appendChild(opt);
+    sel.disabled = true;
+    showEmptyState();
+    return;
+  }
+  sel.disabled = false;
+  const allOpt = document.createElement('option');
+  allOpt.value = 'ALL'; allOpt.textContent = 'All Years';
+  sel.appendChild(allOpt);
   DATA.years.forEach(y=>{
     const opt = document.createElement('option');
     opt.value = y; opt.textContent = y;
     sel.appendChild(opt);
   });
-  // Default to the most recent year in the data unless a specific (valid) year was requested.
+  // Default to the most recent year in the data unless a specific (valid) year — or 'ALL' — was requested.
   const latest = DATA.years[DATA.years.length-1];
-  const target = (preferredYear!=null && DATA.years.includes(preferredYear)) ? preferredYear : latest;
+  const target = (preferredYear==='ALL' || (preferredYear!=null && DATA.years.includes(preferredYear))) ? preferredYear : latest;
   sel.value = target;
   render(target);
   renderRecent();
 }
-sel.addEventListener('change', e=> render(parseInt(e.target.value)));
+sel.addEventListener('change', e=> render(e.target.value === 'ALL' ? 'ALL' : parseInt(e.target.value)));
+
+// Blanks out every KPI/chart/table instead of showing fabricated numbers when there's
+// genuinely no data loaded yet.
+function showEmptyState(){
+  document.getElementById('lastUpdated').textContent = '—';
+  ['kIncome','kExpense','kInvest','kSavings','kRate','kCount','kBalance'].forEach(id=>{
+    document.getElementById(id).textContent = '—';
+  });
+  ['dIncome','dExpense','dInvest'].forEach(id=>{
+    const el = document.getElementById(id); el.textContent = ''; el.className = 'delta flat';
+  });
+  document.getElementById('gaugeNum').textContent = '—';
+  document.getElementById('gaugeFill').style.width = '0%';
+  document.getElementById('yearTableBody').innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:16px;">No data loaded yet</td></tr>';
+  document.getElementById('recentBody').innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:16px;">No data loaded yet</td></tr>';
+  Object.values(charts).forEach(c=> c && c.destroy());
+  charts = {};
+}
 
 // ---------------- Build DATA straight from an uploaded Excel workbook ----------------
 function findSheetByName(wb, target){
@@ -544,9 +642,15 @@ function buildDataFromWorkbook(wb){
   const allTxns = [];
   const ensureYear = y=>{
     if(!byYear[y]) byYear[y] = { income:0, expense:0, investment:0, monthly_income:Array(12).fill(0),
-      monthly_expense:Array(12).fill(0), catTotals:{}, payTotals:{}, count:0, lastDateObj:null };
+      monthly_expense:Array(12).fill(0), monthly_investment:Array(12).fill(0), catTotals:{}, payTotals:{}, count:0, lastDateObj:null };
     return byYear[y];
   };
+  // Balance in A/C (running total, all years, all types — matches "Balance in AC" on
+  // the workbook's 🏠 Dashboard sheet) and Categories-all-time (expense-only, all years
+  // — matches the workbook's "Categories" chart) are tracked across every row below,
+  // independent of the byYear buckets.
+  let balanceTotal = 0;
+  const categoryAllTotals = {};
 
   for(let i=headerRowIdx+1; i<rows.length; i++){
     const r = rows[i];
@@ -580,9 +684,12 @@ function buildDataFromWorkbook(wb){
     // this is what "Last Updated" should show: how far the data actually goes.
     if(!yd.lastDateObj || dateObj > yd.lastDateObj) yd.lastDateObj = dateObj;
     const typeNorm = norm(type);
-    if(typeNorm==='income'){ yd.income += amt; yd.monthly_income[m]+=amt; }
-    else if(typeNorm==='expense'){ yd.expense += amt; yd.monthly_expense[m]+=amt; if(cat) yd.catTotals[cat]=(yd.catTotals[cat]||0)+amt; }
-    else if(typeNorm==='investment'){ yd.investment += amt; }
+    if(typeNorm==='income'){ yd.income += amt; yd.monthly_income[m]+=amt; balanceTotal += amt; }
+    else if(typeNorm==='expense'){
+      yd.expense += amt; yd.monthly_expense[m]+=amt; balanceTotal -= amt;
+      if(cat){ yd.catTotals[cat]=(yd.catTotals[cat]||0)+amt; categoryAllTotals[cat]=(categoryAllTotals[cat]||0)+amt; }
+    }
+    else if(typeNorm==='investment'){ yd.investment += amt; yd.monthly_investment[m]+=amt; balanceTotal -= amt; }
     if(pay) yd.payTotals[pay]=(yd.payTotals[pay]||0)+amt;
     allTxns.push({ dateObj, date: toLocalISODate(dateObj), desc, type, category: cat, amount: amt, payment: pay });
   }
@@ -597,19 +704,19 @@ function buildDataFromWorkbook(wb){
   const data = {};
   years.forEach(y=>{
     const yd = byYear[y];
-    const sortedCats = Object.entries(yd.catTotals).sort((a,b)=>b[1]-a[1]);
-    const top = sortedCats.slice(0,6);
-    const otherVal = sortedCats.slice(6).reduce((s,c)=>s+c[1],0);
-    const categories = top.map(([name,value])=>({name,value}));
-    if(otherVal>0) categories.push({name:'Other', value:otherVal});
+    // Full, untruncated category breakdown for the year — "Top Expense Categories"
+    // now shows every category for the selected year, not just the top few.
+    const categories = Object.entries(yd.catTotals).sort((a,b)=>b[1]-a[1]).map(([name,value])=>({name,value}));
     data[y] = {
       income: yd.income, expense: yd.expense, investment: yd.investment,
-      monthly_income: yd.monthly_income, monthly_expense: yd.monthly_expense,
+      monthly_income: yd.monthly_income, monthly_expense: yd.monthly_expense, monthly_investment: yd.monthly_investment,
       categories, payment: Object.entries(yd.payTotals).sort((a,b)=>b[1]-a[1]).map(([name,value])=>({name,value})),
       count: yd.count,
       lastDate: yd.lastDateObj ? toLocalISODate(yd.lastDateObj) : null
     };
   });
+
+  const categoryAll = Object.entries(categoryAllTotals).sort((a,b)=>b[1]-a[1]).map(([name,value])=>({name,value}));
 
   // Lenders: look for a Settings sheet with lender name / balance pairs; tolerant of layout.
   let lenders = [];
@@ -630,7 +737,7 @@ function buildDataFromWorkbook(wb){
 
   const cashflow = parseCashflowSheet(wb);
 
-  return { years, data, lenders, recent, all, cashflow };
+  return { years, data, lenders, recent, all, cashflow, categoryAll, balance: balanceTotal };
 }
 
 // Parses the "Cashflow" sheet (lender ledger: DATE / Name / TYPE (Given|Received) / CATEGORY /
@@ -722,6 +829,29 @@ function saveGhSettings(s){ localStorage.setItem(GH_KEY, JSON.stringify(s)); }
   });
 })();
 
+async function pushOneFileToGithub(s, branch, path, contentStr){
+  const api = `https://api.github.com/repos/${s.repo}/contents/${path}`;
+  let sha = undefined;
+  const getResp = await fetch(`${api}?ref=${encodeURIComponent(branch)}`, {
+    headers: { 'Authorization': `Bearer ${s.token}`, 'Accept':'application/vnd.github+json' }
+  });
+  if(getResp.ok){ const j = await getResp.json(); sha = j.sha; }
+  else if(getResp.status !== 404){ throw new Error('Could not read current "' + path + '" (HTTP ' + getResp.status + ')'); }
+
+  const content = btoa(unescape(encodeURIComponent(contentStr)));
+  const putResp = await fetch(api, {
+    method:'PUT',
+    headers: { 'Authorization': `Bearer ${s.token}`, 'Accept':'application/vnd.github+json', 'Content-Type':'application/json' },
+    body: JSON.stringify({
+      message: 'Update finance dashboard data (' + path + ') — ' + new Date().toISOString(),
+      content, branch, sha
+    })
+  });
+  if(!putResp.ok){ const j = await putResp.json().catch(()=>({})); throw new Error(j.message || ('HTTP ' + putResp.status) + ' on ' + path); }
+}
+
+// Pushes BOTH data.json (powers online/hosted viewing) and data.js (powers viewing when
+// this page is opened straight from disk, e.g. double-clicked — see notes near data.js).
 async function pushToGithub(newData){
   const s = loadGhSettings();
   if(!s || !s.repo || !s.token){
@@ -729,31 +859,12 @@ async function pushToGithub(newData){
     return;
   }
   const branch = s.branch || 'main';
-  const path = DATA_JSON_PATH;
-  const api = `https://api.github.com/repos/${s.repo}/contents/${path}`;
   const btn = document.getElementById('ghPushBtn');
   if(btn){ btn.disabled = true; btn.textContent = '⏳ Pushing…'; }
   try{
-    // 1. get current file SHA (needed to update an existing file)
-    let sha = undefined;
-    const getResp = await fetch(`${api}?ref=${encodeURIComponent(branch)}`, {
-      headers: { 'Authorization': `Bearer ${s.token}`, 'Accept':'application/vnd.github+json' }
-    });
-    if(getResp.ok){ const j = await getResp.json(); sha = j.sha; }
-    else if(getResp.status !== 404){ throw new Error('Could not read current file (HTTP ' + getResp.status + ')'); }
-
-    // 2. commit updated content
-    const content = btoa(unescape(encodeURIComponent(JSON.stringify(newData, null, 2))));
-    const putResp = await fetch(api, {
-      method:'PUT',
-      headers: { 'Authorization': `Bearer ${s.token}`, 'Accept':'application/vnd.github+json', 'Content-Type':'application/json' },
-      body: JSON.stringify({
-        message: 'Update finance dashboard data — ' + new Date().toISOString(),
-        content, branch, sha
-      })
-    });
-    if(!putResp.ok){ const j = await putResp.json().catch(()=>({})); throw new Error(j.message || ('HTTP ' + putResp.status)); }
-    showBanner('live', '🚀 Pushed successfully to <b>' + s.repo + '</b> (' + branch + '). Every browser/device fetching this page will now see the updated data within a minute or two.');
+    await pushOneFileToGithub(s, branch, DATA_JSON_PATH, JSON.stringify(newData, null, 2));
+    await pushOneFileToGithub(s, branch, 'data.js', dataJsContent(newData));
+    showBanner('live', '🚀 Pushed <b>data.json</b> and <b>data.js</b> successfully to <b>' + s.repo + '</b> (' + branch + '). Every browser/device — online or opened locally — will show the updated data within a minute or two.');
   }catch(err){
     showBanner('error', '⚠️ GitHub push failed: ' + err.message);
   }finally{
@@ -769,14 +880,20 @@ function showBanner(cls, html){
   statusEl.innerHTML = html;
 }
 
-function downloadJSON(obj, filename){
-  const blob = new Blob([JSON.stringify(obj, null, 2)], {type:'application/json'});
+function downloadBlob(content, filename, mime){
+  const blob = new Blob([content], {type:mime});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url; a.download = filename;
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
+function downloadJSON(obj, filename){ downloadBlob(JSON.stringify(obj, null, 2), filename, 'application/json'); }
+// data.js just assigns the same object to a global — loading it via <script src="data.js">
+// works over file:// as well as http(s), which is what makes local double-click-opened
+// pages show the same data as the hosted one.
+function dataJsContent(obj){ return 'window.EMBEDDED_DATA = ' + JSON.stringify(obj) + ';\n'; }
+function downloadDataJs(obj, filename){ downloadBlob(dataJsContent(obj), filename, 'text/javascript'); }
 
 function offerDownload(newData, sourceLabel){
   const wrap = document.getElementById('downloadWrap');
@@ -786,10 +903,16 @@ function offerDownload(newData, sourceLabel){
   wrap.innerHTML = (ghConfigured
     ? '<button type="button" class="loadbtn" id="ghPushBtn" style="margin-right:10px;">🚀 Push to GitHub</button>'
     : '') +
-    '⬇️ <a href="#" id="downloadJsonLink" style="color:inherit;font-weight:700;text-decoration:underline;">Download data.json</a> — replace the <code>data.json</code> next to this HTML file in your git repo and push, so every browser/device shows this data.';
+    '⬇️ <a href="#" id="downloadJsonLink" style="color:inherit;font-weight:700;text-decoration:underline;">Download data.json</a> &nbsp;+&nbsp; ' +
+    '<a href="#" id="downloadJsLink" style="color:inherit;font-weight:700;text-decoration:underline;">Download data.js</a> — replace BOTH files next to this HTML file in your git repo and push. ' +
+    '<code>data.json</code> is what powers online/hosted viewing; <code>data.js</code> is what makes the page show the same data when opened straight from disk (double-clicked) instead of through a URL.';
   document.getElementById('downloadJsonLink').addEventListener('click', function(ev){
     ev.preventDefault();
     downloadJSON(newData, 'data.json');
+  });
+  document.getElementById('downloadJsLink').addEventListener('click', function(ev){
+    ev.preventDefault();
+    downloadDataJs(newData, 'data.js');
   });
   if(ghConfigured){
     document.getElementById('ghPushBtn').addEventListener('click', ()=> pushToGithub(newData));
@@ -824,21 +947,72 @@ document.getElementById('fileInput').addEventListener('change', function(e){
   reader.readAsArrayBuffer(file);
 });
 
-// On page open: fetch data.json (works when this page is served over http/https, e.g. GitHub
-// Pages — same repo, same folder). This is what makes the data show up on ANY browser/device.
-// If it isn't reachable (e.g. opened straight from disk as file://), fall back to sample data.
-fetch(DATA_JSON_PATH, {cache:'no-store'})
-  .then(r=> r.ok ? r.json() : Promise.reject(new Error('data.json not found (' + r.status + ')')))
-  .then(json=>{
-    if(!json || !json.years || !json.years.length) throw new Error('data.json is empty');
-    DATA = json;
-    showBanner('live', '✅ Live data loaded from <b>data.json</b> in this repo — same on every browser and device. Use <b>Load Excel Workbook</b> above whenever you want to refresh it.');
-    populateYearsAndRender();
-  })
-  .catch(()=>{
-    showBanner('demo', 'Showing sample data — this page could not reach <code>data.json</code> (normal if opened directly from disk instead of a hosted URL, or if you haven\'t generated it yet). Click <b>Load Excel Workbook</b> to preview your real numbers, then download &amp; commit <code>data.json</code> so it shows up everywhere.');
-    populateYearsAndRender();
-  });
+// ---- Latest 5 Transactions: same password gate as All Transactions / Cashflow Ledger.
+// Uses the same sessionStorage key, so unlocking on ANY of the three pages (in this
+// browser tab) keeps the others unlocked too, for this session. ----
+const PW_SESSION_KEY = 'financeLedger_unlocked';
+function txnSetUnlockedUI(){
+  document.getElementById('txnRecentTable').style.display = '';
+  document.getElementById('txnLockedMsg').style.display = 'none';
+  document.getElementById('txnUnlockRow').style.display = 'none';
+  document.getElementById('txnToggleBtn').textContent = '🔓 Hide';
+}
+function txnSetHiddenUI(){
+  document.getElementById('txnRecentTable').style.display = 'none';
+  document.getElementById('txnLockedMsg').style.display = '';
+  document.getElementById('txnUnlockRow').style.display = 'none';
+  document.getElementById('txnToggleBtn').textContent = sessionStorage.getItem(PW_SESSION_KEY)==='1' ? '👁️ Show' : '🔒 Show';
+}
+txnSetHiddenUI(); // starts hidden every page load, whether or not already unlocked this session
+document.getElementById('txnToggleBtn').addEventListener('click', ()=>{
+  const isShown = document.getElementById('txnRecentTable').style.display !== 'none';
+  if(isShown){ txnSetHiddenUI(); return; }
+  if(sessionStorage.getItem(PW_SESSION_KEY) === '1'){ txnSetUnlockedUI(); return; }
+  // Not unlocked yet this session — reveal the inline password prompt instead of the table.
+  document.getElementById('txnLockedMsg').style.display = 'none';
+  document.getElementById('txnUnlockRow').style.display = 'flex';
+  document.getElementById('txnPwInput').focus();
+});
+function txnTryUnlock(){
+  const input = document.getElementById('txnPwInput');
+  const err = document.getElementById('txnPwErr');
+  if(typeof PASSWORD !== 'undefined' && input.value === PASSWORD){
+    sessionStorage.setItem(PW_SESSION_KEY, '1');
+    err.textContent = '';
+    input.value = '';
+    txnSetUnlockedUI();
+  } else {
+    err.textContent = 'Incorrect password.';
+    input.value = '';
+    input.focus();
+  }
+}
+document.getElementById('txnPwSubmit').addEventListener('click', txnTryUnlock);
+document.getElementById('txnPwInput').addEventListener('keydown', e=>{ if(e.key === 'Enter') txnTryUnlock(); });
+
+// On page open: prefer the data embedded by data.js (window.EMBEDDED_DATA) — a plain
+// <script> tag, so it loads identically whether this page is opened online or straight
+// from disk (file://), where fetch() of a local data.json is blocked by the browser.
+// If data.js isn't present, fall back to fetching data.json (works when hosted over
+// http/https even without data.js), then finally to the small built-in demo data.
+if(window.EMBEDDED_DATA && window.EMBEDDED_DATA.years && window.EMBEDDED_DATA.years.length){
+  DATA = window.EMBEDDED_DATA;
+  showBanner('live', '✅ Live data loaded from <b>data.js</b> — this works the same whether the page is opened online or straight from disk. Use <b>Load Excel Workbook</b> above whenever you want to refresh it.');
+  populateYearsAndRender();
+} else {
+  fetch(DATA_JSON_PATH, {cache:'no-store'})
+    .then(r=> r.ok ? r.json() : Promise.reject(new Error('data.json not found (' + r.status + ')')))
+    .then(json=>{
+      if(!json || !json.years || !json.years.length) throw new Error('data.json is empty');
+      DATA = json;
+      showBanner('live', '✅ Live data loaded from <b>data.json</b> in this repo — same on every browser and device. Use <b>Load Excel Workbook</b> above whenever you want to refresh it.');
+      populateYearsAndRender();
+    })
+    .catch(()=>{
+      showBanner('demo', 'No data loaded — this page could not reach <code>data.js</code> or <code>data.json</code> yet. Click <b>Load Excel Workbook</b> to preview your real numbers, then download &amp; commit both files so it shows up everywhere — online AND when opened locally.');
+      populateYearsAndRender();
+    });
+}
 </script>
 </body>
 </html>

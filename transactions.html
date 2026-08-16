@@ -95,6 +95,10 @@
   }
 </style>
 <script src="auth-config.js"></script>
+<!-- data.js embeds the live data as window.EMBEDDED_DATA — a plain <script> tag, so it
+     loads the same way whether this page is opened online or straight from disk
+     (fetch() of a local data.json is blocked by browsers over file://). -->
+<script src="data.js"></script>
 </head>
 <body>
 <div id="pwGate" style="position:fixed;inset:0;background:var(--paper);display:flex;align-items:center;justify-content:center;z-index:9999;">
@@ -110,9 +114,12 @@
 </div>
 <div class="main">
   <div class="topbar">
-    <div>
-      <h1>All Transactions</h1>
-      <div class="tag">Every row from the Transactions sheet — searchable, filterable, sortable</div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <img src="https://raw.githubusercontent.com/rajankm991/rkm/main/image/logo.gif" alt="Logo" style="height:32px;width:32px;border-radius:8px;object-fit:cover;flex-shrink:0;">
+      <div>
+        <h1>All Transactions</h1>
+        <div class="tag">Every row from the Transactions sheet — searchable, filterable, sortable</div>
+      </div>
     </div>
     <a class="backlink" href="./">← Back to Dashboard</a>
   </div>
@@ -162,7 +169,9 @@
 </div>
 
 <script>
-const DEMO_FALLBACK = {"all": [{"date": "2027-07-31", "desc": "MIsbalance not getting the value(1214 till 9 jun)", "type": "Income", "category": "Other Income", "amount": 9188, "payment": ""}, {"date": "2027-07-31", "desc": "11250-5000(21/5)-1971(07/09) Ebill + 500 folding- 575 wire", "type": "Income", "category": "Delhi", "amount": 4204, "payment": ""}, {"date": "2026-07-02", "desc": "Alka. ", "type": "Expense", "category": "Alka", "amount": 5000, "payment": ""}, {"date": "2026-07-02", "desc": "Nisha", "type": "Expense", "category": "Nisha", "amount": 300, "payment": ""}, {"date": "2026-07-01", "desc": "Rhishikesh", "type": "Expense", "category": "Rajan", "amount": 3860, "payment": "UPI"}]};
+// Empty scaffold — used only if neither data.js nor data.json can be found. No
+// fake/sample rows are shown; the table just displays an empty state.
+const DEMO_FALLBACK = {"all": []};
 
 const DATA_JSON_PATH = 'data.json';
 const fmtINR = n => '₹' + Math.round(Math.abs(n)).toLocaleString('en-IN');
@@ -234,7 +243,8 @@ function renderPage(){
   const body = document.getElementById('txnBody');
   const total = filtered.length;
 
-  const netTotal = filtered.reduce((s,t)=> s + (t.type === 'Income' ? 1 : -1) * (Number(t.amount)||0), 0);
+  // Expense AND Investment both count as money going out (negative) — only Income is positive.
+  const netTotal = filtered.reduce((s,t)=> s + (t.type === 'Expense' || t.type === 'Investment' ? -1 : 1) * (Number(t.amount)||0), 0);
   const netCls = netTotal < 0 ? 'style="color:var(--red)"' : 'style="color:var(--green)"';
   document.getElementById('countInfo').innerHTML = total.toLocaleString('en-IN') + ' transaction' + (total===1?'':'s') + ' matched · Net <span ' + netCls + '>' + (netTotal<0?'−':'+') + fmtINR(netTotal) + '</span>';
 
@@ -244,8 +254,9 @@ function renderPage(){
   }
 
   body.innerHTML = filtered.map(t=>{
-    const cls = t.type === 'Income' ? 'pos' : 'neg';
-    const sign = t.type === 'Income' ? '+' : '-';
+    const isOut = t.type === 'Expense' || t.type === 'Investment';
+    const cls = isOut ? 'neg' : 'pos';
+    const sign = isOut ? '−' : '+';
     return `<tr>
       <td>${t.date || '—'}</td>
       <td>${t.desc || '—'}</td>
@@ -284,6 +295,12 @@ function loadFrom(data, label, cls){
 }
 
 function initPage(){
+  // Prefer data.js (window.EMBEDDED_DATA) — works over file:// as well as http(s) — then
+  // fall back to fetching data.json (hosted only), then to the small built-in demo data.
+  if(window.EMBEDDED_DATA && window.EMBEDDED_DATA.all){
+    loadFrom(window.EMBEDDED_DATA, '✅ Live data loaded from <b>data.js</b> — works the same whether this page is opened online or straight from disk.', 'live');
+    return;
+  }
   fetch(DATA_JSON_PATH, {cache:'no-store'})
     .then(r=> r.ok ? r.json() : Promise.reject(new Error('data.json not found (' + r.status + ')')))
     .then(json=>{
@@ -291,7 +308,7 @@ function initPage(){
       loadFrom(json, '✅ Live data loaded from <b>data.json</b>.', 'live');
     })
     .catch(()=>{
-      loadFrom(DEMO_FALLBACK, 'Showing sample data — this page could not reach <code>data.json</code> yet.', 'demo');
+      loadFrom(DEMO_FALLBACK, 'No data loaded — this page could not reach <code>data.js</code> or <code>data.json</code> yet.', 'demo');
     });
 }
 
