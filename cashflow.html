@@ -34,7 +34,7 @@
     color:var(--ink-text);
     -webkit-font-smoothing:antialiased;
   }
-  .main{ max-width:1220px; margin:0 auto; padding:26px 34px 50px; }
+  .main{ max-width:1560px; margin:0 auto; padding:24px 26px 50px; }
 
   .topbar{ display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:18px; flex-wrap:wrap; gap:16px; }
   .topbar h1{ font-family:'Fraunces',serif; font-weight:600; font-size:24px; margin:0 0 4px; letter-spacing:-0.01em; }
@@ -78,20 +78,31 @@
   .countInfo{ margin-left:auto; font-size:12.5px; color:var(--muted); font-family:'IBM Plex Mono',monospace; align-self:center; }
 
   .panel{ background:var(--card); border:1px solid var(--card-line); border-radius:12px; padding:0; overflow:hidden; box-shadow:0 1px 2px rgba(20,20,10,0.04); }
-  table.txn-table{ width:100%; border-collapse:collapse; font-size:12.8px; }
+  /* table-layout:fixed + explicit per-column widths keep every column readably wide —
+     Notes/Name get the most room, and content wraps in full (word-break) instead of
+     ever being clipped or squeezed by narrower neighbour columns. */
+  table.txn-table{ width:100%; border-collapse:collapse; font-size:12.8px; table-layout:fixed; }
   table.txn-table th{
     text-align:left; font-size:10px; letter-spacing:.05em; text-transform:uppercase;
     color:#fff; background:var(--ink); padding:10px 12px; font-weight:600; cursor:pointer; user-select:none;
-    white-space:nowrap; position:sticky; top:0; z-index:1;
+    white-space:nowrap; position:sticky; top:0; z-index:1; overflow:hidden; text-overflow:ellipsis;
   }
   table.txn-table th.amtcol{ text-align:right; }
   table.txn-table th .arrow{ opacity:.55; font-size:9px; margin-left:3px; }
-  table.txn-table td{ padding:9px 12px; border-bottom:1px solid var(--card-line); vertical-align:middle; }
+  table.txn-table td{ padding:10px 12px; border-bottom:1px solid var(--card-line); vertical-align:middle; white-space:normal; word-break:break-word; overflow-wrap:anywhere; }
   table.txn-table tbody tr:hover{ background:#FAF7EE; }
   table.txn-table td.amt{ text-align:right; font-family:'IBM Plex Mono',monospace; font-weight:600; white-space:nowrap; }
   table.txn-table td.amt.pos{ color:var(--green); }
   table.txn-table td.amt.neg{ color:var(--red); }
   table.txn-table tr:last-child td{ border-bottom:none; }
+  /* Column widths — Date/Type/Amount stay compact; Notes carries the most text so it
+     gets the most space, Name/Category get comfortable room too. */
+  table.txn-table th:nth-child(1), table.txn-table td:nth-child(1){ width:9%; }
+  table.txn-table th:nth-child(2), table.txn-table td:nth-child(2){ width:17%; }
+  table.txn-table th:nth-child(3), table.txn-table td:nth-child(3){ width:10%; }
+  table.txn-table th:nth-child(4), table.txn-table td:nth-child(4){ width:14%; }
+  table.txn-table th:nth-child(5), table.txn-table td:nth-child(5){ width:36%; }
+  table.txn-table th:nth-child(6), table.txn-table td:nth-child(6){ width:14%; }
   .type-pill{ display:inline-block; padding:2px 9px; border-radius:999px; font-size:10.5px; font-weight:700; white-space:nowrap; }
   .type-pill.Given{ background:var(--red-tint); color:var(--red); }
   .type-pill.Received{ background:var(--green-tint); color:var(--green); }
@@ -102,6 +113,9 @@
   @media (max-width:760px){
     .toolbar{ flex-direction:column; align-items:stretch; }
     .countInfo{ margin-left:0; }
+    table.txn-table{ table-layout:auto; }
+    table.txn-table th, table.txn-table td{ white-space:nowrap; }
+    .panel{ overflow-x:auto; }
   }
 </style>
 <script src="auth-config.js"></script>
@@ -125,7 +139,7 @@
 <div class="main">
   <div class="topbar">
     <div style="display:flex;align-items:center;gap:10px;">
-      <img src="https://raw.githubusercontent.com/rajankm991/rkm/main/image/logo.gif" alt="Logo" style="height:32px;width:32px;border-radius:8px;object-fit:cover;flex-shrink:0;">
+      <img src="logo.gif" alt="Logo" style="height:32px;width:32px;border-radius:8px;object-fit:cover;flex-shrink:0;" onerror="this.style.display='none'">
       <div>
         <h1>Cashflow Ledger</h1>
         <div class="tag">Every Given / Received row from the Cashflow sheet — per lender, searchable &amp; sortable</div>

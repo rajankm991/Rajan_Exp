@@ -214,7 +214,7 @@
   <main class="main">
     <div class="topbar" id="sec-overview">
       <div class="titleblock">
-        <img src="https://raw.githubusercontent.com/rajankm991/rkm/main/image/logo.gif" alt="Logo" style="height:34px;width:34px;border-radius:8px;object-fit:cover;flex-shrink:0;">
+        <img src="logo.gif" alt="Logo" style="height:34px;width:34px;border-radius:8px;object-fit:cover;flex-shrink:0;" onerror="this.style.display='none'">
         <h1>Rajan's Finance Executive Dashboard</h1>
         <div class="tag">Smart insights into your money, at a glance</div>
       </div>
@@ -605,6 +605,35 @@ function toLocalISODate(d){
   return `${y}-${m}-${day}`;
 }
 
+// Reads a date cell's Y/M/D components with ZERO timezone involvement — no UTC, no
+// local-offset conversion anywhere. Excel date cells are read as raw serial numbers
+// (workbook is parsed WITHOUT cellDates, see XLSX.read below), which SSF.parse_date_code
+// decodes directly into {y,m,d} — those numbers are exactly what's typed in the sheet,
+// full stop. Only if a cell is unusually stored as plain text do we fall back to a
+// manual "YYYY-MM-DD"/"DD/MM/YYYY" style regex parse (again, no Date-string parsing,
+// which the JS spec requires browsers to treat as UTC and would reintroduce the same bug).
+function dateCellToParts(v){
+  if(typeof v === 'number'){
+    const p = XLSX.SSF.parse_date_code(v);
+    return p ? {y:p.y, m:p.m||1, d:p.d||1} : null;
+  }
+  if(v instanceof Date){
+    // Shouldn't normally happen (workbook is read with cellDates:false), but handle it
+    // defensively using UTC getters — SheetJS's own Date objects are UTC-based, so
+    // reading them back with getUTC* (not local getters) is the timezone-safe pairing.
+    return {y:v.getUTCFullYear(), m:v.getUTCMonth()+1, d:v.getUTCDate()};
+  }
+  if(typeof v === 'string'){
+    const s = v.trim();
+    let m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);              // YYYY-MM-DD
+    if(m) return {y:+m[1], m:+m[2], d:+m[3]};
+    m = s.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})/);          // DD/MM/YYYY or DD-MM-YYYY
+    if(m) return {y:+m[3], m:+m[2], d:+m[1]};
+    return null; // unrecognized text — caller skips the row rather than risk a wrong date
+  }
+  return null;
+}
+
 // Scans the first ~20 rows for a header row containing DATE / TYPE / CATEGORY / AMOUNT
 // and returns {headerRowIdx, col:{date,desc,type,category,amount,payment}} using whichever
 // column each label actually sits in — so this works regardless of exact sheet layout.
@@ -661,23 +690,16 @@ function buildDataFromWorkbook(wb){
     const pay = col.payment!=null ? r[col.payment] : null;
     if(date==null || amount==null || amount==='') continue;
 
-    let dateObj, dparts;
-    if(typeof date === 'number'){
-      const p = XLSX.SSF.parse_date_code(date);
-      if(!p) continue;
-      dateObj = new Date(p.y, (p.m||1)-1, p.d||1);
-      dparts = p;
-    } else if(date instanceof Date){
-      dateObj = date; dparts = {y:date.getFullYear(), m:date.getMonth()+1};
-    } else if(typeof date === 'string'){
-      const parsed = new Date(date);
-      if(isNaN(parsed)) continue;
-      dateObj = parsed; dparts = {y:parsed.getFullYear(), m:parsed.getMonth()+1};
-    } else continue;
+    const dp = dateCellToParts(date);
+    if(!dp) continue;
+    // Local-only Date object built directly from the sheet's own Y/M/D — the (year,
+    // month, day) constructor form takes plain numbers as local wall-clock values, so
+    // there is no UTC step involved and reading it back gives the exact same numbers.
+    const dateObj = new Date(dp.y, dp.m-1, dp.d);
 
     const amt = Number(amount);
     if(isNaN(amt)) continue;
-    const y = dparts.y, m = (dparts.m!=null?dparts.m:1)-1;
+    const y = dp.y, m = dp.m-1;
     const yd = ensureYear(y);
     yd.count++;
     // Track the most recent (max) transaction date seen for this year —
@@ -779,18 +801,9 @@ function parseCashflowSheet(wb){
     const notes = col.notes!=null ? r[col.notes] : null;
     if(date==null || name==null || amount==null || amount==='') continue;
 
-    let dateObj;
-    if(typeof date === 'number'){
-      const p = XLSX.SSF.parse_date_code(date);
-      if(!p) continue;
-      dateObj = new Date(p.y, (p.m||1)-1, p.d||1);
-    } else if(date instanceof Date){
-      dateObj = date;
-    } else if(typeof date === 'string'){
-      const parsed = new Date(date);
-      if(isNaN(parsed)) continue;
-      dateObj = parsed;
-    } else continue;
+    const dp = dateCellToParts(date);
+    if(!dp) continue;
+    const dateObj = new Date(dp.y, dp.m-1, dp.d);
 
     const amt = Number(amount);
     if(isNaN(amt)) continue;
@@ -923,7 +936,10 @@ function offerDownload(newData, sourceLabel){
 // updates the page, preview, and push options.
 function processWorkbookArrayBuffer(arrayBuffer, sourceLabel){
   try{
-    const wb = XLSX.read(arrayBuffer, {type:'array', cellDates:true});
+    // cellDates is deliberately OFF — date cells stay as raw serial numbers, which
+    // dateCellToParts() decodes directly with zero timezone involvement (see comment
+    // above dateCellToParts). This is what fixes dates showing one day earlier.
+    const wb = XLSX.read(arrayBuffer, {type:'array', cellDates:false});
     const newData = buildDataFromWorkbook(wb);
     if(!newData.years.length) throw new Error('No dated transactions found in the Transactions sheet.');
     DATA = newData;
