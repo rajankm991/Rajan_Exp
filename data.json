@@ -557,28 +557,7 @@
       "lastDate": "2026-08-31"
     }
   },
-  "lenders": [
-    {
-      "name": "Papa",
-      "balance": 112942
-    },
-    {
-      "name": "Anuj Bhaiya",
-      "balance": 105000
-    },
-    {
-      "name": "Bholu bhaiya",
-      "balance": 58772.2
-    },
-    {
-      "name": "Bitan Bhaiya",
-      "balance": 43341.600000000006
-    },
-    {
-      "name": "Ankit Tiwari",
-      "balance": 20000
-    }
-  ],
+  "lenders": [],
   "recent": [
     {
       "date": "2026-08-31",
@@ -5532,7 +5511,7 @@
       "date": "2026-06-22",
       "name": "Guddu bhaiya",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 226000,
       "notes": "Ignore Return "
     },
@@ -5540,7 +5519,7 @@
       "date": "2026-06-22",
       "name": "Bhuvan Ji",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 226000,
       "notes": "Ignore Return "
     },
@@ -5548,7 +5527,7 @@
       "date": "2026-06-22",
       "name": "Bhuvan Ji",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 17000,
       "notes": "Ignore Currency "
     },
@@ -5556,7 +5535,7 @@
       "date": "2026-06-19",
       "name": "Bholu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 300,
       "notes": "Nagendra jaiswal"
     },
@@ -5564,7 +5543,7 @@
       "date": "2026-06-18",
       "name": "Papa",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 50000,
       "notes": "Tuna chacha"
     },
@@ -5572,7 +5551,7 @@
       "date": "2026-06-09",
       "name": "Bholu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 5000,
       "notes": "phnpe"
     },
@@ -5580,7 +5559,7 @@
       "date": "2026-06-05",
       "name": "Ankit Jha",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 5338,
       "notes": "Slice 1/18"
     },
@@ -5588,7 +5567,7 @@
       "date": "2026-06-05",
       "name": "Ankit Jha",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 5348,
       "notes": "Rcv"
     },
@@ -5596,7 +5575,7 @@
       "date": "2026-06-04",
       "name": "Anuj Bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 40000,
       "notes": "QH"
     },
@@ -5604,7 +5583,7 @@
       "date": "2026-05-30",
       "name": "Ankit Jha",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 18728.69,
       "notes": "Flight EMI"
     },
@@ -5612,7 +5591,7 @@
       "date": "2026-05-25",
       "name": "Pathak Mama",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 2000,
       "notes": "Fastag"
     },
@@ -5620,7 +5599,7 @@
       "date": "2026-05-23",
       "name": "Ankit Jha",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 2357.28,
       "notes": "OneCard:12929 6 of 6"
     },
@@ -5628,7 +5607,7 @@
       "date": "2026-05-23",
       "name": "Ankit Jha",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 4695.82,
       "notes": "Onecard: 13385 3 of 3"
     },
@@ -5636,7 +5615,7 @@
       "date": "2026-05-22",
       "name": "Pathak Mama",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 3000,
       "notes": "Fastag"
     },
@@ -5644,7 +5623,7 @@
       "date": "2026-05-19",
       "name": "Ankit Jha",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 4111.04,
       "notes": "Flight EMI"
     },
@@ -5652,7 +5631,7 @@
       "date": "2026-05-19",
       "name": "Bholu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 10000,
       "notes": "Vikas Bhaiya"
     },
@@ -5660,7 +5639,7 @@
       "date": "2026-05-19",
       "name": "Pragyanand",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 4245.99,
       "notes": "EMI 6"
     },
@@ -5668,7 +5647,7 @@
       "date": "2026-05-15",
       "name": "Ashok Mama",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 47250,
       "notes": "Cash- Return"
     },
@@ -5676,7 +5655,7 @@
       "date": "2026-05-14",
       "name": "Ankit Tiwari",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 20000,
       "notes": null
     },
@@ -5684,7 +5663,7 @@
       "date": "2026-05-14",
       "name": "Guddu bhaiya",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 45000,
       "notes": "Ignore Return "
     },
@@ -5692,7 +5671,7 @@
       "date": "2026-05-13",
       "name": "Ashok Mama",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 78500,
       "notes": "UPI- Electric"
     },
@@ -5700,7 +5679,7 @@
       "date": "2026-05-07",
       "name": "Pathak Mama",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 2000,
       "notes": "Fastag"
     },
@@ -5708,7 +5687,7 @@
       "date": "2026-05-06",
       "name": "Ankit Jha",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 59000,
       "notes": "From Slice: 79000 (5260.42* 18): 5338"
     },
@@ -5716,7 +5695,7 @@
       "date": "2026-05-06",
       "name": "Ankit Jha",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 4394,
       "notes": "Slice 6"
     },
@@ -5724,7 +5703,7 @@
       "date": "2026-05-06",
       "name": "Ankit Jha",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 4394,
       "notes": "Slice 7"
     },
@@ -5732,7 +5711,7 @@
       "date": "2026-05-06",
       "name": "Ankit Jha",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 4394,
       "notes": "Slice 8"
     },
@@ -5740,7 +5719,7 @@
       "date": "2026-05-06",
       "name": "Ankit Jha",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 4394,
       "notes": "Slice 9"
     },
@@ -5748,7 +5727,7 @@
       "date": "2026-05-06",
       "name": "Ankit Jha",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 2367.28,
       "notes": "OneCard:12929 5 of 6"
     },
@@ -5756,7 +5735,7 @@
       "date": "2026-05-06",
       "name": "Ankit Jha",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 4702.73,
       "notes": "Onecard: 13385 2 of 3"
     },
@@ -5764,7 +5743,7 @@
       "date": "2026-05-05",
       "name": "Ankit Jha",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 4394,
       "notes": "Slice 5"
     },
@@ -5772,7 +5751,7 @@
       "date": "2026-05-04",
       "name": "Ashok Mama",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 24358,
       "notes": "cc- tv, mixer, iron"
     },
@@ -5780,7 +5759,7 @@
       "date": "2026-05-04",
       "name": "Ashok Mama",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 28329,
       "notes": "CC- AC"
     },
@@ -5788,7 +5767,7 @@
       "date": "2026-04-30",
       "name": "Ashok Mama",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 25902,
       "notes": "CC- Washing MC& Fridge"
     },
@@ -5796,7 +5775,7 @@
       "date": "2026-04-28",
       "name": "Ankit Jha",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 5000,
       "notes": "Return"
     },
@@ -5804,7 +5783,7 @@
       "date": "2026-04-27",
       "name": "Ashok Mama",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 50000,
       "notes": "Cash- Wedding"
     },
@@ -5812,7 +5791,7 @@
       "date": "2026-04-27",
       "name": "Ashok Mama",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 7700,
       "notes": "Cash- Currency"
     },
@@ -5820,7 +5799,7 @@
       "date": "2026-04-27",
       "name": "Ashok Mama",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 5000,
       "notes": "UPI- Mala:1800, Milk: 500*2,Auto Fare:1400"
     },
@@ -5828,7 +5807,7 @@
       "date": "2026-04-27",
       "name": "Ashok Mama",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 932,
       "notes": "UPI- Milk:252, Biscuit:680"
     },
@@ -5836,7 +5815,7 @@
       "date": "2026-04-27",
       "name": "Bhuvan Ji",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 100000,
       "notes": "Break FD"
     },
@@ -5844,7 +5823,7 @@
       "date": "2026-04-25",
       "name": "Anuj Bhaiya",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 20000,
       "notes": "Return"
     },
@@ -5852,7 +5831,7 @@
       "date": "2026-04-24",
       "name": "Ankit Jha",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 5000,
       "notes": "Rcv"
     },
@@ -5860,7 +5839,7 @@
       "date": "2026-04-23",
       "name": "Anuj Bhaiya",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 9000,
       "notes": "Return"
     },
@@ -5868,7 +5847,7 @@
       "date": "2026-04-22",
       "name": "Bitan Bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 1833.6,
       "notes": "Bitan Bhaiya anvt to gkp 23/04/2026 Durgesh Kumar "
     },
@@ -5876,7 +5855,7 @@
       "date": "2026-04-19",
       "name": "Pragyanand",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 4095,
       "notes": "CC(2 Mar 26)"
     },
@@ -5884,7 +5863,7 @@
       "date": "2026-04-19",
       "name": "Pragyanand",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 4257.08,
       "notes": "EMI 5"
     },
@@ -5892,7 +5871,7 @@
       "date": "2026-04-18",
       "name": "Anuj Bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 24000,
       "notes": "Currency"
     },
@@ -5900,7 +5879,7 @@
       "date": "2026-04-11",
       "name": "Bhuvan Ji",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 50000,
       "notes": "QH"
     },
@@ -5908,7 +5887,7 @@
       "date": "2026-04-06",
       "name": "Ankit Jha",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 15000,
       "notes": "Rcv"
     },
@@ -5916,7 +5895,7 @@
       "date": "2026-04-06",
       "name": "Ankit Jha",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 3000,
       "notes": "Rcv"
     },
@@ -5924,7 +5903,7 @@
       "date": "2026-04-05",
       "name": "Ankit Jha",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 4394,
       "notes": "Slice 4"
     },
@@ -5932,7 +5911,7 @@
       "date": "2026-04-05",
       "name": "Ankit Jha",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 3332.08,
       "notes": "OneCard: 9421 3 of 6"
     },
@@ -5940,7 +5919,7 @@
       "date": "2026-04-05",
       "name": "Ankit Jha",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 2372.48,
       "notes": "OneCard:12929 4 of 6"
     },
@@ -5948,7 +5927,7 @@
       "date": "2026-04-05",
       "name": "Ankit Jha",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 4771.24,
       "notes": "Onecard: 13385 1 of 3"
     },
@@ -5956,7 +5935,7 @@
       "date": "2026-04-05",
       "name": "Ankit Jha",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 8315,
       "notes": "Onecard: 8315"
     },
@@ -5964,7 +5943,7 @@
       "date": "2026-04-02",
       "name": "Anuj Bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 70000,
       "notes": "UPI"
     },
@@ -5972,7 +5951,7 @@
       "date": "2026-04-02",
       "name": "Bholu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 20000,
       "notes": "phnpe"
     },
@@ -5980,7 +5959,7 @@
       "date": "2026-04-01",
       "name": "Bhuvan Ji",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 28150,
       "notes": "Currency"
     },
@@ -5988,7 +5967,7 @@
       "date": "2026-04-01",
       "name": "Bhuvan Ji",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 12000,
       "notes": "Credit card"
     },
@@ -5996,7 +5975,7 @@
       "date": "2026-03-28",
       "name": "Bitan Bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 2000,
       "notes": "Currency Currency Durgesh Kumar "
     },
@@ -6004,7 +5983,7 @@
       "date": "2026-03-18",
       "name": "Pragyanand",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 4268.02,
       "notes": "EMI 4"
     },
@@ -6012,7 +5991,7 @@
       "date": "2026-03-17",
       "name": "Vinod Mama",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 6893.6,
       "notes": "tkt Pune-GKP Choubey"
     },
@@ -6020,7 +5999,7 @@
       "date": "2026-03-17",
       "name": "Vinod Mama",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 2111,
       "notes": "Ignore Return "
     },
@@ -6028,7 +6007,7 @@
       "date": "2026-03-16",
       "name": "Pragyanand",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 2000,
       "notes": "Return"
     },
@@ -6036,7 +6015,7 @@
       "date": "2026-03-15",
       "name": "Ankit Jha",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 5000,
       "notes": "Rcv"
     },
@@ -6044,7 +6023,7 @@
       "date": "2026-03-12",
       "name": "Guddu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 5000,
       "notes": "phnpe"
     },
@@ -6052,7 +6031,7 @@
       "date": "2026-03-12",
       "name": "Pragyanand",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 2000,
       "notes": "QH"
     },
@@ -6060,7 +6039,7 @@
       "date": "2026-03-11",
       "name": "Bholu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 1138.6,
       "notes": "PUN-GKP"
     },
@@ -6068,7 +6047,7 @@
       "date": "2026-03-10",
       "name": "Ankit Jha",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 2377.62,
       "notes": "OneCard:12929 3 of 6"
     },
@@ -6076,7 +6055,7 @@
       "date": "2026-03-10",
       "name": "Ankit Jha",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 3339.62,
       "notes": "OneCard: 9421 2 of 6"
     },
@@ -6084,7 +6063,7 @@
       "date": "2026-03-09",
       "name": "Vinod Mama",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 5393.6,
       "notes": "tkt PNBE-Pune Choubey"
     },
@@ -6092,7 +6071,7 @@
       "date": "2026-03-05",
       "name": "Ankit Jha",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 4394,
       "notes": "Slice 3"
     },
@@ -6100,7 +6079,7 @@
       "date": "2026-03-05",
       "name": "Ankit Jha",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 10000,
       "notes": "Rcv"
     },
@@ -6108,7 +6087,7 @@
       "date": "2026-03-05",
       "name": "Pathak Mama",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 15734,
       "notes": "LIC"
     },
@@ -6116,7 +6095,7 @@
       "date": "2026-03-05",
       "name": "Pathak Mama",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 0,
       "notes": "Ignore Return- 7900"
     },
@@ -6124,7 +6103,7 @@
       "date": "2026-02-27",
       "name": "Bholu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 1833.6,
       "notes": "GKP-PUN"
     },
@@ -6132,7 +6111,7 @@
       "date": "2026-02-26",
       "name": "Bholu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 3000,
       "notes": "phnpe"
     },
@@ -6140,7 +6119,7 @@
       "date": "2026-02-25",
       "name": "Bhuvan Ji",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 50000,
       "notes": "Break FD"
     },
@@ -6148,7 +6127,7 @@
       "date": "2026-02-25",
       "name": "Guddu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 10000,
       "notes": "phnpe"
     },
@@ -6156,7 +6135,7 @@
       "date": "2026-02-25",
       "name": "Papa",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 50000,
       "notes": "Bheem Shah"
     },
@@ -6164,7 +6143,7 @@
       "date": "2026-02-22",
       "name": "Sunny",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 1546.8,
       "notes": "r tkt for 5 Mar april : GKP-DLI"
     },
@@ -6172,7 +6151,7 @@
       "date": "2026-02-19",
       "name": "Bhuvan Ji",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 100000,
       "notes": "QH"
     },
@@ -6180,7 +6159,7 @@
       "date": "2026-02-19",
       "name": "Pathak Mama",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 864,
       "notes": "Bike Insurance"
     },
@@ -6188,7 +6167,7 @@
       "date": "2026-02-19",
       "name": "Pragyanand",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 4278.79,
       "notes": "EMI 3"
     },
@@ -6196,7 +6175,7 @@
       "date": "2026-02-18",
       "name": "Mausi Chakiya",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 17000,
       "notes": "Return"
     },
@@ -6204,7 +6183,7 @@
       "date": "2026-02-18",
       "name": "Mausi Chakiya",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 550,
       "notes": "Ignore Return "
     },
@@ -6212,7 +6191,7 @@
       "date": "2026-02-13",
       "name": "Pragyanand",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 4257,
       "notes": "EMI 5"
     },
@@ -6220,7 +6199,7 @@
       "date": "2026-02-12",
       "name": "Ankit Jha",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 4000,
       "notes": "Rcv"
     },
@@ -6228,7 +6207,7 @@
       "date": "2026-02-12",
       "name": "Gaurav Investment",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 3000,
       "notes": "Return"
     },
@@ -6236,7 +6215,7 @@
       "date": "2026-02-12",
       "name": "Gaurav Investment",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 18100,
       "notes": "Ignore Return "
     },
@@ -6244,7 +6223,7 @@
       "date": "2026-02-09",
       "name": "Ankit Jha",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 2382.68,
       "notes": "OneCard:12929 2 of 6"
     },
@@ -6252,7 +6231,7 @@
       "date": "2026-02-09",
       "name": "Ankit Jha",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 3363.86,
       "notes": "OneCard: 9421 1 of 6"
     },
@@ -6260,7 +6239,7 @@
       "date": "2026-02-09",
       "name": "Bholu bhaiya",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 5000,
       "notes": "Return"
     },
@@ -6268,7 +6247,7 @@
       "date": "2026-02-08",
       "name": "Bholu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 8500,
       "notes": "phnpe"
     },
@@ -6276,7 +6255,7 @@
       "date": "2026-02-07",
       "name": "Guddu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 4000,
       "notes": "phnpe"
     },
@@ -6284,7 +6263,7 @@
       "date": "2026-02-06",
       "name": "Ankit Jha",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 6000,
       "notes": "Rcv"
     },
@@ -6292,7 +6271,7 @@
       "date": "2026-02-05",
       "name": "Ankit Jha",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 4394,
       "notes": "Slice 2"
     },
@@ -6300,7 +6279,7 @@
       "date": "2026-02-05",
       "name": "Ankit Jha",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 10000,
       "notes": "Rcv"
     },
@@ -6308,7 +6287,7 @@
       "date": "2026-02-05",
       "name": "Bhuvan Ji",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 50000,
       "notes": "Nisha Fee CC"
     },
@@ -6316,7 +6295,7 @@
       "date": "2026-02-03",
       "name": "Guddu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 5000,
       "notes": "phnpe"
     },
@@ -6324,7 +6303,7 @@
       "date": "2026-02-02",
       "name": "Guddu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 2500,
       "notes": "phnpe"
     },
@@ -6332,7 +6311,7 @@
       "date": "2026-01-31",
       "name": "Guddu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 2500,
       "notes": "phnpe"
     },
@@ -6340,7 +6319,7 @@
       "date": "2026-01-30",
       "name": "Bhuvan Ji",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 100000,
       "notes": "Papa"
     },
@@ -6348,7 +6327,7 @@
       "date": "2026-01-30",
       "name": "Papa",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 100300,
       "notes": "Bheem Shah"
     },
@@ -6356,7 +6335,7 @@
       "date": "2026-01-29",
       "name": "Guddu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 5000,
       "notes": "slice-phnpe"
     },
@@ -6364,7 +6343,7 @@
       "date": "2026-01-19",
       "name": "Pragyanand",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 4289.4,
       "notes": "EMI 2"
     },
@@ -6372,7 +6351,7 @@
       "date": "2026-01-18",
       "name": "Papa",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 2114,
       "notes": "Sunil Chacha med"
     },
@@ -6380,7 +6359,7 @@
       "date": "2026-01-17",
       "name": "Guddu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 7000,
       "notes": "phnpe"
     },
@@ -6388,7 +6367,7 @@
       "date": "2026-01-16",
       "name": "Sanjeev (jokhan)",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 100,
       "notes": "Chicken"
     },
@@ -6396,7 +6375,7 @@
       "date": "2026-01-14",
       "name": "Ankit Jha",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 6000,
       "notes": "Rcv"
     },
@@ -6404,7 +6383,7 @@
       "date": "2026-01-14",
       "name": "Papa",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 2261,
       "notes": "Sunil Chacha med"
     },
@@ -6412,7 +6391,7 @@
       "date": "2026-01-10",
       "name": "Bholu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 6000,
       "notes": "phnpe"
     },
@@ -6420,7 +6399,7 @@
       "date": "2026-01-10",
       "name": "Guddu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 5000,
       "notes": "phnpe"
     },
@@ -6428,7 +6407,7 @@
       "date": "2026-01-10",
       "name": "Guddu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 5000,
       "notes": "phnpe"
     },
@@ -6436,7 +6415,7 @@
       "date": "2026-01-09",
       "name": "Guddu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 10000,
       "notes": "phnpe"
     },
@@ -6444,7 +6423,7 @@
       "date": "2026-01-08",
       "name": "Ankit Jha",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 2440.28,
       "notes": "OneCard:12929 1 of 6"
     },
@@ -6452,7 +6431,7 @@
       "date": "2026-01-08",
       "name": "Bhuvan Ji",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 20000,
       "notes": "Gudu"
     },
@@ -6460,7 +6439,7 @@
       "date": "2026-01-08",
       "name": "Guddu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 10000,
       "notes": "phnpe"
     },
@@ -6468,7 +6447,7 @@
       "date": "2026-01-08",
       "name": "Pragyanand",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 4268,
       "notes": "EMI 4"
     },
@@ -6476,7 +6455,7 @@
       "date": "2026-01-08",
       "name": "Sanjeev (jokhan)",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 3000,
       "notes": "Rcv"
     },
@@ -6484,7 +6463,7 @@
       "date": "2026-01-07",
       "name": "Ankit Jha",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 9000,
       "notes": "Rcv"
     },
@@ -6492,7 +6471,7 @@
       "date": "2026-01-07",
       "name": "Guddu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 5000,
       "notes": "phnpe"
     },
@@ -6500,7 +6479,7 @@
       "date": "2026-01-06",
       "name": "Guddu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 5000,
       "notes": "phnpe"
     },
@@ -6508,7 +6487,7 @@
       "date": "2026-01-05",
       "name": "Ankit Jha",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 4394,
       "notes": "Slice 1"
     },
@@ -6516,7 +6495,7 @@
       "date": "2026-01-05",
       "name": "Ankit Jha",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 7000,
       "notes": "Rcv"
     },
@@ -6524,7 +6503,7 @@
       "date": "2026-01-05",
       "name": "Sanjeev (jokhan)",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 4200,
       "notes": "QH"
     },
@@ -6532,7 +6511,7 @@
       "date": "2026-01-04",
       "name": "Guddu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 5000,
       "notes": "phnpe"
     },
@@ -6540,7 +6519,7 @@
       "date": "2025-12-31",
       "name": "Guddu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 10000,
       "notes": "phnpe"
     },
@@ -6548,7 +6527,7 @@
       "date": "2025-12-28",
       "name": "Pathak Mama",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 2000,
       "notes": "Fatsag"
     },
@@ -6556,7 +6535,7 @@
       "date": "2025-12-26",
       "name": "Guddu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 5000,
       "notes": "phnpe"
     },
@@ -6564,7 +6543,7 @@
       "date": "2025-12-26",
       "name": "Pragyanand",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 4290,
       "notes": "EMI 2(10 Nov 25)"
     },
@@ -6572,7 +6551,7 @@
       "date": "2025-12-26",
       "name": "Pragyanand",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 4280,
       "notes": "EMI 3(24 Dec 25)"
     },
@@ -6580,7 +6559,7 @@
       "date": "2025-12-25",
       "name": "Pragyanand",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 9000,
       "notes": "QH"
     },
@@ -6588,7 +6567,7 @@
       "date": "2025-12-24",
       "name": "Bhuvan Ji",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 50000,
       "notes": "Break FD"
     },
@@ -6596,7 +6575,7 @@
       "date": "2025-12-24",
       "name": "Bhuvan Ji",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 100000,
       "notes": "For FD"
     },
@@ -6604,7 +6583,7 @@
       "date": "2025-12-24",
       "name": "Bhuvan Ji",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 100000,
       "notes": "Created FD"
     },
@@ -6612,7 +6591,7 @@
       "date": "2025-12-24",
       "name": "Pragyanand",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 13500,
       "notes": "Return"
     },
@@ -6620,7 +6599,7 @@
       "date": "2025-12-24",
       "name": "Pragyanand",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 2000,
       "notes": "QH"
     },
@@ -6628,7 +6607,7 @@
       "date": "2025-12-20",
       "name": "Guddu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 5000,
       "notes": "phnpe"
     },
@@ -6636,7 +6615,7 @@
       "date": "2025-12-20",
       "name": "Guddu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 5000,
       "notes": "phnpe"
     },
@@ -6644,7 +6623,7 @@
       "date": "2025-12-18",
       "name": "Bhuvan Ji",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 20000,
       "notes": "Gudu"
     },
@@ -6652,7 +6631,7 @@
       "date": "2025-12-18",
       "name": "Guddu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 10000,
       "notes": "phnpe"
     },
@@ -6660,7 +6639,7 @@
       "date": "2025-12-18",
       "name": "Papa",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 1092,
       "notes": "Sunil Chacha med"
     },
@@ -6668,7 +6647,7 @@
       "date": "2025-12-18",
       "name": "Papa",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 1134,
       "notes": "Sunil Chacha med"
     },
@@ -6676,7 +6655,7 @@
       "date": "2025-12-18",
       "name": "Papa",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 1134,
       "notes": "Sunil Chacha med"
     },
@@ -6684,7 +6663,7 @@
       "date": "2025-12-18",
       "name": "Papa",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 1092,
       "notes": "Sunil Chacha med"
     },
@@ -6692,7 +6671,7 @@
       "date": "2025-12-17",
       "name": "Guddu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 13000,
       "notes": "phnpe"
     },
@@ -6700,7 +6679,7 @@
       "date": "2025-12-16",
       "name": "Guddu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 7000,
       "notes": "phnpe"
     },
@@ -6708,7 +6687,7 @@
       "date": "2025-12-15",
       "name": "Bhuvan Ji",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 20000,
       "notes": "Gudu"
     },
@@ -6716,7 +6695,7 @@
       "date": "2025-12-15",
       "name": "Guddu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 20000,
       "notes": "phnpe"
     },
@@ -6724,7 +6703,7 @@
       "date": "2025-12-14",
       "name": "Guddu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 10000,
       "notes": "phnpe"
     },
@@ -6732,7 +6711,7 @@
       "date": "2025-12-14",
       "name": "Pragyanand",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 500,
       "notes": "Gas"
     },
@@ -6740,7 +6719,7 @@
       "date": "2025-12-13",
       "name": "Pragyanand",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 3000,
       "notes": "2996 cc"
     },
@@ -6748,7 +6727,7 @@
       "date": "2025-12-13",
       "name": "Pragyanand",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 1500,
       "notes": "2996 cc"
     },
@@ -6756,7 +6735,7 @@
       "date": "2025-12-12",
       "name": "Guddu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 5000,
       "notes": "phnpe"
     },
@@ -6764,7 +6743,7 @@
       "date": "2025-12-10",
       "name": "Guddu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 5000,
       "notes": "phnpe"
     },
@@ -6772,7 +6751,7 @@
       "date": "2025-12-09",
       "name": "Guddu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 10000,
       "notes": "phnpe"
     },
@@ -6780,7 +6759,7 @@
       "date": "2025-12-07",
       "name": "Ankit Jha",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 35003,
       "notes": "Frd's Phn: 35003"
     },
@@ -6788,7 +6767,7 @@
       "date": "2025-12-07",
       "name": "Ankit Jha",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 10000,
       "notes": "Rcv"
     },
@@ -6796,7 +6775,7 @@
       "date": "2025-12-07",
       "name": "Guddu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 5000,
       "notes": "phnpe"
     },
@@ -6804,7 +6783,7 @@
       "date": "2025-12-06",
       "name": "Papa",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 1084,
       "notes": "Sunil Chacha med"
     },
@@ -6812,7 +6791,7 @@
       "date": "2025-12-06",
       "name": "Pragyanand",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 5000,
       "notes": "Rent"
     },
@@ -6820,7 +6799,7 @@
       "date": "2025-12-05",
       "name": "Guddu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 5000,
       "notes": "slice"
     },
@@ -6828,7 +6807,7 @@
       "date": "2025-12-03",
       "name": "Guddu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 10000,
       "notes": "slice"
     },
@@ -6836,7 +6815,7 @@
       "date": "2025-12-02",
       "name": "Pathak Mama",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 12130,
       "notes": "LIC"
     },
@@ -6844,7 +6823,7 @@
       "date": "2025-12-01",
       "name": "Guddu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 10000,
       "notes": "slice"
     },
@@ -6852,7 +6831,7 @@
       "date": "2025-12-01",
       "name": "Papa",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 1081,
       "notes": "Sunil Chacha med"
     },
@@ -6860,7 +6839,7 @@
       "date": "2025-11-30",
       "name": "Guddu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 20000,
       "notes": "slice"
     },
@@ -6868,7 +6847,7 @@
       "date": "2025-11-28",
       "name": "Guddu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 8000,
       "notes": "slice"
     },
@@ -6876,7 +6855,7 @@
       "date": "2025-11-27",
       "name": "Pragyanand",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 500,
       "notes": null
     },
@@ -6884,7 +6863,7 @@
       "date": "2025-11-21",
       "name": "Guddu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 5000,
       "notes": "phnpe"
     },
@@ -6892,7 +6871,7 @@
       "date": "2025-11-15",
       "name": "Papa",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 1110,
       "notes": "Sunil Chacha med"
     },
@@ -6900,7 +6879,7 @@
       "date": "2025-11-13",
       "name": "Bitan Bhaiya",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 22511,
       "notes": "Rcv"
     },
@@ -6908,7 +6887,7 @@
       "date": "2025-11-13",
       "name": "Papa",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 1093,
       "notes": "Sunil Chacha med"
     },
@@ -6916,7 +6895,7 @@
       "date": "2025-11-12",
       "name": "Guddu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 2000,
       "notes": "phnpe"
     },
@@ -6924,7 +6903,7 @@
       "date": "2025-11-12",
       "name": "Guddu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 5000,
       "notes": "phnpe"
     },
@@ -6932,7 +6911,7 @@
       "date": "2025-11-08",
       "name": "Vinod Mama",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 2475,
       "notes": "Return gkp-pune Cancel"
     },
@@ -6940,7 +6919,7 @@
       "date": "2025-10-27",
       "name": "Bitan Bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 22511,
       "notes": "GKP-DUBAI 00/01/1900 Pappu Bhaiya Flight"
     },
@@ -6948,7 +6927,7 @@
       "date": "2025-10-25",
       "name": "Bitan Bhaiya",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 800,
       "notes": "Rcv 00/01/1900 Misc+ Light 600+200"
     },
@@ -6956,7 +6935,7 @@
       "date": "2025-10-25",
       "name": "Bitan Bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 8318,
       "notes": "GKP-BLR 07/11/2025 Purnima Kumari Flight"
     },
@@ -6964,7 +6943,7 @@
       "date": "2025-10-19",
       "name": "Guddu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 10000,
       "notes": "phnpe"
     },
@@ -6972,7 +6951,7 @@
       "date": "2025-10-12",
       "name": "Dheeraj",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 500,
       "notes": "Chandni chwk"
     },
@@ -6980,7 +6959,7 @@
       "date": "2025-10-11",
       "name": "Pathak Mama",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 2533,
       "notes": "Med"
     },
@@ -6988,7 +6967,7 @@
       "date": "2025-10-11",
       "name": "Pathak Mama",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 5000,
       "notes": "Fastag"
     },
@@ -6996,7 +6975,7 @@
       "date": "2025-10-11",
       "name": "Vinod Mama",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 2666.8,
       "notes": "Tkt  gkp-pune "
     },
@@ -7004,7 +6983,7 @@
       "date": "2025-10-07",
       "name": "Pathak Mama",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 6405,
       "notes": "tkt"
     },
@@ -7012,7 +6991,7 @@
       "date": "2025-10-07",
       "name": "Pathak Mama",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 3450,
       "notes": "tkt cancel"
     },
@@ -7020,7 +6999,7 @@
       "date": "2025-10-07",
       "name": "Pathak Mama",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 790,
       "notes": "cancel fee"
     },
@@ -7028,7 +7007,7 @@
       "date": "2025-10-05",
       "name": "Bholu bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 8000,
       "notes": "phnpe"
     },
@@ -7036,7 +7015,7 @@
       "date": "2025-10-02",
       "name": "Bitan Bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 1400,
       "notes": "GKP-DEL 01/11/2025 Durgesh Kumar Train"
     },
@@ -7044,7 +7023,7 @@
       "date": "2025-09-21",
       "name": "Sanjeev (jokhan)",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 3000,
       "notes": "Bike waste"
     },
@@ -7052,7 +7031,7 @@
       "date": "2025-09-10",
       "name": "Bitan Bhaiya",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 5000,
       "notes": "Rcv Bhabhi"
     },
@@ -7060,7 +7039,7 @@
       "date": "2025-08-22",
       "name": "Dheeraj",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 2733.6,
       "notes": "Train tkt del to GKP"
     },
@@ -7068,7 +7047,7 @@
       "date": "2025-08-19",
       "name": "Bitan Bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 0,
       "notes": "DEL-GKP 15/10/2025 Durgesh Kumar Train"
     },
@@ -7076,7 +7055,7 @@
       "date": "2025-08-11",
       "name": "Sanjeev (jokhan)",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 50,
       "notes": "QH"
     },
@@ -7084,7 +7063,7 @@
       "date": "2025-08-06",
       "name": "Bitan Bhaiya",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 4000,
       "notes": "Rcv 5k rcv- 1k at home  Bhabhi"
     },
@@ -7092,7 +7071,7 @@
       "date": "2025-08-05",
       "name": "Sanjeev (jokhan)",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 899,
       "notes": "Recharge"
     },
@@ -7100,7 +7079,7 @@
       "date": "2025-07-16",
       "name": "Sanjeev (jokhan)",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 900,
       "notes": "Recharge "
     },
@@ -7108,7 +7087,7 @@
       "date": "2025-07-06",
       "name": "Bitan Bhaiya",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 5000,
       "notes": "Rcv Bhabhi"
     },
@@ -7116,7 +7095,7 @@
       "date": "2025-06-27",
       "name": "Sanjeev (jokhan)",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 69,
       "notes": "recharge"
     },
@@ -7124,7 +7103,7 @@
       "date": "2025-06-12",
       "name": "Sanjeev (jokhan)",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 250,
       "notes": "bike service"
     },
@@ -7132,7 +7111,7 @@
       "date": "2025-06-12",
       "name": "Sanjeev (jokhan)",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 300,
       "notes": "QH"
     },
@@ -7140,7 +7119,7 @@
       "date": "2025-06-11",
       "name": "Pathak Mama",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 50000,
       "notes": "DRCC"
     },
@@ -7148,7 +7127,7 @@
       "date": "2025-06-05",
       "name": "Sanjeev (jokhan)",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 69,
       "notes": "recharge"
     },
@@ -7156,7 +7135,7 @@
       "date": "2025-05-25",
       "name": "Sakshat",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 1500,
       "notes": "QH"
     },
@@ -7164,7 +7143,7 @@
       "date": "2025-05-16",
       "name": "Bhuvan Ji",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 50000,
       "notes": "Paid to Chacha "
     },
@@ -7172,7 +7151,7 @@
       "date": "2025-05-13",
       "name": "Sanjeev (jokhan)",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 69,
       "notes": "recharge"
     },
@@ -7180,7 +7159,7 @@
       "date": "2025-05-11",
       "name": "Bitan Bhaiya",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 500,
       "notes": "Sofa Paid 00/01/1900  Sofa"
     },
@@ -7188,7 +7167,7 @@
       "date": "2025-05-11",
       "name": "Sanjeev (jokhan)",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 500,
       "notes": "old"
     },
@@ -7196,7 +7175,7 @@
       "date": "2025-05-11",
       "name": "Sanjeev (jokhan)",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 400,
       "notes": "purse"
     },
@@ -7204,7 +7183,7 @@
       "date": "2025-05-02",
       "name": "Bitan Bhaiya",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 4000,
       "notes": "Rcv"
     },
@@ -7212,7 +7191,7 @@
       "date": "2025-04-23",
       "name": "Bitan Bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 1000,
       "notes": "Gift dress 00/01/1900  alka"
     },
@@ -7220,7 +7199,7 @@
       "date": "2025-03-29",
       "name": "Sakshat",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 1500,
       "notes": "QH"
     },
@@ -7228,7 +7207,7 @@
       "date": "2025-03-26",
       "name": "Bhuvan Ji",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 25000,
       "notes": "Urgent"
     },
@@ -7236,7 +7215,7 @@
       "date": "2025-03-11",
       "name": "Bitan Bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 17025,
       "notes": "GKP-BLR 08/03/1943 Flight one card flight EMI"
     },
@@ -7244,7 +7223,7 @@
       "date": "2025-02-25",
       "name": "Bitan Bhaiya",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 600,
       "notes": "Stall 00/01/1900  Stall"
     },
@@ -7252,7 +7231,7 @@
       "date": "2025-02-15",
       "name": "Bitan Bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 0,
       "notes": "Ignore 10*100 Currency"
     },
@@ -7260,7 +7239,7 @@
       "date": "2025-02-14",
       "name": "Bhuvan Ji",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 17000,
       "notes": "Currency"
     },
@@ -7268,7 +7247,7 @@
       "date": "2025-02-09",
       "name": "Bhuvan Ji",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 50000,
       "notes": "Shadi"
     },
@@ -7276,7 +7255,7 @@
       "date": "2025-02-07",
       "name": "Dheeraj",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 1000,
       "notes": "Train tkt del to GKP"
     },
@@ -7284,7 +7263,7 @@
       "date": "2025-02-03",
       "name": "Anupam Penula",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 2500,
       "notes": "Return"
     },
@@ -7292,7 +7271,7 @@
       "date": "2025-01-31",
       "name": "Bitan Bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 1478,
       "notes": "DEL-GKP 06/02/2025  R Tkt"
     },
@@ -7300,7 +7279,7 @@
       "date": "2025-01-28",
       "name": "Bitan Bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 1390,
       "notes": "GKP-Del 22/02/2025  R Tkt"
     },
@@ -7308,7 +7287,7 @@
       "date": "2025-01-03",
       "name": "Bitan Bhaiya",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 4000,
       "notes": "Rcv Bhabhi"
     },
@@ -7316,7 +7295,7 @@
       "date": "2024-12-26",
       "name": "Bitan Bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 5657,
       "notes": "BLR-GKP 03/02/2025  Flight"
     },
@@ -7324,7 +7303,7 @@
       "date": "2024-12-24",
       "name": "Sakshat",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 600,
       "notes": "QH"
     },
@@ -7332,7 +7311,7 @@
       "date": "2024-12-14",
       "name": "Sakshat",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 2000,
       "notes": "QH"
     },
@@ -7340,7 +7319,7 @@
       "date": "2024-12-13",
       "name": "Prince RamchandraPur",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 6500,
       "notes": "Return"
     },
@@ -7348,7 +7327,7 @@
       "date": "2024-12-09",
       "name": "Bitan Bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 1200,
       "notes": "DEL-GKP 07/02/2025 Cancel tkt"
     },
@@ -7356,7 +7335,7 @@
       "date": "2024-12-09",
       "name": "Bitan Bhaiya",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 1000,
       "notes": "DEL-GKP 07/02/2025 Cancel tkt"
     },
@@ -7364,7 +7343,7 @@
       "date": "2024-12-09",
       "name": "Pragyanand",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 1000,
       "notes": null
     },
@@ -7372,7 +7351,7 @@
       "date": "2024-11-30",
       "name": "Bitan Bhaiya",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 4000,
       "notes": "Rcv"
     },
@@ -7380,7 +7359,7 @@
       "date": "2024-11-27",
       "name": "Prince RamchandraPur",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 8835,
       "notes": "Flight"
     },
@@ -7388,7 +7367,7 @@
       "date": "2024-11-12",
       "name": "Bitan Bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 0,
       "notes": "GKP-DXB 23/11/2024 17216 Flight"
     },
@@ -7396,7 +7375,7 @@
       "date": "2024-11-12",
       "name": "Papa",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 553,
       "notes": "Rcv"
     },
@@ -7404,7 +7383,7 @@
       "date": "2024-11-08",
       "name": "Bitan Bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 9080,
       "notes": "GKP-BLR 13/11/2024 1 Flight"
     },
@@ -7412,7 +7391,7 @@
       "date": "2024-11-08",
       "name": "Bitan Bhaiya",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 6000,
       "notes": "Rcv Bhabhi"
     },
@@ -7420,7 +7399,7 @@
       "date": "2024-10-02",
       "name": "Vinod Mama",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 681.8,
       "notes": "tkt pune to jblpur "
     },
@@ -7428,7 +7407,7 @@
       "date": "2024-09-26",
       "name": "Pragyanand",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 2000,
       "notes": null
     },
@@ -7436,7 +7415,7 @@
       "date": "2024-09-04",
       "name": "Pragyanand",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 2500,
       "notes": null
     },
@@ -7444,7 +7423,7 @@
       "date": "2024-08-19",
       "name": "Mausi Chakiya",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 4000,
       "notes": "Return"
     },
@@ -7452,7 +7431,7 @@
       "date": "2024-08-08",
       "name": "Bitan Bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 5702,
       "notes": "BLR-DEL 17/08/2024 1 Flight"
     },
@@ -7460,7 +7439,7 @@
       "date": "2024-08-07",
       "name": "Bitan Bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 0,
       "notes": "DEL-BLR 09/08/2024 5623 Flight"
     },
@@ -7468,7 +7447,7 @@
       "date": "2024-07-11",
       "name": "Pragyanand",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 500,
       "notes": null
     },
@@ -7476,7 +7455,7 @@
       "date": "2024-07-01",
       "name": "Bitan Bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 1327,
       "notes": "DEL-GKP 29/10/2024 1 train"
     },
@@ -7484,7 +7463,7 @@
       "date": "2024-06-09",
       "name": "Anupam Penula",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 2500,
       "notes": "Return"
     },
@@ -7492,7 +7471,7 @@
       "date": "2024-05-30",
       "name": "Bitan Bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 6694,
       "notes": "BLR-GKP 28/10/2024 2 train"
     },
@@ -7500,7 +7479,7 @@
       "date": "2024-05-30",
       "name": "Bitan Bhaiya",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 6650,
       "notes": "Rcv"
     },
@@ -7508,7 +7487,7 @@
       "date": "2024-05-01",
       "name": "Bitan Bhaiya",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 4000,
       "notes": "Rcv"
     },
@@ -7516,7 +7495,7 @@
       "date": "2024-04-27",
       "name": "Bitan Bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 1788,
       "notes": "GKP-DEL 28/04/2024 1 Train"
     },
@@ -7524,7 +7503,7 @@
       "date": "2024-04-20",
       "name": "Bitan Bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 8766,
       "notes": "GKP-BLR 26/04/2024 1 Flight"
     },
@@ -7532,7 +7511,7 @@
       "date": "2024-04-20",
       "name": "Bitan Bhaiya",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 9000,
       "notes": "Rcv"
     },
@@ -7540,7 +7519,7 @@
       "date": "2024-03-01",
       "name": "Bitan Bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 1700,
       "notes": "Blazzer 00/01/1900  "
     },
@@ -7548,7 +7527,7 @@
       "date": "2024-03-01",
       "name": "Bitan Bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 0,
       "notes": "DEL-GKP 19/08/1903 paid by Rajan Train"
     },
@@ -7556,7 +7535,7 @@
       "date": "2024-03-01",
       "name": "Bitan Bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 1321,
       "notes": "GKP-DEL 00/01/1900  "
     },
@@ -7564,7 +7543,7 @@
       "date": "2024-02-15",
       "name": "Dheeraj",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 2000,
       "notes": "udhari"
     },
@@ -7572,7 +7551,7 @@
       "date": "2024-02-09",
       "name": "Bitan Bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 1788,
       "notes": "GKP-DEL 10/02/2024 Durgesh Kumar Train"
     },
@@ -7580,7 +7559,7 @@
       "date": "2024-02-07",
       "name": "Dheeraj",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 300,
       "notes": "coaching"
     },
@@ -7588,7 +7567,7 @@
       "date": "2024-02-01",
       "name": "Bitan Bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 1703,
       "notes": "DEL-GKP 02/02/2024 Durgesh Kumar "
     },
@@ -7596,7 +7575,7 @@
       "date": "2024-02-01",
       "name": "Bitan Bhaiya",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 2000,
       "notes": "Rcv"
     },
@@ -7604,7 +7583,7 @@
       "date": "2024-02-01",
       "name": "Sakshat",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 1450,
       "notes": "QH"
     },
@@ -7612,7 +7591,7 @@
       "date": "2024-01-24",
       "name": "Bitan Bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 6837,
       "notes": "BLR-DEL 00/01/1900 1 Flight"
     },
@@ -7620,7 +7599,7 @@
       "date": "2024-01-24",
       "name": "Bitan Bhaiya",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 5000,
       "notes": "Rcv"
     },
@@ -7628,7 +7607,7 @@
       "date": "2024-01-18",
       "name": "Bitan Bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 5987,
       "notes": "DEL-GKP 00/01/1900 1 Flight"
     },
@@ -7636,7 +7615,7 @@
       "date": "2024-01-17",
       "name": "Bitan Bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 13256,
       "notes": "BRL-DEL 00/01/1900 2 Flight"
     },
@@ -7644,7 +7623,7 @@
       "date": "2024-01-16",
       "name": "Bitan Bhaiya",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 10000,
       "notes": "Rcv"
     },
@@ -7652,7 +7631,7 @@
       "date": "2023-12-10",
       "name": "Bitan Bhaiya",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 1000,
       "notes": "Rcv  From Chacha "
     },
@@ -7660,7 +7639,7 @@
       "date": "2023-12-08",
       "name": "Rahul Penula",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 240,
       "notes": "rech"
     },
@@ -7668,7 +7647,7 @@
       "date": "2023-12-08",
       "name": "Rahul Penula",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 240,
       "notes": "rech"
     },
@@ -7676,7 +7655,7 @@
       "date": "2023-12-08",
       "name": "Rahul Penula",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 200,
       "notes": "cash for Newta"
     },
@@ -7684,7 +7663,7 @@
       "date": "2023-11-14",
       "name": "Dheeraj",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 3853,
       "notes": "Laptop"
     },
@@ -7692,7 +7671,7 @@
       "date": "2023-11-10",
       "name": "Bitan Bhaiya",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 1030,
       "notes": "Cancellation for 1 from 14 jul 11/11/2023 Purnima Kumari 2626489356"
     },
@@ -7700,7 +7679,7 @@
       "date": "2023-11-01",
       "name": "Anupam Penula",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 6000,
       "notes": "ankit job"
     },
@@ -7708,7 +7687,7 @@
       "date": "2023-10-13",
       "name": "Anupam Penula",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 500,
       "notes": "form"
     },
@@ -7716,7 +7695,7 @@
       "date": "2023-09-29",
       "name": "Dheeraj",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 160,
       "notes": null
     },
@@ -7724,7 +7703,7 @@
       "date": "2023-08-08",
       "name": "Dheeraj",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 210,
       "notes": "Recharge"
     },
@@ -7732,7 +7711,7 @@
       "date": "2023-08-03",
       "name": "Dheeraj",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 2000,
       "notes": null
     },
@@ -7740,7 +7719,7 @@
       "date": "2023-07-26",
       "name": "Bitan Bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 2653,
       "notes": "GKP-DEL 23/11/2023 Durgesh& Purnima "
     },
@@ -7748,7 +7727,7 @@
       "date": "2023-07-14",
       "name": "Bitan Bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 2773,
       "notes": "DEL-GKP 11/11/2023 Durgesh& Purnima 2626489356"
     },
@@ -7756,7 +7735,7 @@
       "date": "2023-07-04",
       "name": "Mausi Chakiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 11000,
       "notes": "Mausa ji phn"
     },
@@ -7764,7 +7743,7 @@
       "date": "2023-05-15",
       "name": "Bitan Bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 1465,
       "notes": "DEL-GKP 02/06/2023 Durgesh Kumar "
     },
@@ -7772,7 +7751,7 @@
       "date": "2023-05-09",
       "name": "Bitan Bhaiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 2780,
       "notes": "GKP-DEL 21/05/2023 Abhinav & Khushboo Train"
     },
@@ -7780,7 +7759,7 @@
       "date": "2023-02-28",
       "name": "Anupam Penula",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 2000,
       "notes": "QH"
     },
@@ -7788,7 +7767,7 @@
       "date": "2022-10-22",
       "name": "Mausi Chakiya",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 10550,
       "notes": "Mausi phn"
     },
@@ -7796,7 +7775,7 @@
       "date": "2022-10-05",
       "name": "Pramod Mama",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 28500,
       "notes": "flight"
     },
@@ -7804,7 +7783,7 @@
       "date": "2022-10-05",
       "name": "Pramod Mama",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 16000,
       "notes": "Rcv"
     },
@@ -7812,7 +7791,7 @@
       "date": "2022-10-05",
       "name": "Pramod Mama",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 10000,
       "notes": "Rcv"
     },
@@ -7820,7 +7799,7 @@
       "date": "2022-10-05",
       "name": "Pramod Mama",
       "type": "Received",
-      "category": null,
+      "category": "Cashflow",
       "amount": 3000,
       "notes": "Ignore Return "
     },
@@ -7828,7 +7807,7 @@
       "date": "2022-07-14",
       "name": "Dheeraj",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 0,
       "notes": "\"Dheeeaj thawe 210, 550, 70 -30-20-400\r\n 50 jhanda, 50 dudh,1500, 40mala, 25 -600-200\r\n =1045\""
     },
@@ -7836,7 +7815,7 @@
       "date": "2022-01-18",
       "name": "Gaurav Investment",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 1000,
       "notes": "Inv"
     },
@@ -7844,7 +7823,7 @@
       "date": "2022-01-14",
       "name": "Gaurav Investment",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 2300,
       "notes": "Inv"
     },
@@ -7852,7 +7831,7 @@
       "date": "2022-01-14",
       "name": "Gaurav Investment",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 4000,
       "notes": "Inv"
     },
@@ -7860,7 +7839,7 @@
       "date": "2022-01-13",
       "name": "Gaurav Investment",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 7800,
       "notes": "Inv"
     },
@@ -7868,7 +7847,7 @@
       "date": "2022-01-11",
       "name": "Gaurav Investment",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 4000,
       "notes": "Inv"
     },
@@ -7876,7 +7855,7 @@
       "date": "2022-01-10",
       "name": "Gaurav Investment",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 2000,
       "notes": "Inv"
     },
@@ -7884,7 +7863,7 @@
       "date": "2021-12-22",
       "name": "Pramod Mama",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 500,
       "notes": "Kettle"
     },
@@ -7892,7 +7871,7 @@
       "date": "2021-01-01",
       "name": "Vinod Mama",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 1500,
       "notes": "Hafta  "
     },
@@ -7900,7 +7879,7 @@
       "date": "2021-01-01",
       "name": "Vinod Mama",
       "type": "Given",
-      "category": null,
+      "category": "Cashflow",
       "amount": 450,
       "notes": "tkt  "
     }
