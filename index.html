@@ -277,14 +277,14 @@
         <div class="chart-wrap"><canvas id="chartMonthlyCombo"></canvas></div>
       </div>
       <div class="panel" id="sec-categories">
-        <h3><span class="ic">🏆</span> All Expense Categories <span style="text-transform:none;font-weight:500;color:var(--muted);font-size:11px;">(Selected Year)</span></h3>
+        <h3><span class="ic">🏆</span> All Categories <span style="text-transform:none;font-weight:500;color:var(--muted);font-size:11px;">(Selected Year · Expense adds, Income/Investment subtract)</span></h3>
         <div class="chart-wrap" id="chartTopCatWrap"><canvas id="chartTopCat"></canvas></div>
       </div>
     </div>
 
     <div class="grid2">
       <div class="panel">
-        <h3><span class="ic">📦</span> Categories <span style="text-transform:none;font-weight:500;color:var(--muted);font-size:11px;">(all-time expense)</span></h3>
+        <h3><span class="ic">📦</span> Categories <span style="text-transform:none;font-weight:500;color:var(--muted);font-size:11px;">(all-time · Expense adds, Income/Investment subtract)</span></h3>
         <div class="chart-wrap" id="chartCategoriesAllWrap"><canvas id="chartCategoriesAll"></canvas></div>
       </div>
       <div class="panel" id="sec-reports">
@@ -696,9 +696,9 @@ function buildDataFromWorkbook(wb){
     return byYear[y];
   };
   // Balance in A/C (running total, all years, all types — matches "Balance in AC" on
-  // the workbook's 🏠 Dashboard sheet) and Categories-all-time (expense-only, all years
-  // — matches the workbook's "Categories" chart) are tracked across every row below,
-  // independent of the byYear buckets.
+  // the workbook's 🏠 Dashboard sheet) and Categories-all-time (Expense rows ADD to their
+  // category, Income/Investment rows SUBTRACT, all years) are tracked across every row
+  // below, independent of the byYear buckets.
   let balanceTotal = 0;
   const categoryAllTotals = {};
 
@@ -728,11 +728,15 @@ function buildDataFromWorkbook(wb){
     if(!yd.lastDateObj || dateObj > yd.lastDateObj) yd.lastDateObj = dateObj;
     const typeNorm = norm(type);
     if(typeNorm==='income'){ yd.income += amt; yd.monthly_income[m]+=amt; balanceTotal += amt; }
-    else if(typeNorm==='expense'){
-      yd.expense += amt; yd.monthly_expense[m]+=amt; balanceTotal -= amt;
-      if(cat){ yd.catTotals[cat]=(yd.catTotals[cat]||0)+amt; categoryAllTotals[cat]=(categoryAllTotals[cat]||0)+amt; }
-    }
+    else if(typeNorm==='expense'){ yd.expense += amt; yd.monthly_expense[m]+=amt; balanceTotal -= amt; }
     else if(typeNorm==='investment'){ yd.investment += amt; yd.monthly_investment[m]+=amt; balanceTotal -= amt; }
+    // Category totals: Expense rows ADD to the category, Income/Investment rows SUBTRACT.
+    // "Salary" and "Other Income" categories are excluded entirely from both category charts.
+    const EXCLUDED_CATS = ['salary','other income'];
+    if(cat && !EXCLUDED_CATS.includes(norm(cat))){
+      const catAmt = (typeNorm==='expense') ? amt : -amt;
+      yd.catTotals[cat]=(yd.catTotals[cat]||0)+catAmt; categoryAllTotals[cat]=(categoryAllTotals[cat]||0)+catAmt;
+    }
     if(pay) yd.payTotals[pay]=(yd.payTotals[pay]||0)+amt;
     allTxns.push({ dateObj, date: toLocalISODate(dateObj), desc, type, category: cat, amount: amt, payment: pay });
   }
@@ -747,8 +751,8 @@ function buildDataFromWorkbook(wb){
   const data = {};
   years.forEach(y=>{
     const yd = byYear[y];
-    // Full, untruncated category breakdown for the year — "Top Expense Categories"
-    // now shows every category for the selected year, not just the top few.
+    // Full, untruncated category breakdown for the year (Expense adds, Income/Investment
+    // subtract) — shows every category for the selected year, not just the top few.
     const categories = Object.entries(yd.catTotals).sort((a,b)=>b[1]-a[1]).map(([name,value])=>({name,value}));
     data[y] = {
       income: yd.income, expense: yd.expense, investment: yd.investment,
