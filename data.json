@@ -76,6 +76,10 @@
           "value": 230
         },
         {
+          "name": "Saving",
+          "value": -55000
+        },
+        {
           "name": "Cashflow",
           "value": -76407.01999999979
         }
@@ -159,6 +163,10 @@
         {
           "name": "Delhi",
           "value": 2000
+        },
+        {
+          "name": "Saving",
+          "value": -6800
         }
       ],
       "payment": [
@@ -256,6 +264,10 @@
         {
           "name": "Recharge",
           "value": 6058
+        },
+        {
+          "name": "Saving",
+          "value": -14504
         }
       ],
       "payment": [],
@@ -310,10 +322,6 @@
       ],
       "categories": [
         {
-          "name": "Nisha",
-          "value": 230200
-        },
-        {
           "name": "Delhi",
           "value": 101203.31
         },
@@ -334,12 +342,20 @@
           "value": 80708.02
         },
         {
+          "name": "Nisha",
+          "value": 80700
+        },
+        {
           "name": "Railway",
-          "value": 11516.4
+          "value": 9406.4
         },
         {
           "name": "Recharge",
           "value": 2960
+        },
+        {
+          "name": "Saving",
+          "value": -16512
         }
       ],
       "payment": [],
@@ -395,11 +411,11 @@
       "categories": [
         {
           "name": "Nisha",
-          "value": 252061
+          "value": 193061
         },
         {
           "name": "Rajan",
-          "value": 174544
+          "value": 149544
         },
         {
           "name": "Delhi",
@@ -407,7 +423,7 @@
         },
         {
           "name": "Home",
-          "value": 84280
+          "value": 79280
         },
         {
           "name": "Pawan",
@@ -436,6 +452,10 @@
         {
           "name": "Other",
           "value": 7800
+        },
+        {
+          "name": "Saving",
+          "value": -20792
         }
       ],
       "payment": [
@@ -495,12 +515,12 @@
       ],
       "categories": [
         {
-          "name": "Nisha",
-          "value": 131700
+          "name": "Rajan",
+          "value": 70332.55
         },
         {
-          "name": "Rajan",
-          "value": 79206.55
+          "name": "Nisha",
+          "value": 70200
         },
         {
           "name": "Pawan",
@@ -511,12 +531,12 @@
           "value": 51509
         },
         {
-          "name": "Delhi",
-          "value": 47375.89
-        },
-        {
           "name": "Alka",
           "value": 44600
+        },
+        {
+          "name": "Delhi",
+          "value": 43171.89
         },
         {
           "name": "Delhi Room",
@@ -524,7 +544,7 @@
         },
         {
           "name": "Railway",
-          "value": 16351.000000000002
+          "value": 13796.000000000002
         },
         {
           "name": "Recharge",
@@ -533,6 +553,10 @@
         {
           "name": "Other",
           "value": 500
+        },
+        {
+          "name": "Saving",
+          "value": -67386
         }
       ],
       "payment": [
@@ -2507,7 +2531,7 @@
     },
     {
       "date": "2025-01-31",
-      "desc": "45689.00011574074",
+      "desc": "45689",
       "type": "Expense",
       "category": "Pawan",
       "amount": 4000,
@@ -3243,7 +3267,7 @@
     },
     {
       "date": "2024-07-01",
-      "desc": "45474.00011574074",
+      "desc": "45474",
       "type": "Expense",
       "category": "Pawan",
       "amount": 4000,
@@ -3523,7 +3547,7 @@
     },
     {
       "date": "2024-03-28",
-      "desc": "45383.00011574074",
+      "desc": "45383",
       "type": "Expense",
       "category": "Pawan",
       "amount": 4000,
@@ -3539,7 +3563,7 @@
     },
     {
       "date": "2024-03-16",
-      "desc": "45352.00011574074",
+      "desc": "45352",
       "type": "Expense",
       "category": "Pawan",
       "amount": 2000,
@@ -3611,7 +3635,7 @@
     },
     {
       "date": "2024-02-29",
-      "desc": "45352.00011574074",
+      "desc": "45352",
       "type": "Expense",
       "category": "Pawan",
       "amount": 4000,
@@ -3635,7 +3659,7 @@
     },
     {
       "date": "2024-02-28",
-      "desc": "45323.00011574074",
+      "desc": "45323",
       "type": "Expense",
       "category": "Pawan",
       "amount": 1000,
@@ -3723,7 +3747,7 @@
     },
     {
       "date": "2024-01-31",
-      "desc": "45323.00011574074",
+      "desc": "45323",
       "type": "Expense",
       "category": "Pawan",
       "amount": 4000,
@@ -3787,7 +3811,7 @@
     },
     {
       "date": "2024-01-08",
-      "desc": "45292.00011574074",
+      "desc": "45292",
       "type": "Expense",
       "category": "Pawan",
       "amount": 4000,
@@ -3835,7 +3859,7 @@
     },
     {
       "date": "2023-12-22",
-      "desc": "45261.00011574074",
+      "desc": "45261",
       "type": "Expense",
       "category": "Pawan",
       "amount": 1000,
@@ -3883,7 +3907,7 @@
     },
     {
       "date": "2023-11-30",
-      "desc": "45261.00011574074",
+      "desc": "45261",
       "type": "Expense",
       "category": "Pawan",
       "amount": 4300,
@@ -3947,7 +3971,7 @@
     },
     {
       "date": "2023-11-02",
-      "desc": "45231.00011574074",
+      "desc": "45231",
       "type": "Expense",
       "category": "Pawan",
       "amount": 4500,
@@ -4147,7 +4171,7 @@
     },
     {
       "date": "2023-08-25",
-      "desc": "45170.00011574074",
+      "desc": "45170",
       "type": "Expense",
       "category": "Pawan",
       "amount": 4000,
@@ -4155,7 +4179,7 @@
     },
     {
       "date": "2023-08-25",
-      "desc": "45200.00011574074",
+      "desc": "45200",
       "type": "Expense",
       "category": "Pawan",
       "amount": 5000,
@@ -4267,7 +4291,7 @@
     },
     {
       "date": "2023-07-26",
-      "desc": "45139.00011574074",
+      "desc": "45139",
       "type": "Expense",
       "category": "Pawan",
       "amount": 4000,
@@ -7886,12 +7910,12 @@
   ],
   "categoryAll": [
     {
-      "name": "Nisha",
-      "value": 748976
+      "name": "Rajan",
+      "value": 488526.55
     },
     {
-      "name": "Rajan",
-      "value": 522400.55
+      "name": "Nisha",
+      "value": 478976
     },
     {
       "name": "Pawan",
@@ -7899,11 +7923,11 @@
     },
     {
       "name": "Home",
-      "value": 331519.2
+      "value": 326519.2
     },
     {
       "name": "Delhi",
-      "value": 305330.2
+      "value": 301126.2
     },
     {
       "name": "Ed LOAN",
@@ -7919,7 +7943,7 @@
     },
     {
       "name": "Railway",
-      "value": 64136.59999999999
+      "value": 59471.59999999999
     },
     {
       "name": "Delhi Room",
@@ -7936,6 +7960,10 @@
     {
       "name": "Cashflow",
       "value": -76407.01999999979
+    },
+    {
+      "name": "Saving",
+      "value": -180994
     }
   ],
   "balance": 14208.979999999778
