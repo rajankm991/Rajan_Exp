@@ -52,6 +52,24 @@
   .data-status.error{ background:var(--red-tint); color:var(--red); border-color:#E8C1C6; }
   .data-status code{ font-family:'IBM Plex Mono',monospace; }
 
+  .summaryGrid{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:12px; }
+  .summaryCard{
+    background:var(--card); border:1px solid var(--card-line); border-radius:12px;
+    padding:14px 18px; border-left:4px solid var(--brass);
+    box-shadow:0 1px 2px rgba(20,20,10,0.04);
+  }
+  .summaryCard.given{ border-left-color:var(--red); }
+  .summaryCard.received{ border-left-color:var(--green); }
+  .summaryCard.net{ border-left-color:var(--brass); }
+  .summaryCard.count{ border-left-color:var(--purple); }
+  .summaryCard .label{ font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted-cool); font-weight:700; margin-bottom:8px; }
+  .summaryCard .value{ font-family:'IBM Plex Mono',monospace; font-size:22px; font-weight:700; color:var(--ink-text); }
+  .summaryCard.given .value{ color:var(--red); }
+  .summaryCard.received .value{ color:var(--green); }
+  @media (max-width:760px){
+    .summaryGrid{ grid-template-columns:repeat(2,1fr); }
+  }
+
   .toolbar{
     background:var(--card); border:1px solid var(--card-line); border-radius:12px;
     padding:11px 14px; display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end; margin-bottom:12px;
@@ -144,10 +162,33 @@
 
   <div id="dataStatus" class="data-status demo">Loading…</div>
 
+  <div class="summaryGrid">
+    <div class="summaryCard given">
+      <div class="label">Total Given</div>
+      <div class="value" id="sumGiven">₹0</div>
+    </div>
+    <div class="summaryCard received">
+      <div class="label">Total Received</div>
+      <div class="value" id="sumReceived">₹0</div>
+    </div>
+    <div class="summaryCard net">
+      <div class="label">Net Balance</div>
+      <div class="value" id="sumNet">₹0</div>
+    </div>
+    <div class="summaryCard count">
+      <div class="label">Transactions</div>
+      <div class="value" id="sumCount">0</div>
+    </div>
+  </div>
+
   <div class="toolbar">
     <div class="field">
       <label>Year</label>
       <select id="fYear"><option value="">All</option></select>
+    </div>
+    <div class="field">
+      <label>Month</label>
+      <select id="fMonth"><option value="">All</option></select>
     </div>
     <div class="field">
       <label>Type</label>
@@ -215,6 +256,18 @@ function populateYearFilter(txns){
   });
 }
 
+const MONTH_NAMES = ['','January','February','March','April','May','June','July','August','September','October','November','December'];
+
+function populateMonthFilter(){
+  const sel = document.getElementById('fMonth');
+  for(let m=1; m<=12; m++){
+    const opt = document.createElement('option');
+    opt.value = String(m).padStart(2,'0');
+    opt.textContent = MONTH_NAMES[m];
+    sel.appendChild(opt);
+  }
+}
+
 function populateCategoryFilter(txns){
   const cats = Array.from(new Set(txns.map(t => t.category).filter(Boolean))).sort((a,b)=> String(a).localeCompare(String(b)));
   const sel = document.getElementById('fCategory');
@@ -227,12 +280,14 @@ function populateCategoryFilter(txns){
 
 function applyFilters(){
   const year = document.getElementById('fYear').value;
+  const month = document.getElementById('fMonth').value;
   const type = document.getElementById('fType').value;
   const category = document.getElementById('fCategory').value;
   const q = document.getElementById('fSearch').value.trim().toLowerCase();
 
   filtered = ALL_TXNS.filter(t=>{
     if(year && !(t.date||'').startsWith(year)) return false;
+    if(month && (t.date||'').slice(5,7) !== month) return false;
     if(type && t.type !== type) return false;
     if(category && t.category !== category) return false;
     if(q){
@@ -257,9 +312,25 @@ function sortFiltered(){
   });
 }
 
+function renderSummary(){
+  // Expense AND Investment both count as money given/out — only Income is received.
+  const given = filtered.reduce((s,t)=> s + ((t.type === 'Expense' || t.type === 'Investment') ? (Number(t.amount)||0) : 0), 0);
+  const received = filtered.reduce((s,t)=> s + (t.type === 'Income' ? (Number(t.amount)||0) : 0), 0);
+  const net = received - given;
+  const netEl = document.getElementById('sumNet');
+
+  document.getElementById('sumGiven').textContent = fmtINR(given);
+  document.getElementById('sumReceived').textContent = fmtINR(received);
+  netEl.textContent = (net<0?'−':'') + fmtINR(net);
+  netEl.style.color = net < 0 ? 'var(--red)' : 'var(--green)';
+  document.getElementById('sumCount').textContent = filtered.length.toLocaleString('en-IN');
+}
+
 function renderPage(){
   const body = document.getElementById('txnBody');
   const total = filtered.length;
+
+  renderSummary();
 
   // Expense AND Investment both count as money going out (negative) — only Income is positive.
   const netTotal = filtered.reduce((s,t)=> s + (t.type === 'Expense' || t.type === 'Investment' ? -1 : 1) * (Number(t.amount)||0), 0);
@@ -287,6 +358,7 @@ function renderPage(){
 }
 
 document.getElementById('fYear').addEventListener('change', applyFilters);
+document.getElementById('fMonth').addEventListener('change', applyFilters);
 document.getElementById('fType').addEventListener('change', applyFilters);
 document.getElementById('fCategory').addEventListener('change', applyFilters);
 document.getElementById('fSearch').addEventListener('input', applyFilters);
@@ -306,6 +378,7 @@ function loadFrom(data, label, cls){
   ALL_TXNS = (data.all && data.all.length) ? data.all : (data.recent || []);
   const usingFallback = !(data.all && data.all.length);
   populateYearFilter(ALL_TXNS);
+  populateMonthFilter();
   populateCategoryFilter(ALL_TXNS);
   showBanner(cls, label + (usingFallback ? ' <br><span style="opacity:.85">Note: this data.json only has the latest 5 transactions (old format) — re-generate it (Load Excel Workbook → push) on the dashboard to see every row here.</span>' : ''));
   document.getElementById('arrow-date').textContent = '▼';
