@@ -7,6 +7,8 @@
 //
 // HOW TO CHANGE THE PASSWORD:
 // Just edit the value below, save this file, and push it to your repo.
+// (Or use the "Change Protected-Pages Password" box on the dashboard's
+// ⚙️ GitHub Sync panel — it pushes this exact file for you.)
 //
 // Note: this is a plain-text password in a public GitHub file, checked only
 // in the browser (GitHub Pages has no server to check it against). It stops
@@ -15,4 +17,4 @@
 // data.json is still a public file at its own URL either way.
 // ============================================================================
 
-const PASSWORD = 'Rajan@991';
+const PASSWORD = 'Rajan';
