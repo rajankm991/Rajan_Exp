@@ -536,13 +536,13 @@
         }
       ],
       "count": 115,
-      "lastDate": "2026-10-01"
+      "lastDate": "2026-09-30"
     }
   },
   "lenders": [],
   "recent": [
     {
-      "date": "2026-10-01",
+      "date": "2026-09-30",
       "desc": "MIsbalance not getting the value(1214 till 9 jun)",
       "type": "Income",
       "category": "Other Income",
@@ -584,7 +584,7 @@
   ],
   "all": [
     {
-      "date": "2026-10-01",
+      "date": "2026-09-30",
       "desc": "MIsbalance not getting the value(1214 till 9 jun)",
       "type": "Income",
       "category": "Other Income",
