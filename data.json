@@ -455,8 +455,8 @@
         50500,
         50500,
         0,
-        13392,
-        0,
+        4204,
+        9188,
         0,
         0,
         0
@@ -536,13 +536,13 @@
         }
       ],
       "count": 115,
-      "lastDate": "2026-08-31"
+      "lastDate": "2026-10-01"
     }
   },
   "lenders": [],
   "recent": [
     {
-      "date": "2026-08-31",
+      "date": "2026-10-01",
       "desc": "MIsbalance not getting the value(1214 till 9 jun)",
       "type": "Income",
       "category": "Other Income",
@@ -584,7 +584,7 @@
   ],
   "all": [
     {
-      "date": "2026-08-31",
+      "date": "2026-10-01",
       "desc": "MIsbalance not getting the value(1214 till 9 jun)",
       "type": "Income",
       "category": "Other Income",
