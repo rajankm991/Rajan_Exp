@@ -469,7 +469,7 @@
     },
     "2026": {
       "income": 389321,
-      "expense": 479689.43999999994,
+      "expense": 496009.43999999994,
       "investment": 67386,
       "monthly_income": [
         120874,
@@ -492,8 +492,8 @@
         79968.20000000001,
         103426.6,
         34784,
-        18992,
-        0,
+        27192,
+        8120,
         0,
         0,
         0,
@@ -523,6 +523,10 @@
           "value": 70200
         },
         {
+          "name": "Delhi Room",
+          "value": 58960
+        },
+        {
           "name": "Pawan",
           "value": 55171
         },
@@ -537,10 +541,6 @@
         {
           "name": "Delhi",
           "value": 43171.89
-        },
-        {
-          "name": "Delhi Room",
-          "value": 42640
         },
         {
           "name": "Railway",
@@ -569,15 +569,15 @@
           "value": 50500
         },
         {
-          "name": "Credit Card",
-          "value": 26002
+          "name": "Cash",
+          "value": 44640
         },
         {
-          "name": "Cash",
-          "value": 8200
+          "name": "Credit Card",
+          "value": 26002
         }
       ],
-      "count": 113,
+      "count": 115,
       "lastDate": "2026-08-31"
     }
   },
@@ -600,28 +600,28 @@
       "payment": null
     },
     {
+      "date": "2026-08-21",
+      "desc": "Room rent for 16 July to 15 Aug",
+      "type": "Expense",
+      "category": "Delhi Room",
+      "amount": 8120,
+      "payment": null
+    },
+    {
+      "date": "2026-07-17",
+      "desc": "Room rent for 16 July to 15 Aug",
+      "type": "Expense",
+      "category": "Delhi Room",
+      "amount": 8200,
+      "payment": "Cash"
+    },
+    {
       "date": "2026-07-02",
       "desc": "Alka. ",
       "type": "Expense",
       "category": "Alka",
       "amount": 5000,
       "payment": null
-    },
-    {
-      "date": "2026-07-02",
-      "desc": "Nisha",
-      "type": "Expense",
-      "category": "Nisha",
-      "amount": 300,
-      "payment": null
-    },
-    {
-      "date": "2026-07-01",
-      "desc": "Rhishikesh",
-      "type": "Expense",
-      "category": "Rajan",
-      "amount": 3860,
-      "payment": "UPI"
     }
   ],
   "all": [
@@ -640,6 +640,22 @@
       "category": "Delhi",
       "amount": 4204,
       "payment": null
+    },
+    {
+      "date": "2026-08-21",
+      "desc": "Room rent for 16 July to 15 Aug",
+      "type": "Expense",
+      "category": "Delhi Room",
+      "amount": 8120,
+      "payment": null
+    },
+    {
+      "date": "2026-07-17",
+      "desc": "Room rent for 16 July to 15 Aug",
+      "type": "Expense",
+      "category": "Delhi Room",
+      "amount": 8200,
+      "payment": "Cash"
     },
     {
       "date": "2026-07-02",
@@ -831,7 +847,7 @@
       "type": "Expense",
       "category": "Delhi Room",
       "amount": 8120,
-      "payment": null
+      "payment": "Cash"
     },
     {
       "date": "2026-05-19",
@@ -1015,7 +1031,7 @@
       "type": "Expense",
       "category": "Delhi Room",
       "amount": 8120,
-      "payment": null
+      "payment": "Cash"
     },
     {
       "date": "2026-04-11",
@@ -1151,7 +1167,7 @@
       "type": "Expense",
       "category": "Delhi Room",
       "amount": 12000,
-      "payment": null
+      "payment": "Cash"
     },
     {
       "date": "2026-03-15",
@@ -7947,7 +7963,7 @@
     },
     {
       "name": "Delhi Room",
-      "value": 42640
+      "value": 58960
     },
     {
       "name": "Recharge",
@@ -7966,5 +7982,5 @@
       "value": -180994
     }
   ],
-  "balance": 14208.979999999778
+  "balance": -2111.0200000002224
 }
