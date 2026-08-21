@@ -104,7 +104,7 @@
   table.txn-table td.amt.neg{ color:var(--red); }
   table.txn-table tr:last-child td{ border-bottom:none; }
   /* Column widths — Date/Type/Amount stay compact; Description carries the most text
-     so it gets the most space, Category/Payment get comfortable room too. */
+     so it gets the most space, Category/Notes get comfortable room too. */
   table.txn-table th:nth-child(1), table.txn-table td:nth-child(1){ width:9%; }
   table.txn-table th:nth-child(2), table.txn-table td:nth-child(2){ width:38%; }
   table.txn-table th:nth-child(3), table.txn-table td:nth-child(3){ width:15%; }
@@ -218,7 +218,7 @@
           <th data-key="desc">Description <span class="arrow" id="arrow-desc"></span></th>
           <th data-key="category">Category <span class="arrow" id="arrow-category"></span></th>
           <th data-key="type">Type <span class="arrow" id="arrow-type"></span></th>
-          <th data-key="payment">Payment <span class="arrow" id="arrow-payment"></span></th>
+          <th data-key="notes">Notes <span class="arrow" id="arrow-notes"></span></th>
           <th data-key="amount" class="amtcol">Amount <span class="arrow" id="arrow-amount"></span></th>
         </tr>
       </thead>
@@ -351,7 +351,7 @@ function renderPage(){
       <td>${t.desc || '—'}</td>
       <td>${t.category || '—'}</td>
       <td><span class="type-pill ${t.type||''}">${t.type||'—'}</span></td>
-      <td>${t.payment || '—'}</td>
+      <td>${t.notes || '—'}</td>
       <td class="amt ${cls}">${sign}${fmtINR(t.amount||0)}</td>
     </tr>`;
   }).join('');

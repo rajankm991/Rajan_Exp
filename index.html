@@ -253,6 +253,19 @@
         It's stored only in this browser's local storage and sent directly to GitHub's API — never through us. Once saved, loading an Excel file will show a
         <b>🚀 Push to GitHub</b> button that commits <code>data.json</code> for you — no manual download/upload needed.
       </p>
+
+      <hr style="border:none;border-top:1px solid var(--card-line);margin:16px 0;">
+      <h3 style="margin-top:0;"><span class="ic">🔑</span> Change Protected-Pages Password</h3>
+      <div style="display:grid; grid-template-columns:1fr auto; gap:10px; align-items:end; margin-bottom:6px;">
+        <div class="field" style="min-width:0;"><label>New Password</label><input id="ghNewPassword" type="text" placeholder="Enter new password" style="border:none;outline:none;font-family:'IBM Plex Mono',monospace;font-size:13px;"></div>
+        <button type="button" class="loadbtn" id="ghPasswordBtn">🔑 Update Password</button>
+      </div>
+      <span id="ghPasswordMsg" style="font-size:11.5px;margin-left:0;"></span>
+      <p style="font-size:11px;color:var(--muted);margin:10px 0 0;line-height:1.6;">
+        This updates <code>auth-config.js</code> — the single file that both <b>All Transactions</b> and <b>Cashflow Ledger</b>
+        read their password from — via the same GitHub Sync settings above (repo/branch/token). After it pushes successfully,
+        the new password is live for everyone within a minute or two; the old password stops working immediately after that.
+      </p>
     </div>
 
     <div class="kpi-row">
@@ -656,11 +669,11 @@ function dateCellToParts(v){
 }
 
 // Scans the first ~20 rows for a header row containing DATE / TYPE / CATEGORY / AMOUNT
-// and returns {headerRowIdx, col:{date,desc,type,category,amount,payment}} using whichever
+// and returns {headerRowIdx, col:{date,desc,type,category,amount,notes}} using whichever
 // column each label actually sits in — so this works regardless of exact sheet layout.
 function detectColumns(rows){
   const wanted = { date:['date'], desc:['description','desc'], type:['type'],
-    category:['category'], amount:['amount'], payment:['payment','payment mode','mode'] };
+    category:['category'], amount:['amount'], notes:['notes'] };
   for(let r=0; r<Math.min(20, rows.length); r++){
     const row = rows[r] || [];
     const found = {};
@@ -692,7 +705,7 @@ function buildDataFromWorkbook(wb){
   const allTxns = [];
   const ensureYear = y=>{
     if(!byYear[y]) byYear[y] = { income:0, expense:0, investment:0, monthly_income:Array(12).fill(0),
-      monthly_expense:Array(12).fill(0), monthly_investment:Array(12).fill(0), catTotals:{}, payTotals:{}, count:0, lastDateObj:null };
+      monthly_expense:Array(12).fill(0), monthly_investment:Array(12).fill(0), catTotals:{}, count:0, lastDateObj:null };
     return byYear[y];
   };
   // Balance in A/C (running total, all years, all types — matches "Balance in AC" on
@@ -708,7 +721,7 @@ function buildDataFromWorkbook(wb){
     let date = r[col.date];
     const desc = asText(col.desc!=null ? r[col.desc] : null);
     const type = asText(r[col.type]), cat = asText(r[col.category]), amount = r[col.amount];
-    const pay = asText(col.payment!=null ? r[col.payment] : null);
+    const notes = asText(col.notes!=null ? r[col.notes] : null);
     if(date==null || amount==null || amount==='') continue;
 
     const dp = dateCellToParts(date);
@@ -737,15 +750,14 @@ function buildDataFromWorkbook(wb){
       const catAmt = (typeNorm==='expense') ? amt : -amt;
       yd.catTotals[cat]=(yd.catTotals[cat]||0)+catAmt; categoryAllTotals[cat]=(categoryAllTotals[cat]||0)+catAmt;
     }
-    if(pay) yd.payTotals[pay]=(yd.payTotals[pay]||0)+amt;
-    allTxns.push({ dateObj, date: toLocalISODate(dateObj), desc, type, category: cat, amount: amt, payment: pay });
+    allTxns.push({ dateObj, date: toLocalISODate(dateObj), desc, type, category: cat, amount: amt, notes });
   }
 
   if(!allTxns.length) throw new Error('Found the Transactions sheet but no valid dated rows with an amount — check the file has data below the header row.');
 
   allTxns.sort((a,b)=> b.dateObj - a.dateObj);
   // Full list (every row from the Transactions sheet) — powers the "All Transactions" page.
-  const all = allTxns.map(t=>({date:t.date, desc:t.desc, type:t.type, category:t.category, amount:t.amount, payment:t.payment}));
+  const all = allTxns.map(t=>({date:t.date, desc:t.desc, type:t.type, category:t.category, amount:t.amount, notes:t.notes}));
   const recent = all.slice(0,5);
   const years = Object.keys(byYear).map(Number).sort((a,b)=>a-b);
   const data = {};
@@ -757,7 +769,7 @@ function buildDataFromWorkbook(wb){
     data[y] = {
       income: yd.income, expense: yd.expense, investment: yd.investment,
       monthly_income: yd.monthly_income, monthly_expense: yd.monthly_expense, monthly_investment: yd.monthly_investment,
-      categories, payment: Object.entries(yd.payTotals).sort((a,b)=>b[1]-a[1]).map(([name,value])=>({name,value})),
+      categories,
       count: yd.count,
       lastDate: yd.lastDateObj ? toLocalISODate(yd.lastDateObj) : null
     };
@@ -865,7 +877,64 @@ function saveGhSettings(s){ localStorage.setItem(GH_KEY, JSON.stringify(s)); }
     msg.textContent = '✓ Saved in this browser';
     setTimeout(()=> msg.textContent='', 2500);
   });
+  document.getElementById('ghPasswordBtn').addEventListener('click', updatePasswordOnGithub);
 })();
+
+// Builds the exact auth-config.js file content, with the new password swapped in —
+// keeps the same header/comments so the file's own explanation of itself stays intact.
+function authConfigContent(newPassword){
+  const escaped = String(newPassword).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+  return `// ============================================================================
+// PASSWORD CONFIG — shared by transactions.html and cashflow.html
+// ============================================================================
+// This is the ONE place to change the password for those two protected pages.
+// Both pages read PASSWORD from this file, so editing it here updates the
+// password everywhere — no other file needs to change.
+//
+// HOW TO CHANGE THE PASSWORD:
+// Just edit the value below, save this file, and push it to your repo.
+// (Or use the "Change Protected-Pages Password" box on the dashboard's
+// ⚙️ GitHub Sync panel — it pushes this exact file for you.)
+//
+// Note: this is a plain-text password in a public GitHub file, checked only
+// in the browser (GitHub Pages has no server to check it against). It stops
+// casual visitors from seeing the page, but anyone who opens this file
+// directly (e.g. via the repo's file list) can read the password, and
+// data.json is still a public file at its own URL either way.
+// ============================================================================
+
+const PASSWORD = '${escaped}';
+`;
+}
+
+async function updatePasswordOnGithub(){
+  const input = document.getElementById('ghNewPassword');
+  const msg = document.getElementById('ghPasswordMsg');
+  const newPassword = input.value.trim();
+  const setMsg = (color, text)=>{ msg.style.color = color; msg.textContent = text; };
+
+  if(!newPassword){ setMsg('var(--red)', '⚠️ Enter a new password first.'); return; }
+
+  const s = loadGhSettings();
+  if(!s || !s.repo || !s.token){
+    setMsg('var(--red)', '⚠️ Set up GitHub Sync first (repo + token above) — required to push.');
+    return;
+  }
+
+  const branch = s.branch || 'main';
+  const btn = document.getElementById('ghPasswordBtn');
+  btn.disabled = true; btn.textContent = '⏳ Updating…';
+  setMsg('var(--muted)', '');
+  try{
+    await pushOneFileToGithub(s, branch, 'auth-config.js', authConfigContent(newPassword));
+    setMsg('var(--green)', '✓ Password updated — pushed to ' + s.repo + ' (' + branch + '). Live everywhere within a minute or two.');
+    input.value = '';
+  }catch(err){
+    setMsg('var(--red)', '⚠️ Failed: ' + err.message);
+  }finally{
+    btn.disabled = false; btn.textContent = '🔑 Update Password';
+  }
+}
 
 async function pushOneFileToGithub(s, branch, path, contentStr){
   const api = `https://api.github.com/repos/${s.repo}/contents/${path}`;

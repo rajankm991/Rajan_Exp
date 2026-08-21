@@ -44,6 +44,21 @@ Har row apne month-index (0-11) ke hisaab se `monthly_income` /
 `monthly_expense` / `monthly_investment` arrays mein add hoti hai — same
 function ke andar.
 
+### C.1 Column detection (Notes column, Payment ki jagah) → `detectColumns(rows)`
+Transactions sheet ke header row mein columns dhoondhne ka logic yahin hai:
+```js
+const wanted = { date:['date'], desc:['description','desc'], type:['type'],
+  category:['category'], amount:['amount'], notes:['notes'] };
+```
+Pehle yahan `payment` (ya "Payment Mode"/"Mode") column detect hota tha aur
+uska ek alag `payTotals` breakdown bhi banta tha — dono hata diye gaye hain
+(wo breakdown kahin display nahi hota tha). Ab iski jagah **Notes** column
+detect hota hai — jaisa Cashflow sheet mein pehle se hota hai — aur har row
+ke saath `notes` field allTxns/`all` array mein save hoti hai.
+**Kahan change karna hai:** agar Notes column ka naam Excel mein alag ho
+(e.g. "Remarks"), to `detectColumns()` ke `notes:['notes']` array mein naya
+alias add karo.
+
 ### D. Main KPI formulas → `render(year)` function
 ```js
 const net  = y.income - y.expense - y.investment;      // Net Savings
@@ -104,6 +119,13 @@ Same logic, dusri jagah use hota hai (filtered rows ke liye).
 Ye sirf filtering hai, calculation nahi — lekin agar naya filter add karna ho
 to yahin add hoga.
 
+### Notes column (Payment ki jagah) → `renderPage()`
+Table ka 5th column ab `t.notes` display karta hai (pehle `t.payment` tha,
+jo hata diya gaya hai). Ye sirf display hai — koi calculation nahi. Actual
+Notes text **Excel workbook se hi aata hai** (Transactions sheet ka "Notes"
+column) — `index.html` ke `buildDataFromWorkbook()` mein parse hota hai, phir
+`data.js`/`data.json` mein save hota hai jise ye page read karta hai.
+
 ---
 
 ## 📁 FILE 3: `cashflow.html` — Lender Ledger
@@ -137,6 +159,8 @@ Same formula, filtered rows ke liye.
 | Cashflow sheet se data kaise parse ho | index.html | `parseCashflowSheet()` |
 | YoY growth % ka formula | index.html | `delta()` (inside `render()`) |
 | "All Years" view ka total kaise bane | index.html | `getViewData('ALL')` |
+| Transactions sheet mein Notes column ka naam/alias | index.html | `detectColumns()` → `notes:['notes']` |
+| Transactions table mein Notes column display | transactions.html | `renderPage()` |
 
 ---
 
@@ -152,3 +176,26 @@ Isliye: agar **core calculation logic** (balance, category rule, income/expense
 type) change karna hai → hamesha **`index.html`** mein jaake
 `buildDataFromWorkbook()` edit karo, aur phir Excel wapas load/push karo taaki
 `data.js`/`data.json` refresh ho jaaye.
+
+---
+
+## 🔑 Protected-pages password (transactions.html / cashflow.html) — online se change karna
+
+Ye calculation nahi hai, lekin GitHub Sync jaisi hi push mechanism use karta
+hai isliye yahan note kiya gaya hai.
+
+- Dashboard (`index.html`) ke **⚙️ GitHub Sync** panel mein ek naya section
+  hai: **"Change Protected-Pages Password"**.
+- Naya password type karo → **🔑 Update Password** click karo.
+- Function: `updatePasswordOnGithub()` — same `pushOneFileToGithub()` reuse
+  karta hai jo `data.json`/`data.js` push karne ke liye already istemal hota
+  hai, sirf path `auth-config.js` hai. Content `authConfigContent(newPassword)`
+  se banta hai (same file jaisa comments-wala format, sirf `PASSWORD` value
+  badalti hai).
+- **Requirement:** GitHub Sync (repo + token, Contents: Read & write) pehle
+  se set-up hona chahiye — same setup jo data push ke liye use hota hai.
+- Push hone ke baad naya password 1-2 minute mein live ho jaata hai (GitHub
+  Pages ke build/CDN cache ke hisaab se); purana password tab kaam nahi
+  karega.
+- **Kahan change karna hai agar format badalna ho:** `index.html` →
+  `authConfigContent()` function.
